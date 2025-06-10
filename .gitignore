@@ -1,0 +1,12 @@
+**/.idea
+**/.vscode
+**/*.ai
+**/*.env
+**/*.log
+**/.next/
+**/build/
+**/dist/
+**/doc/
+**/node_modules/
+**/coverage/
+**/npm-debug.*
