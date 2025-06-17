@@ -24,17 +24,17 @@ export default function RootLayout() {
 	return (
 		<AppProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 			<Stack>
-				{isLoggedIn ? (
+				{/* {isLoggedIn ? (
 					<>
 						<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
 						<Stack.Screen name='+not-found' />
 					</>
-				) : (
+				) : ( */}
 					<Stack.Screen
 						name='login'
 						options={{ headerShown: false }}
 					></Stack.Screen>
-				)}
+				{/* )} */}
 			</Stack>
 			{/* <StatusBar style='auto' /> */}
 		</AppProvider>

@@ -4,7 +4,8 @@ export const euLocaleText: LocaleText = {
 	dialog: {
 		submit: 'Продолжить',
 	},
-	dashboard: {
-		title: 'Это страница Дашборд! Такие дела..',
-	},
+
+	login: {
+		title: 'Welcome back to FoxRunner'
+	}
 };
