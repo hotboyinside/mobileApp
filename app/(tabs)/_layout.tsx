@@ -7,7 +7,6 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 
 export default function TabLayout() {
-
 	return (
 		<Tabs
 			screenOptions={{
@@ -38,15 +37,6 @@ export default function TabLayout() {
 					title: 'Explore',
 					tabBarIcon: ({ color }) => (
 						<IconSymbol size={28} name='paperplane.fill' color={color} />
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name='profile'
-				options={{
-					title: 'Profile',
-					tabBarIcon: ({ color }) => (
-						<IconSymbol size={28} name='person.crop.circle' color={color} />
 					),
 				}}
 			/>
