@@ -1,128 +1,135 @@
-// app/login.tsx
-import LogoIcon from '@/assets/icons/logoIcon.svg';
-import { useLocaleText } from '@/components/appProvider/localization/LocalizationProvider';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
-import { appTokens } from '@/constants/tokens';
-// import { Input } from '@/components/ui/Input';
-import { Button, Icon, Input } from '@rneui/themed';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { createRef, useState } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import EyeClosedIcon from "@/assets/icons/eye-closed-icon.svg";
+import EyeOpenedIcon from "@/assets/icons/eye-opened-icon.svg";
+import LogoIcon from "@/assets/icons/logo-icon.svg";
+import { useLocaleText } from "@/components/appProvider/localization/LocalizationProvider";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedViewWithSafeArea } from "@/components/ThemedViewWithSafeArea";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { appTokens } from "@/constants/tokens";
+import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
+import { createRef, useState } from "react";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 export default function LoginScreen() {
-	const router = useRouter();
-	const loginTexts = useLocaleText().localeText.login;
-	const [isSecureText, setIsSecureText] = useState(true);
-	const inputRef = createRef();
+  const router = useRouter();
+  const loginTexts = useLocaleText().localeText.login;
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const inputRef = createRef<any>();
 
-	const handleLogin = async () => {
-		router.replace('/'); // Перенаправление на главную
-	};
+  const handleLogin = async () => {
+    router.replace("/"); // Перенаправление на главную
+  };
 
-	const onSubmit = async () => {
-		inputRef.current.shake();
-	};
+  const onSubmit = async () => {
+    if (inputRef.current) {
+      inputRef.current.shake();
+    }
+  };
 
-	return (
-		<ThemedViewWithSafeArea
-			safeEdges={['top', 'right', 'bottom', 'bottom']}
-			style={styles.container}
-		>
-			<View style={styles.container}>
-				<View style={styles.logoContainer}>
-					<LogoIcon style={styles.icon} />
-					<ThemedText style={styles.title} type='displayXs'>
-						{loginTexts?.title}
-					</ThemedText>
-				</View>
-				<KeyboardAvoidingView behavior='padding' style={styles.form}>
-					<View>
-						<Input
-							placeholder='Enter your email'
-							label='Email'
-							inputContainerStyle={styles.inputContainerExtra}
-							labelStyle={styles.labelExtra}
-							inputStyle={styles.inputExtra}
-						/>
-						<Input
-							ref={inputRef}
-							placeholder='Enter your password'
-							label='Password'
-							inputContainerStyle={styles.inputContainerExtra}
-							labelStyle={styles.labelExtra}
-							inputStyle={styles.inputExtra}
-							secureTextEntry={isSecureText}
-							rightIcon={<Icon name='user' size={24} color='black' />}
-						/>
-					</View>
-					<Button
-						title='Log in'
-						ViewComponent={LinearGradient}
-						linearGradientProps={{
-							colors: ['#FF692E', '#FF4405'],
-							start: [0, 0],
-							end: [1, 0],
-						}}
-						onPress={onSubmit}
-						buttonStyle={styles.submitBtn}
-					/>
-				</KeyboardAvoidingView>
-			</View>
-		</ThemedViewWithSafeArea>
-	);
+  return (
+    <ThemedViewWithSafeArea
+      safeEdges={["top", "right", "bottom", "bottom"]}
+      style={styles.container}
+    >
+      <KeyboardAvoidingView behavior={"padding"} style={styles.wrapper}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.content}>
+            <View style={styles.logoContainer}>
+              <LogoIcon />
+              <ThemedText style={styles.title} type='displayXs'>
+                {loginTexts?.title}
+              </ThemedText>
+            </View>
+            <View style={styles.formContainer}>
+              <View>
+                <Input placeholder='Enter your email' label='Email' />
+                <Input
+                  ref={inputRef}
+                  placeholder='Enter your password'
+                  label='Password'
+                  secureTextEntry={isPasswordVisible}
+                  rightIcon={
+                    isPasswordVisible ? (
+                      <EyeClosedIcon
+                        onPress={() => setIsPasswordVisible(prev => !prev)}
+                        width={20}
+                        height={20}
+                        fill={appTokens.foreground.quinary.light}
+                        color={appTokens.foreground.quinary.light}
+                      />
+                    ) : (
+                      <EyeOpenedIcon
+                        onPress={() => setIsPasswordVisible(prev => !prev)}
+                        width={20}
+                        height={20}
+                        fill={appTokens.foreground.quinary.light}
+                        color={appTokens.foreground.quinary.light}
+                      />
+                    )
+                  }
+                  rightIconContainerStyle={styles.iconContainerExtra}
+                />
+              </View>
+              <Button
+                ViewComponent={LinearGradient as any}
+                linearGradientProps={{
+                  colors: ["#FF692E", "#FF4405"],
+                  start: [0, 0],
+                  end: [1, 0],
+                }}
+                onPress={onSubmit}
+                title='Log in'
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ThemedViewWithSafeArea>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: 16,
-		flex: 1,
-	},
+  container: {
+    flex: 1,
+  },
 
-	logoContainer: {
-		alignItems: 'center',
-	},
+  wrapper: {
+    flex: 1,
+    marginTop: 32,
+    paddingHorizontal: 16,
+  },
 
-	icon: {
-		marginTop: 32,
-	},
+  content: {
+    flex: 1,
+  },
 
-	title: {
-		width: 286,
-		textAlign: 'center',
-		marginTop: 16,
-		fontWeight: 700,
-	},
+  logoContainer: {
+    alignItems: "center",
+  },
 
-	form: {
-		flex: 1,
-		justifyContent: 'space-between',
-		paddingVertical: 16,
-	},
+  title: {
+    width: 286,
+    textAlign: "center",
+    marginTop: 16,
+    fontWeight: 700,
+    fontFamily: "MontserratBold",
+  },
 
-	labelExtra: {
-		marginBottom: 6,
-	},
+  formContainer: {
+    flex: 1,
+    justifyContent: "space-between",
+    marginTop: 32,
+  },
 
-	inputContainerExtra: {
-		borderWidth: 1,
-		borderColor: appTokens.border.tertiary.light,
-		backgroundColor: appTokens.background.secondary.light,
-		borderRadius: 12,
-	},
-
-	inputExtra: {
-		paddingVertical: 12,
-		paddingHorizontal: 16,
-		borderWidth: 0,
-		borderRadius: 12,
-	},
-
-	submitBtn: {
-		borderRadius: 12,
-		paddingVertical: 12,
-		paddingHorizontal: 20,
-		marginBottom: 12,
-	},
+  iconContainerExtra: {
+    marginRight: 11,
+  },
 });

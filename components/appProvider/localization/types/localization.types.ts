@@ -1,16 +1,22 @@
 export interface IDialogText {
-	submit: string;
+  submit: string;
+}
+
+export interface ILoginInput {
+  placeholder: string;
+  label: string;
 }
 
 export interface IDashboardText {
-	title: string;
+  title: string;
 }
 
 export interface ILoginText {
-	title: string;
+  title: string;
+  input: ILoginInput;
 }
 
 export interface LocaleText {
-	dialog: IDialogText;
-	login: ILoginText;
+  login: ILoginText;
+  dialog: IDialogText;
 }

@@ -1,61 +1,52 @@
-import { appTokens } from '@/constants/tokens';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import React, { useRef, useState } from 'react';
-import { StyleSheet, TextInput, TextInputProps, ViewStyle } from 'react-native';
-import { ThemedText } from '../ThemedText';
-import { ThemedView } from '../ThemedView';
+import { appTokens } from "@/constants/tokens";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { InputProps, Input as RNInput } from "@rneui/themed";
+import React from "react";
+import { StyleSheet } from "react-native";
 
-export interface IInput extends TextInputProps {
-	label?: string;
-	containerStyle?: ViewStyle;
-}
+export const Input = (props: InputProps) => {
+  const labelColor = useThemeColor({}, appTokens.text.secondary);
 
-export const Input = ({ label, style, containerStyle, ...rest }: IInput) => {
-	const [value, setValue] = useState('');
-	const refInput = useRef<TextInput>(null);
-	const backgroundColor = useThemeColor({}, appTokens.background.secondary);
-	const placeholderColor = useThemeColor({}, appTokens.text.placeholder);
-	const inputTextColor = useThemeColor({}, appTokens.text.primary);
-
-	return (
-		<ThemedView style={[styles.container, containerStyle]}>
-			{label && (
-				<ThemedText
-					style={styles.label}
-					lightColor={appTokens.text.secondary.light}
-					darkColor={appTokens.text.secondary.dark}
-					type='textSm'
-				>
-					{label}
-				</ThemedText>
-			)}
-			<TextInput
-				style={[{ backgroundColor }, { color: inputTextColor }, styles.input]}
-				placeholderTextColor={placeholderColor}
-				value={value}
-				onChangeText={text => setValue(text)}
-				ref={refInput}
-				{...rest}
-			/>
-		</ThemedView>
-	);
+  return (
+    <RNInput
+      {...props}
+      containerStyle={styles.containerExtra}
+      inputContainerStyle={styles.inputContainerExtra}
+      labelStyle={[{ color: labelColor }, styles.labelExtra]}
+      inputStyle={styles.inputExtra}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {},
+  labelExtra: {
+    marginBottom: 6,
+    fontWeight: 500,
+    fontSize: 14,
+    lineHeight: 20,
+    fontFamily: "MontserratRegular",
+  },
 
-	label: {
-		marginBottom: 6,
-		fontWeight: 500,
-	},
+  containerExtra: {
+    paddingHorizontal: 0,
+  },
 
-	input: {
-		paddingVertical: 12,
-		paddingHorizontal: 16,
-		height: 48,
-		borderRadius: 12,
-		fontSize: 16,
-		fontWeight: 500,
-		// lineHeight: 24
-	},
+  inputContainerExtra: {
+    borderWidth: 1,
+    borderColor: appTokens.border.tertiary.light,
+    backgroundColor: appTokens.background.secondary.light,
+    borderRadius: 12,
+  },
+
+  inputExtra: {
+    minHeight: 48,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderWidth: 0,
+    borderRadius: 12,
+    fontWeight: 500,
+    fontSize: 16,
+    lineHeight: 20,
+    fontFamily: "MontserratRegular",
+  },
 });
