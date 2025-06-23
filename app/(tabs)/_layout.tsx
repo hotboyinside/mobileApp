@@ -2,8 +2,13 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 
+import PlanetIcon from '@/assets/icons/planet-icon.svg';
+import CongressIcon from '@/assets/icons/congress-icon.svg';
+import DashboardIcon from '@/assets/icons/dashboard-icon.svg';
+import FireIcon from '@/assets/icons/fire-icon.svg';
+import MagnifierIcon from '@/assets/icons/magnifier-icon.svg';
+
 import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 
 export default function TabLayout() {
@@ -25,18 +30,45 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name='index'
 				options={{
-					title: 'Home',
+					title: 'All News',
 					tabBarIcon: ({ color }) => (
-						<IconSymbol size={28} name='house.fill' color={color} />
+						<PlanetIcon width={28} height={28} color={color} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='search'
+				options={{
+					title: 'Search',
+					tabBarIcon: ({ color }) => (
+						<MagnifierIcon width={28} height={28} color={color} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='congress'
+				options={{
+					title: 'Congress',
+					tabBarIcon: ({ color }) => (
+						<CongressIcon width={28} height={28} color={color} />
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name='newsAlerts'
+				options={{
+					title: 'News Alerts',
+					tabBarIcon: ({ color }) => (
+						<FireIcon width={28} height={28} color={color} />
 					),
 				}}
 			/>
 			<Tabs.Screen
 				name='explore'
 				options={{
-					title: 'Explore',
+					title: 'More',
 					tabBarIcon: ({ color }) => (
-						<IconSymbol size={28} name='paperplane.fill' color={color} />
+						<DashboardIcon width={28} height={28} color={color} />
 					),
 				}}
 			/>
