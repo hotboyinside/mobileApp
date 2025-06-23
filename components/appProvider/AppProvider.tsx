@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DialogProvider } from './dialog/DialogProvider';
+import { SessionProvider } from './session/SessionContext';
 export interface NavigateOptions {
 	history?: 'auto' | 'push' | 'replace';
 }
@@ -25,17 +26,6 @@ export interface Session {
 	};
 }
 
-export interface Authentication {
-	signIn: () => void;
-	signOut: () => void;
-}
-
-export const AuthenticationContext = React.createContext<Authentication | null>(
-	null
-);
-
-export const SessionContext = React.createContext<Session | null>(null);
-
 export interface AppProviderProps {
 	/**
 	 * The content of the app provider.
@@ -51,27 +41,20 @@ export interface AppProviderProps {
 	 * @default ruLocaleText
 	 */
 	session?: Session | null;
-	/**
-	 * Authentication methods.
-	 * @default null
-	 */
-	authentication?: Authentication | null;
 }
 
 function AppProvider(props: AppProviderProps) {
-	const { children, authentication = null, session = null, theme } = props;
+	const { children, theme } = props;
 	const queryClient = new QueryClient();
 
 	return (
 		<SafeAreaProvider>
 			<QueryClientProvider client={queryClient}>
-				<AuthenticationContext value={authentication}>
-					<SessionContext value={session}>
-						<ThemeProvider value={theme}>
-							<DialogProvider>{children}</DialogProvider>
-						</ThemeProvider>
-					</SessionContext>
-				</AuthenticationContext>
+				<SessionProvider>
+					<ThemeProvider value={theme}>
+						<DialogProvider>{children}</DialogProvider>
+					</ThemeProvider>
+				</SessionProvider>
 			</QueryClientProvider>
 		</SafeAreaProvider>
 	);

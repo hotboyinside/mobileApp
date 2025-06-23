@@ -6,6 +6,8 @@ import 'react-native-reanimated';
 
 import { AppProvider } from '@/components/appProvider/AppProvider';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { SplashScreenController } from '@/components/splash/SplashScreenController';
+import { useSession } from '@/components/appProvider/session/SessionContext';
 
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
@@ -23,20 +25,25 @@ export default function RootLayout() {
 
 	return (
 		<AppProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-			<Stack>
-				{/* {isLoggedIn ? (
-					<>
-						<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-						<Stack.Screen name='+not-found' />
-					</>
-				) : ( */}
-				<Stack.Screen
-					name='login'
-					options={{ headerShown: false }}
-				></Stack.Screen>
-				{/* )} */}
-			</Stack>
-			{/* <StatusBar style='auto' /> */}
+			<SplashScreenController />
+			<RootNavigator />
 		</AppProvider>
+	);
+}
+
+function RootNavigator() {
+	const { session } = useSession();
+	const isEmptySession = Object.keys(session ?? {}).length === 0;
+
+	return (
+		<Stack>
+			<Stack.Protected guard={!isEmptySession}>
+				<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+			</Stack.Protected>
+
+			<Stack.Protected guard={isEmptySession}>
+				<Stack.Screen name='sign-in' options={{ headerShown: false }} />
+			</Stack.Protected>
+		</Stack>
 	);
 }

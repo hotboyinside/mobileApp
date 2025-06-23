@@ -5,8 +5,12 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Button } from '@/components/ui/Button';
+import { useSession } from '@/components/appProvider/session/SessionContext';
 
 export default function HomeScreen() {
+	const { session, signOut } = useSession();
+	console.log('session', session);
 	return (
 		<ParallaxScrollView
 			headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -51,6 +55,7 @@ export default function HomeScreen() {
 					move the current <ThemedText type='textSm'>app</ThemedText> to{' '}
 					<ThemedText type='textSm'>app-example</ThemedText>.
 				</ThemedText>
+				<Button title='Log out' onPress={() => signOut()} />
 			</ThemedView>
 		</ParallaxScrollView>
 	);

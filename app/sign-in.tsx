@@ -1,4 +1,5 @@
 import LogoIcon from '@/assets/icons/logo-icon.svg';
+import { useSession } from '@/components/appProvider/session/SessionContext';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import { Button } from '@/components/ui/Button';
@@ -6,7 +7,6 @@ import { Input } from '@/components/ui/Input';
 import { useLogin } from '@/services/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
 import { createRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -25,7 +25,6 @@ const schema = yup
 	.required();
 
 export default function LoginScreen() {
-	const router = useRouter();
 	const inputRef = createRef<any>();
 	const {
 		control,
@@ -35,16 +34,14 @@ export default function LoginScreen() {
 		resolver: yupResolver(schema),
 	});
 
-	const handleLogin = async () => {
-		router.replace('/'); // Перенаправление на главную
-	};
+	const { signIn } = useSession();
 
-	const { mutate: login, isPending, error } = useLogin();
+	const { mutate: login } = useLogin();
 
 	const onSubmit = (data: any) => {
 		login(data, {
 			onSuccess: res => {
-				console.log('Logged in!', res.data);
+				signIn(res.data.success.user);
 			},
 			onError: err => {
 				console.error('Login error', err);
