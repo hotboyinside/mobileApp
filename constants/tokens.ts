@@ -12,11 +12,11 @@ export const appTokens = {
 		},
 		secondary: {
 			light: appColors.gray['700'],
-			dark: appColors.gray['300'],
+			dark: appColors.gray['200'],
 		},
 		secondaryHover: {
 			light: appColors.gray['800'],
-			dark: appColors.gray['200'],
+			dark: appColors.gray['100'],
 		},
 		secondaryOnBrand: {
 			light: appColors.brand['200'],
@@ -24,19 +24,19 @@ export const appTokens = {
 		},
 		tertiary: {
 			light: appColors.gray['600'],
-			dark: appColors.gray['400'],
+			dark: appColors.gray['300'],
 		},
 		tertiaryHover: {
 			light: appColors.gray['700'],
-			dark: appColors.gray['300'],
+			dark: appColors.gray['200'],
 		},
 		tertiaryOnBrand: {
 			light: appColors.brand['200'],
 			dark: appColors.gray['400'],
 		},
 		quaternary: {
-			light: appColors.gray['500'],
-			dark: appColors.gray['500'],
+			light: appColors.gray['400'],
+			dark: appColors.gray['400'],
 		},
 		quaternaryOnBrand: {
 			light: appColors.brand['300'],
@@ -44,31 +44,31 @@ export const appTokens = {
 		},
 		white: {
 			light: appColors.base.white,
-			dark: appColors.base.white,
+			dark: appColors.gray['900'],
 		},
 		disabled: {
 			light: appColors.gray['500'],
-			dark: appColors.gray['500'],
+			dark: appColors.gray['400'],
 		},
 		placeholder: {
-			light: appColors.gray['500'],
-			dark: appColors.gray['400'],
+			light: appColors.gray['400'],
+			dark: appColors.gray['500'],
 		},
 		placeholderSubtle: {
 			light: appColors.gray['300'],
-			dark: appColors.gray['700'],
+			dark: appColors.gray['600'],
 		},
 		brandPrimary: {
-			light: appColors.brand['900'],
+			light: appColors.brand['700'],
 			dark: appColors.gray['50'],
 		},
 		brandSecondary: {
-			light: appColors.brand['700'],
-			dark: appColors.gray['300'],
+			light: appColors.brand['600'],
+			dark: appColors.gray['100'],
 		},
 		brandTertiary: {
-			light: appColors.brand['600'],
-			dark: appColors.gray['400'],
+			light: appColors.brand['500'],
+			dark: appColors.gray['300'],
 		},
 		errorPrimary: {
 			light: appColors.error['600'],
@@ -87,37 +87,44 @@ export const appTokens = {
 	border: {
 		primary: {
 			light: appColors.gray['300'],
-			dark: appColors.gray['700'],
+			dark: appColors.gray['600'],
 		},
 
 		secondary: {
 			light: appColors.gray['200'],
-			dark: appColors.gray['800'],
+			dark: appColors.gray['700'],
 		},
+
 		tertiary: {
 			light: appColors.gray['100'],
-			dark: appColors.gray['800'],
+			dark: appColors.gray['700'],
 		},
+
 		disabled: {
 			light: appColors.gray['300'],
 			dark: appColors.gray['700'],
 		},
+
 		disabledSubtle: {
 			light: appColors.gray['200'],
 			dark: appColors.gray['800'],
 		},
+
 		brand: {
-			light: appColors.brand['500'],
-			dark: appColors.brand['400'],
+			light: appColors.brand['400'],
+			dark: appColors.brand['600'],
 		},
+
 		brandSubtle: {
 			light: appColors.brand['200'],
 			dark: appColors.brand['800'],
 		},
+
 		error: {
 			light: appColors.error['500'],
 			dark: appColors.error['400'],
 		},
+
 		errorSubtle: {
 			light: appColors.error['300'],
 			dark: appColors.error['400'],
@@ -139,15 +146,15 @@ export const appTokens = {
 		},
 		secondary: {
 			light: appColors.gray['50'],
-			dark: appColors.gray['950'],
+			dark: appColors.gray['800'],
 		},
 		secondaryHover: {
 			light: appColors.gray['100'],
-			dark: appColors.gray['800'],
+			dark: appColors.gray['900'],
 		},
 		secondarySubtle: {
 			light: appColors.gray['25'],
-			dark: appColors.gray['900'],
+			dark: appColors.gray['950'],
 		},
 		secondarySolid: {
 			light: appColors.gray['600'],
@@ -155,7 +162,7 @@ export const appTokens = {
 		},
 		tertiary: {
 			light: appColors.gray['100'],
-			dark: appColors.gray['800'],
+			dark: appColors.gray['700'],
 		},
 		quaternary: {
 			light: appColors.gray['200'],
@@ -167,7 +174,7 @@ export const appTokens = {
 		},
 		disabled: {
 			light: appColors.gray['100'],
-			dark: appColors.gray['800'],
+			dark: appColors.gray['900'],
 		},
 		disabledSubtle: {
 			light: appColors.gray['50'],
@@ -203,7 +210,7 @@ export const appTokens = {
 		},
 		errorPrimary: {
 			light: appColors.error['50'],
-			dark: appColors.error['950'],
+			dark: appColors.error['900'],
 		},
 		errorSecondary: {
 			light: appColors.error['100'],
@@ -215,7 +222,7 @@ export const appTokens = {
 		},
 		warningPrimary: {
 			light: appColors.warning['50'],
-			dark: appColors.warning['950'],
+			dark: appColors.warning['900'],
 		},
 		warningSecondary: {
 			light: appColors.warning['100'],
@@ -226,11 +233,11 @@ export const appTokens = {
 			dark: appColors.warning['600'],
 		},
 		successPrimary: {
-			light: appColors.success['50'],
-			dark: appColors.success['950'],
+			light: appColors.success['100'],
+			dark: appColors.success['900'],
 		},
 		successSecondary: {
-			light: appColors.success['100'],
+			light: appColors.success['200'],
 			dark: appColors.success['600'],
 		},
 		successSolid: {
@@ -261,7 +268,7 @@ export const appTokens = {
 			dark: appColors.gray['300'],
 		},
 		quaternary: {
-			light: appColors.gray['500'],
+			light: appColors.gray['400'],
 			dark: appColors.gray['500'],
 		},
 		quaternaryHover: {
@@ -270,7 +277,7 @@ export const appTokens = {
 		},
 		quinary: {
 			light: appColors.gray['400'],
-			dark: appColors.gray['600'],
+			dark: appColors.gray['500'],
 		},
 		quinaryHover: {
 			light: appColors.gray['500'],
@@ -293,12 +300,12 @@ export const appTokens = {
 			dark: appColors.gray['600'],
 		},
 		brandPrimary: {
-			light: appColors.brand['600'],
+			light: appColors.brand['500'],
 			dark: appColors.brand['500'],
 		},
 		brandSecondary: {
-			light: appColors.brand['500'],
-			dark: appColors.brand['500'],
+			light: appColors.brand['400'],
+			dark: appColors.brand['600'],
 		},
 		errorPrimary: {
 			light: appColors.error['600'],
@@ -306,10 +313,10 @@ export const appTokens = {
 		},
 		errorSecondary: {
 			light: appColors.error['500'],
-			dark: appColors.error['400'],
+			dark: appColors.error['500'],
 		},
 		warningPrimary: {
-			light: appColors.warning['600'],
+			light: appColors.warning['500'],
 			dark: appColors.warning['500'],
 		},
 		warningSecondary: {

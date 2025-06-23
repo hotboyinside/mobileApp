@@ -1,12 +1,9 @@
 'use client';
-import { euLocaleText } from '@/locales/eu';
 import { ThemeProvider } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DialogProvider } from './dialog/DialogProvider';
-import { LocalizationProvider } from './localization/LocalizationProvider';
-import { LocaleText } from './localization/types/localization.types';
-
 export interface NavigateOptions {
 	history?: 'auto' | 'push' | 'replace';
 }
@@ -50,10 +47,6 @@ export interface AppProviderProps {
 	 */
 	theme?: ReactNavigation.Theme;
 	/**
-	 * Locale text for components
-	 */
-	localeText?: Partial<LocaleText>;
-	/**
 	 * Session info about the current user.
 	 * @default ruLocaleText
 	 */
@@ -66,25 +59,20 @@ export interface AppProviderProps {
 }
 
 function AppProvider(props: AppProviderProps) {
-	const {
-		children,
-		localeText = euLocaleText,
-		authentication = null,
-		session = null,
-		theme,
-	} = props;
+	const { children, authentication = null, session = null, theme } = props;
+	const queryClient = new QueryClient();
 
 	return (
 		<SafeAreaProvider>
-			<AuthenticationContext value={authentication}>
-				<SessionContext value={session}>
-					<ThemeProvider value={theme}>
-						<LocalizationProvider localeText={localeText}>
+			<QueryClientProvider client={queryClient}>
+				<AuthenticationContext value={authentication}>
+					<SessionContext value={session}>
+						<ThemeProvider value={theme}>
 							<DialogProvider>{children}</DialogProvider>
-						</LocalizationProvider>
-					</ThemeProvider>
-				</SessionContext>
-			</AuthenticationContext>
+						</ThemeProvider>
+					</SessionContext>
+				</AuthenticationContext>
+			</QueryClientProvider>
 		</SafeAreaProvider>
 	);
 }
