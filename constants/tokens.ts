@@ -344,23 +344,40 @@ export const appTokens = {
 		logoPrimary: appColors.brand['600'],
 		logoSecondary: appColors.brand['400'],
 		shadowSoft: '#0D121C0C',
-
 		buttons: {
 			secondaryGray: {
-				bg: appColors.gray['50'],
+				bg: {
+					light: appColors.gray['50'],
+					dark: appColors.gray['700'],
+				},
 				bgHover: appColors.gray['100'],
-				fg: appColors.gray['700'],
+				fg: {
+					light: appColors.gray['700'],
+					dark: appColors.gray['300'],
+				},
 				fgHover: appColors.gray['800'],
 			},
 			tertiaryGray: {
 				bg: appColors.base.transparent,
 				bgHover: appColors.gray['100'],
-				fg: appColors.gray['700'],
+				fg: {
+					light: appColors.gray['700'],
+					dark: appColors.gray['300'],
+				},
 				fgHover: appColors.gray['800'],
+			},
+			link: {
+				fg: {
+					light: appColors.brand['500'],
+					dark: appColors.brand['400'],
+				},
 			},
 			linkGray: {
 				bg: appColors.base.transparent,
-				fg: appColors.gray['700'],
+				fg: {
+					light: appColors.gray['700'],
+					dark: appColors.gray['300'],
+				},
 			},
 			linkTertiary: {
 				bg: appColors.base.transparent,
