@@ -13,7 +13,7 @@ export default function HomeScreen() {
 	return (
 		<ThemedViewWithSafeArea
 			style={styles.container}
-			safeEdges={['top', 'right', 'bottom', 'left']}
+			safeEdges={['right', 'bottom', 'left']}
 		>
 			<Header />
 			<ThemedView style={styles.titleContainer}>
