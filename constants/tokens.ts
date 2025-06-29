@@ -416,4 +416,54 @@ export const appTokens = {
 			90: '#0D121CE5',
 		},
 	},
+	utilityGray: {
+		25: {
+			light: appColors.gray['25'],
+			dark: appColors.gray['900'],
+		},
+		50: {
+			light: appColors.gray['50'],
+			dark: appColors.gray['800'],
+		},
+		100: {
+			light: appColors.gray['100'],
+			dark: appColors.gray['700'],
+		},
+		200: {
+			light: appColors.gray['200'],
+			dark: appColors.gray['600'],
+		},
+		300: {
+			light: appColors.gray['300'],
+			dark: appColors.gray['500'],
+		},
+		400: {
+			light: appColors.gray['400'],
+			dark: appColors.gray['400'],
+		},
+		500: {
+			light: appColors.gray['500'],
+			dark: appColors.gray['300'],
+		},
+		600: {
+			light: appColors.gray['600'],
+			dark: appColors.gray['200'],
+		},
+		700: {
+			light: appColors.gray['700'],
+			dark: appColors.gray['100'],
+		},
+		800: {
+			light: appColors.gray['800'],
+			dark: appColors.gray['50'],
+		},
+		900: {
+			light: appColors.gray['900'],
+			dark: appColors.gray['25'],
+		},
+		950: {
+			light: appColors.gray['950'],
+			dark: appColors.gray['25'],
+		},
+	},
 } as const;
