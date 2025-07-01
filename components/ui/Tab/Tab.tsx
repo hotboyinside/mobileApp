@@ -1,11 +1,24 @@
 import { Tab as RNTab, TabProps as RNTabProps } from "@rneui/base";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 export type TabProps = RNTabProps & {};
 
 export const Tab = ({ ...props }: TabProps) => {
-  return <RNTab buttonStyle={styles.buttonExtraStyles} containerStyle={styles.containerExtraStyles} {...props}></RNTab>;
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: 16 }}
+      style={{ marginHorizontal: -16 }}
+    >
+      <RNTab
+        disableIndicator
+        buttonStyle={styles.buttonExtraStyles}
+        {...props}
+      ></RNTab>
+    </ScrollView>
+  );
 };
 
 Tab.Item = RNTab.Item;
@@ -15,13 +28,4 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 0,
   },
-
-  containerExtraStyles: {
-    // flex: 0,
-    paddingVertical: 6,
-    // flexShrink: 1,
-    paddingHorizontal: 12,
-    // alignItems: 'center',
-    justifyContent: 'center'
-  },
-})
+});

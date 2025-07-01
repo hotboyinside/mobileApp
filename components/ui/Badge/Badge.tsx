@@ -45,6 +45,7 @@ export const Badge = ({
 
 const generalBadgeStyles = StyleSheet.create({
 	extraBadgeStyle: {
+		borderWidth: 0,
 		borderRadius: 100,
 		height: 'auto',
 	},

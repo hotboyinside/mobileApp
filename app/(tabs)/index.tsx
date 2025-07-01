@@ -4,7 +4,9 @@ import { ThemedView } from "@/components/ThemedView";
 import { ThemedViewWithSafeArea } from "@/components/ThemedViewWithSafeArea";
 import Header from "@/components/ui/Header";
 import React from "react";
-import { Tab } from '@/components/ui/Tab/Tab';
+import { Tab } from "@/components/ui/Tab/Tab";
+import { appTokens } from "@/constants/tokens";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 type MockItem = {
   id: number;
@@ -71,20 +73,120 @@ const listStyles = StyleSheet.create({
 });
 
 const TopBlock = () => {
+  const tabBgColor = useThemeColor({}, appTokens.border.tertiary);
+  const tabBgColorActive = useThemeColor({}, appTokens.background.tertiary);
+  const tabTextColor = useThemeColor({}, appTokens.text.tertiary);
+  const tabTextColorActive = useThemeColor({}, appTokens.text.secondary);
+  const tabBorderColor = useThemeColor({}, appTokens.border.tertiary);
+
   return (
     <ThemedView style={topBlockStyles.container}>
       <ThemedText type='textLg' style={topBlockStyles.title}>
         Top Gainers
       </ThemedText>
       <Tab>
-				<Tab.Item
-					title='All Stocks'
-					titleStyle={topBlockStyles.itemStyles}
-				/>
-				<Tab.Item
-					title='With News or Filings'
-					titleStyle={topBlockStyles.itemStyles}
-				/>
+        <Tab.Item
+          buttonStyle={active => ({
+            paddingVertical: 6,
+            paddingHorizontal: 12,
+          })}
+          containerStyle={active => ({
+            borderRadius: 10,
+            flex: 0,
+            marginRight: 8,
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            backgroundColor: active ? tabBgColorActive : "transparent",
+            borderColor: active ? "none" : tabBorderColor,
+            borderWidth: active ? 0 : 1,
+          })}
+          title='All Stocks'
+          titleStyle={active => ({
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            fontSize: 14,
+            lineHeight: 24,
+            color: active ? tabTextColorActive : tabTextColor,
+            fontWeight: active ? 600 : 500,
+            fontFamily: active ? "MontserratBold" : "MontserratMedium",
+          })}
+        />
+        <Tab.Item
+          buttonStyle={active => ({
+            paddingVertical: 6,
+            paddingHorizontal: 12,
+          })}
+          containerStyle={active => ({
+            borderRadius: 10,
+            flex: 0,
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            backgroundColor: active ? tabBgColorActive : "transparent",
+            borderColor: active ? "none" : tabBorderColor,
+            borderWidth: active ? 0 : 1,
+          })}
+          title='With News or Filings'
+          titleStyle={active => ({
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            fontSize: 14,
+            lineHeight: 24,
+            color: active ? tabTextColorActive : tabTextColor,
+            fontWeight: active ? 600 : 500,
+            fontFamily: active ? "MontserratBold" : "MontserratMedium",
+          })}
+        />
+        <Tab.Item
+          buttonStyle={active => ({
+            paddingVertical: 6,
+            paddingHorizontal: 12,
+          })}
+          containerStyle={active => ({
+            borderRadius: 10,
+            flex: 0,
+            marginRight: 8,
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            backgroundColor: active ? tabBgColorActive : "transparent",
+            borderColor: active ? "none" : tabBorderColor,
+            borderWidth: active ? 0 : 1,
+          })}
+          title='All Stocks'
+          titleStyle={active => ({
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            fontSize: 14,
+            lineHeight: 24,
+            color: active ? tabTextColorActive : tabTextColor,
+            fontWeight: active ? 600 : 500,
+            fontFamily: active ? "MontserratBold" : "MontserratMedium",
+          })}
+        />
+        <Tab.Item
+          buttonStyle={active => ({
+            paddingVertical: 6,
+            paddingHorizontal: 12,
+          })}
+          containerStyle={active => ({
+            borderRadius: 10,
+            flex: 0,
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            backgroundColor: active ? tabBgColorActive : "transparent",
+            borderColor: active ? "none" : tabBorderColor,
+            borderWidth: active ? 0 : 1,
+          })}
+          title='All Stocks'
+          titleStyle={active => ({
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            fontSize: 14,
+            lineHeight: 24,
+            color: active ? tabTextColorActive : tabTextColor,
+            fontWeight: active ? 600 : 500,
+            fontFamily: active ? "MontserratBold" : "MontserratMedium",
+          })}
+        />
       </Tab>
     </ThemedView>
   );
@@ -101,13 +203,21 @@ const topBlockStyles = StyleSheet.create({
     fontFamily: "MontserratBold",
   },
 
-	itemStyles: {
-		paddingVertical: 0,
-		paddingHorizontal: 0,
-		fontFamily: 'MontserratSemiBold',
+  itemStyles: {
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    fontFamily: "MontserratMedium",
+    fontWeight: 500,
+    fontSize: 14,
+  },
+
+  itemStylesActive: {
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    fontFamily: "MontserratSemiBold",
     fontWeight: 600,
     fontSize: 14,
-	}
+  },
 });
 
 export default function HomeScreen() {
