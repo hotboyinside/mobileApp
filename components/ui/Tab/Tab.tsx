@@ -1,29 +1,60 @@
 import { Tab as RNTab, TabProps as RNTabProps } from "@rneui/base";
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { TabItem } from "./TabItem";
 
-export type TabProps = RNTabProps & {};
+export type TabProps = RNTabProps & {
+  tabsTitles: string[];
+  isScroll?: boolean;
+  scrollStyles?: StyleProp<ViewStyle>;
+};
 
-export const Tab = ({ ...props }: TabProps) => {
+export const Tab = ({
+  tabsTitles,
+  scrollStyles,
+  isScroll = false,
+  ...props
+}: TabProps) => {
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 16 }}
-      style={{ marginHorizontal: -16 }}
-    >
-      <RNTab
-        disableIndicator
-        buttonStyle={styles.buttonExtraStyles}
-        {...props}
-      ></RNTab>
-    </ScrollView>
+    <>
+      {isScroll && (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.contentContainerStyle}
+          style={[scrollStyles]}
+        >
+          <RNTab
+            {...props}
+            scrollable={false}
+            disableIndicator
+            buttonStyle={styles.buttonExtraStyles}
+          >
+            {tabsTitles.map(tabTitle => (
+              <TabItem key={tabTitle} title={tabTitle} />
+            ))}
+          </RNTab>
+        </ScrollView>
+      )}
+
+      {!isScroll && (
+        <RNTab
+          {...props}
+          disableIndicator
+          buttonStyle={styles.buttonExtraStyles}
+        >
+          {tabsTitles.map(tabTitle => (
+            <TabItem key={tabTitle} title={tabTitle} />
+          ))}
+        </RNTab>
+      )}
+    </>
   );
 };
 
-Tab.Item = RNTab.Item;
-
 const styles = StyleSheet.create({
+  contentContainerStyle: { paddingHorizontal: 16 },
+
   buttonExtraStyles: {
     paddingVertical: 0,
     paddingHorizontal: 0,

@@ -1,125 +1,137 @@
-import { appTokens } from '@/constants/tokens';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { BadgeProps, BadgeVariant, VariantColorStyles } from './badgeTypes';
+import { appTokens } from "@/constants/tokens";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { BadgeProps, BadgeVariant, VariantColorStyles } from "./badgeTypes";
 
 export const useBadgeStyles = (): {
-	variantColorStyles: VariantColorStyles;
-	borderWidths: Record<BadgeVariant, number>;
+  variantColorStyles: VariantColorStyles;
+  borderWidths: Record<BadgeVariant, number>;
 } => {
-	const modernTextColor = useThemeColor({}, appTokens.text.secondary);
-	const modernBorderColor = useThemeColor({}, appTokens.border.secondary);
-	const modernBgColor = useThemeColor({}, appTokens.background.primary);
+  const modernTextColor = useThemeColor({}, appTokens.text.secondary);
+  const modernBorderColor = useThemeColor({}, appTokens.border.secondary);
+  const modernBgColor = useThemeColor({}, appTokens.background.primary);
 
-	const pillColorGrayTextColor = useThemeColor({}, appTokens.text.secondary);
-	const pillColorGrayBgColor = useThemeColor({}, appTokens.background.tertiary);
+  const pillColorGrayTextColor = useThemeColor({}, appTokens.text.secondary);
+  const pillColorGrayBgColor = useThemeColor({}, appTokens.background.tertiary);
 
-	const pillColorPrimaryTextColor = useThemeColor(
-		{},
-		appTokens.text.brandSecondary
-	);
-	const pillColorPrimaryBgColor = useThemeColor(
-		{},
-		appTokens.background.brandPrimary
-	);
+  const pillColorPrimaryTextColor = useThemeColor(
+    {},
+    appTokens.text.brandSecondary
+  );
+  const pillColorPrimaryBgColor = useThemeColor(
+    {},
+    appTokens.background.brandPrimary
+  );
 
-	const pillColorRedTextColor = useThemeColor({}, appTokens.text.errorPrimary);
-	const pillColorRedBgColor = useThemeColor(
-		{},
-		appTokens.background.errorPrimary
-	);
+  const pillColorRedTextColor = useThemeColor({}, appTokens.text.errorPrimary);
+  const pillColorRedBgColor = useThemeColor(
+    {},
+    appTokens.background.errorPrimary
+  );
 
-	const pillColorGreenTextColor = useThemeColor(
-		{},
-		appTokens.text.successPrimary
-	);
-	const pillColorGreenBgColor = useThemeColor(
-		{},
-		appTokens.background.successPrimary
-	);
+  const pillColorGreenTextColor = useThemeColor(
+    {},
+    appTokens.text.successPrimary
+  );
+  const pillColorGreenBgColor = useThemeColor(
+    {},
+    appTokens.background.successPrimary
+  );
 
-	const filledPrimaryTextColor = useThemeColor(
-		{},
-		appTokens.text.primaryOnBrand
-	);
-	const filledPrimaryFgColor = useThemeColor(
-		{},
-		appTokens.foreground.brandSecondary
-	);
+  const filledPrimaryTextColor = useThemeColor(
+    {},
+    appTokens.text.primaryOnBrand
+  );
+  const filledPrimaryFgColor = useThemeColor(
+    {},
+    appTokens.foreground.brandSecondary
+  );
 
-	const filledRedTextColor = useThemeColor({}, appTokens.text.primaryOnBrand);
-	const filledRedFgColor = useThemeColor(
-		{},
-		appTokens.foreground.errorSecondary
-	);
+  const filledRedTextColor = useThemeColor({}, appTokens.text.primaryOnBrand);
+  const filledRedFgColor = useThemeColor(
+    {},
+    appTokens.foreground.errorSecondary
+  );
 
-	const filledGreenTextColor = useThemeColor({}, appTokens.text.primaryOnBrand);
-	const filledGreenFgColor = useThemeColor(
-		{},
-		appTokens.foreground.successSecondary
-	);
+  const filledGreenTextColor = useThemeColor({}, appTokens.text.primaryOnBrand);
+  const filledGreenFgColor = useThemeColor(
+    {},
+    appTokens.foreground.successSecondary
+  );
 
-	const variantColorStyles: VariantColorStyles = {
-		modern: {
-			gray: {
-				color: modernTextColor,
-				borderColor: modernBorderColor,
-				backgroundColor: modernBgColor,
-			},
-		},
+  const keywordsRedTextColor = useThemeColor({}, appTokens.utilityRed[700]);
+  const keywordsRedBgColor = useThemeColor({}, appTokens.utilityRed[50]);
 
-		pillColor: {
-			gray: {
-				color: pillColorGrayTextColor,
-				backgroundColor: pillColorGrayBgColor,
-			},
+  const keywordsGreenTextColor = useThemeColor({}, appTokens.utilityGreen[700]);
+  const keywordsGreenBgColor = useThemeColor({}, appTokens.utilityGreen[100]);
 
-			primary: {
-				color: pillColorPrimaryTextColor,
-				backgroundColor: pillColorPrimaryBgColor,
-			},
+  const variantColorStyles: VariantColorStyles = {
+    modern: {
+      gray: {
+        color: modernTextColor,
+        borderColor: modernBorderColor,
+        backgroundColor: modernBgColor,
+      },
+    },
 
-			red: {
-				color: pillColorRedTextColor,
-				backgroundColor: pillColorRedBgColor,
-			},
+    pillColor: {
+      gray: {
+        color: pillColorGrayTextColor,
+        backgroundColor: pillColorGrayBgColor,
+      },
 
-			green: {
-				color: pillColorGreenTextColor,
-				backgroundColor: pillColorGreenBgColor,
-			},
-		},
+      primary: {
+        color: pillColorPrimaryTextColor,
+        backgroundColor: pillColorPrimaryBgColor,
+      },
 
-		filled: {
-			primary: {
-				color: filledPrimaryTextColor,
-				backgroundColor: filledPrimaryFgColor,
-			},
+      red: {
+        color: pillColorRedTextColor,
+        backgroundColor: pillColorRedBgColor,
+      },
 
-			red: {
-				color: filledRedTextColor,
-				backgroundColor: filledRedFgColor,
-			},
+      green: {
+        color: pillColorGreenTextColor,
+        backgroundColor: pillColorGreenBgColor,
+      },
+    },
 
-			green: {
-				color: filledGreenTextColor,
-				backgroundColor: filledGreenFgColor,
-			},
-		},
+    filled: {
+      primary: {
+        color: filledPrimaryTextColor,
+        backgroundColor: filledPrimaryFgColor,
+      },
 
-		keywords: {
-			gray: {},
-			primary: {},
-			red: {},
-			green: {},
-		},
-	};
+      red: {
+        color: filledRedTextColor,
+        backgroundColor: filledRedFgColor,
+      },
 
-	const borderWidths: Record<BadgeProps['variant'], number> = {
-		modern: 1,
-		pillColor: 0,
-		filled: 0,
-		keywords: 0,
-	};
+      green: {
+        color: filledGreenTextColor,
+        backgroundColor: filledGreenFgColor,
+      },
+    },
 
-	return { variantColorStyles, borderWidths };
+    keywords: {
+      red: {
+        color: keywordsRedTextColor,
+        backgroundColor: keywordsRedBgColor,
+      },
+      green: {
+        color: keywordsGreenTextColor,
+        backgroundColor: keywordsGreenBgColor,
+      },
+      gray: {},
+      primary: {},
+    },
+  };
+
+  const borderWidths: Record<BadgeProps["variant"], number> = {
+    modern: 1,
+    pillColor: 0,
+    filled: 0,
+    keywords: 0,
+  };
+
+  return { variantColorStyles, borderWidths };
 };
