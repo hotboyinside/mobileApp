@@ -3,9 +3,9 @@ import { ThemedView } from "@/components/ThemedView";
 import { Tab } from "@/components/ui/Tab/Tab";
 import { TabView } from "@rneui/base";
 import React, { useState } from "react";
-import { TopNews } from "./TopNews";
 import { StyleSheet } from "react-native";
 import { News } from "./TopNewsCard";
+import { Cards } from "./TopNews";
 
 export const topGainersMocks: News[] = [
   {
@@ -27,6 +27,7 @@ export const topGainersMocks: News[] = [
 
 export default function TopGainers() {
   const [index, setIndex] = useState(0);
+
   return (
     <ThemedView>
       <ThemedText type='textLg' style={styles.title}>
@@ -48,10 +49,10 @@ export default function TopGainers() {
         }}
       >
         <TabView.Item>
-          <TopNews topNews={topGainersMocks} />
+          <Cards topNews={topGainersMocks} />
         </TabView.Item>
         <TabView.Item>
-          <TopNews topNews={topGainersMocks} />
+          <Cards topNews={topGainersMocks} />
         </TabView.Item>
       </TabView>
     </ThemedView>

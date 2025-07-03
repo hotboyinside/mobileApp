@@ -2,11 +2,11 @@ import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { TopNewsCard, News } from "./TopNewsCard";
 
-type TopNewsProps = {
+type CardsProps = {
   topNews: News[];
 };
 
-export const TopNews = ({ topNews }: TopNewsProps) => {
+export const Cards = ({ topNews }: CardsProps) => {
   return (
     <ScrollView
       horizontal

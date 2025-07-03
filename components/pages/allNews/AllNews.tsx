@@ -3,6 +3,7 @@ import { ThemedViewWithSafeArea } from "@/components/ThemedViewWithSafeArea";
 import Header from "@/components/ui/Header";
 import React from "react";
 import { TopNewsBlock } from "./TopNewsBlock/TopNewsBlock";
+import { Filters } from "./Filters";
 
 type MockItem = {
   id: number;
@@ -80,7 +81,12 @@ export default function AllNews() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => <ListItem item={item} />}
         ListHeaderComponent={() => {
-          return <TopNewsBlock />;
+          return (
+            <>
+              <TopNewsBlock />
+              <Filters />
+            </>
+          );
         }}
       ></FlatList>
     </ThemedViewWithSafeArea>

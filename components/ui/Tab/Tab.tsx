@@ -1,10 +1,15 @@
 import { Tab as RNTab, TabProps as RNTabProps } from "@rneui/base";
-import React from "react";
+import React, { JSXElementConstructor, ReactElement } from "react";
 import { ScrollView, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { TabItem } from "./TabItem";
 
+type tabElement =
+  | string
+  | ReactElement<{}, string | JSXElementConstructor<any>>
+  | undefined;
+
 export type TabProps = RNTabProps & {
-  tabsTitles: string[];
+  tabsTitles: tabElement[];
   isScroll?: boolean;
   scrollStyles?: StyleProp<ViewStyle>;
 };
@@ -30,8 +35,8 @@ export const Tab = ({
             disableIndicator
             buttonStyle={styles.buttonExtraStyles}
           >
-            {tabsTitles.map(tabTitle => (
-              <TabItem key={tabTitle} title={tabTitle} />
+            {tabsTitles.map((tabTitle, index) => (
+              <TabItem key={index} title={tabTitle} />
             ))}
           </RNTab>
         </ScrollView>
@@ -43,8 +48,8 @@ export const Tab = ({
           disableIndicator
           buttonStyle={styles.buttonExtraStyles}
         >
-          {tabsTitles.map(tabTitle => (
-            <TabItem key={tabTitle} title={tabTitle} />
+          {tabsTitles.map((tabTitle, index) => (
+            <TabItem key={index} title={tabTitle} />
           ))}
         </RNTab>
       )}
