@@ -4,7 +4,18 @@ export type VariantColorMap = {
 	modern: ['gray'];
 	pillColor: ['gray', 'primary', 'red', 'green'];
 	filled: ['primary', 'red', 'green'];
-	keywords: ['gray', 'primary', 'red', 'green'];
+	keywords: [
+		'gray',
+		'pink',
+		'red',
+		'orange',
+		'yellow',
+		'lime',
+		'green',
+		'blue',
+		'grayBlue',
+		'violet'
+	];
 };
 
 export type VariantColorStyles = {
