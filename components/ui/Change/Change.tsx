@@ -1,4 +1,4 @@
-import { ThemedText } from '@/components/ThemedText';
+import { ThemedText, ThemedTextType } from '@/components/ThemedText';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import ArrowDownIcon from '@/assets/icons/alt-arrow-down-icon.svg';
@@ -8,9 +8,15 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 
 type ChangeProps = {
 	value: string;
+	size?: 'xs' | 'sm';
 };
 
-export const Change = ({ value }: ChangeProps) => {
+type ChangeSizeStyles = {
+	iconSize: number;
+	fontType: ThemedTextType;
+};
+
+export const Change = ({ value, size = 'sm' }: ChangeProps) => {
 	const valueIsNumber = !isNaN(Number(value));
 	const formattedValue = Number(value);
 	const isPositiveValue = formattedValue >= 0;
@@ -18,6 +24,22 @@ export const Change = ({ value }: ChangeProps) => {
 	let percentChange;
 	if (valueIsNumber) {
 		percentChange = `${value}%`;
+	}
+
+	let changeSizeStyles: ChangeSizeStyles = {
+		iconSize: 12,
+		fontType: 'textXs',
+	};
+
+	switch (size) {
+		case 'xs':
+			changeSizeStyles['iconSize'] = 12;
+			changeSizeStyles['fontType'] = 'textXs';
+			break;
+		case 'sm':
+			changeSizeStyles['iconSize'] = 16;
+			changeSizeStyles['fontType'] = 'textSm';
+			break;
 	}
 
 	const textColor = useThemeColor(
@@ -37,13 +59,24 @@ export const Change = ({ value }: ChangeProps) => {
 		<View style={styles.changeContainer}>
 			<View>
 				{valueIsNumber && isPositiveValue && (
-					<ArrowUpIcon width={16} height={16} color={iconColor} />
+					<ArrowUpIcon
+						width={changeSizeStyles.iconSize}
+						height={changeSizeStyles.iconSize}
+						color={iconColor}
+					/>
 				)}
 				{valueIsNumber && !isPositiveValue && (
-					<ArrowDownIcon width={16} height={16} color={iconColor} />
+					<ArrowDownIcon
+						width={changeSizeStyles.iconSize}
+						height={changeSizeStyles.iconSize}
+						color={iconColor}
+					/>
 				)}
 			</View>
-			<ThemedText style={[styles.change, { color: textColor }]} type='textXs'>
+			<ThemedText
+				style={[styles.change, { color: textColor }]}
+				type={changeSizeStyles.fontType}
+			>
 				{percentChange}
 			</ThemedText>
 		</View>
@@ -59,8 +92,6 @@ const styles = StyleSheet.create({
 
 	change: {
 		fontFamily: 'MontserratSemiBold',
-		fontSize: 12,
 		fontWeight: 600,
-		lineHeight: 20,
 	},
 });

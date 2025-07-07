@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
 
 	title: {
 		marginHorizontal: 16,
+		marginBottom: 8,
 		fontWeight: 700,
 		fontFamily: 'MontserratBold',
-		marginBottom: 8,
 	},
 
 	tabViewContainer: {

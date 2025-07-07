@@ -1,43 +1,40 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 import { appTokens } from '@/constants/tokens';
-import { useThemeColor } from '@/hooks/useThemeColor';
+import { ColorVariant, useThemeColor } from '@/hooks/useThemeColor';
+
+export type ThemedTextType =
+	| 'default'
+	| 'displayXl'
+	| 'displayLg'
+	| 'displayMd'
+	| 'displaySm'
+	| 'displayXs'
+	| 'textXl'
+	| 'textLg'
+	| 'textMd'
+	| 'textSm'
+	| 'textXs'
+	| 'textXss';
 
 export type ThemedTextProps = TextProps & {
-	lightColor?: string;
-	darkColor?: string;
-	type?:
-		| 'default'
-		| 'displayXl'
-		| 'displayLg'
-		| 'displayMd'
-		| 'displaySm'
-		| 'displayXs'
-		| 'textXl'
-		| 'textLg'
-		| 'textMd'
-		| 'textSm'
-		| 'textXs'
-		| 'textXss';
+	color?: ColorVariant;
+	type?: ThemedTextType;
 };
 
 export function ThemedText({
 	style,
-	lightColor,
-	darkColor,
+	color = appTokens.text.primary,
 	type = 'default',
 	...rest
 }: ThemedTextProps) {
-	const color = useThemeColor(
-		{ light: lightColor, dark: darkColor },
-		appTokens.text.primary
-	);
+	const textColor = useThemeColor({}, color);
 
 	return (
 		<Text
 			style={[
 				{ fontFamily: 'MontserratRegular' },
-				{ color },
+				{ color: textColor },
 				type === 'default' ? styles.textMd : undefined,
 				type === 'displayXl' ? styles.displayXl : undefined,
 				type === 'displayLg' ? styles.displayLg : undefined,

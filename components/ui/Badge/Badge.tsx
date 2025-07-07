@@ -4,6 +4,13 @@ import { StyleSheet } from 'react-native';
 import { useBadgeStyles } from './badgeStyles';
 import { BadgeProps } from './badgeTypes';
 
+type SizeBadgeStyles = {
+	paddingHorizontal: number;
+	paddingVertical: number;
+	fontSize?: number;
+	lineHeight?: number;
+};
+
 export const Badge = ({
 	onlyIcon,
 	size = 'md',
@@ -15,7 +22,7 @@ export const Badge = ({
 	const colorKey =
 		color as keyof (typeof variantColorStyles)[typeof variantKey];
 
-	let sizeBadgeStyles;
+	let sizeBadgeStyles: SizeBadgeStyles;
 
 	if (onlyIcon) {
 		sizeBadgeStyles = onlyIconSizeStyles[size];
@@ -34,13 +41,20 @@ export const Badge = ({
 		<RNBadge
 			{...props}
 			textStyle={[
-				props.textStyle,
+				{
+					fontSize: sizeBadgeStyles.fontSize,
+					lineHeight: sizeBadgeStyles.lineHeight,
+				},
 				generalTextStyles.extraTextStyle,
 				{ color: textColor },
+				props.textStyle,
 			]}
 			badgeStyle={[
 				generalBadgeStyles.extraBadgeStyle,
-				sizeBadgeStyles,
+				{
+					paddingVertical: sizeBadgeStyles.paddingVertical,
+					paddingHorizontal: sizeBadgeStyles.paddingHorizontal,
+				},
 				badgeColorStyles,
 				props.containerStyle,
 			]}
@@ -62,10 +76,8 @@ const generalTextStyles = StyleSheet.create({
 		paddingVertical: 0,
 		paddingHorizontal: 0,
 		textAlign: 'center',
-		fontSize: 14,
-		fontFamily: 'MontserratMedium',
 		fontWeight: 500,
-		lineHeight: 20,
+		fontFamily: 'MontserratMedium',
 	},
 });
 
@@ -73,21 +85,29 @@ const sizeStyles = StyleSheet.create({
 	xs: {
 		paddingHorizontal: 6,
 		paddingVertical: 1,
+		fontSize: 10,
+		lineHeight: 16,
 	},
 
 	sm: {
 		paddingHorizontal: 8,
 		paddingVertical: 1,
+		fontSize: 12,
+		lineHeight: 18,
 	},
 
 	md: {
 		paddingHorizontal: 10,
 		paddingVertical: 2,
+		fontSize: 14,
+		lineHeight: 20,
 	},
 
 	lg: {
 		paddingHorizontal: 12,
 		paddingVertical: 4,
+		fontSize: 14,
+		lineHeight: 20,
 	},
 });
 

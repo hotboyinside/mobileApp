@@ -60,7 +60,12 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 						start: [0, 0],
 						end: [1, 0],
 					}}
-					buttonStyle={[buttonSizeStyles, generalStyles.generalButtonStyles]}
+					buttonStyle={[generalStyles.generalButtonStyles, buttonSizeStyles]}
+					titleStyle={[
+						generalStyles.generalTextStyles,
+						{ color: buttonColorStyles.color },
+						props.titleStyle,
+					]}
 				/>
 			);
 		case 'secondary':
@@ -80,9 +85,14 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 		<RNButton
 			{...props}
 			buttonStyle={[
+				generalStyles.generalButtonStyles,
 				buttonColorStyles,
 				buttonSizeStyles,
-				generalStyles.generalButtonStyles,
+			]}
+			titleStyle={[
+				generalStyles.generalTextStyles,
+				{ color: buttonColorStyles.color },
+				props.titleStyle,
 			]}
 		/>
 	);
@@ -90,9 +100,12 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 
 const generalStyles = StyleSheet.create({
 	generalButtonStyles: {
+		borderRadius: 12,
+	},
+
+	generalTextStyles: {
 		fontSize: 14,
 		fontWeight: 600,
-		borderRadius: 12,
 		fontFamily: 'MontserratSemiBold',
 	},
 });

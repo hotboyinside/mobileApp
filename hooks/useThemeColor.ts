@@ -1,6 +1,6 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-type ColorVariant = {
+export type ColorVariant = {
 	light: string;
 	dark: string;
 };
