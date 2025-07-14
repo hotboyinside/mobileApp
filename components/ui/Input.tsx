@@ -6,7 +6,7 @@ import { InputProps, Input as RNInput } from '@rneui/themed';
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-type InputType = 'text' | 'password';
+type InputType = 'text' | 'password' | 'number';
 
 type CustomInputProps = InputProps & {
 	type?: InputType;
@@ -22,6 +22,7 @@ export const Input = ({
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
 	const isPasswordType = type === 'password';
+	const isNumberType = type === 'number';
 
 	const labelColor = useThemeColor({}, appTokens.text.secondary);
 	const inputContainerBackgroundColor = useThemeColor(
@@ -65,12 +66,10 @@ export const Input = ({
 	return (
 		<RNInput
 			{...props}
+			keyboardType={isNumberType ? 'numeric' : 'default'}
 			secureTextEntry={isPasswordType && !isPasswordVisible}
 			rightIcon={renderRightIcon()}
-			containerStyle={[
-				props.errorMessage && { marginBottom: 24 },
-				styles.containerExtra,
-			]}
+			containerStyle={[styles.containerExtra, props.containerStyle]}
 			inputContainerStyle={[
 				{ borderColor: inputBorderColor },
 				{ backgroundColor: inputContainerBackgroundColor },
@@ -90,7 +89,11 @@ export const Input = ({
 				setIsFocused(false);
 				props.onBlur?.(e);
 			}}
-			errorStyle={[{ color: errorTextColor }, styles.errorExtra]}
+			errorStyle={[
+				!isError && { height: 0 },
+				{ color: errorTextColor },
+				styles.errorExtra,
+			]}
 		/>
 	);
 };
@@ -105,6 +108,7 @@ const styles = StyleSheet.create({
 	},
 
 	containerExtra: {
+		marginTop: 0,
 		paddingHorizontal: 0,
 	},
 

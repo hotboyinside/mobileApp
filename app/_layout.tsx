@@ -41,12 +41,12 @@ function RootNavigator() {
 			}}
 		>
 			{/* <Stack.Protected guard={!isEmptySession}>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-      </Stack.Protected>
+				<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+			</Stack.Protected>
 
-      <Stack.Protected guard={isEmptySession}>
-        <Stack.Screen name='sign-in' options={{ headerShown: false }} />
-      </Stack.Protected> */}
+			<Stack.Protected guard={isEmptySession}>
+				<Stack.Screen name='sign-in' options={{ headerShown: false }} />
+			</Stack.Protected> */}
 
 			<Stack.Protected guard={true}>
 				<Stack.Screen name='(tabs)' options={{ headerShown: false }} />

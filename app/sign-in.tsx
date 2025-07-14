@@ -60,6 +60,7 @@ export default function LoginScreen() {
 							Welcome back to&nbsp;FoxRunner
 						</ThemedText>
 					</View>
+
 					<Form
 						serverError={serverError}
 						onSubmit={onSubmit}

@@ -21,6 +21,8 @@
 		"@rneui/themed": "0.0.0-edge.2",
 		"@tanstack/react-query": "5.81.2",
 		"axios": "1.10.0",
+		"effector": "23.4.1",
+		"effector-react": "23.3.0",
 		"expo": "~53.0.9",
 		"expo-blur": "~14.1.4",
 		"expo-constants": "~17.1.6",
