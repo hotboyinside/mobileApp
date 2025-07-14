@@ -1,8 +1,6 @@
 import { HeaderProps, Header as RNHeader } from "@rneui/base";
 import LogoIcon from "@/assets/icons/logo-icon.svg";
-import BellIcon from "@/assets/icons/bell-icon.svg";
 import { StyleSheet } from "react-native";
-import { Button } from "./Button";
 import { appTokens } from "@/constants/tokens";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedText } from "../ThemedText";
@@ -10,10 +8,6 @@ import { NavNotification } from "./NavNotification";
 
 export default function Header(props: HeaderProps) {
   const bgColor = useThemeColor({}, appTokens.background.primary);
-  const buttonColor = useThemeColor(
-    {},
-    appTokens.component.buttons.secondaryGray.fg
-  );
   const borderColor = useThemeColor({}, appTokens.border.tertiary);
 
   return (

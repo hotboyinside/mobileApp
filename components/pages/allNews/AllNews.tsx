@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import Header from '@/components/ui/Header';
 import { useEffect } from 'react';
@@ -26,16 +26,14 @@ export default function AllNews() {
 				data={MOCK_NEWS}
 				keyExtractor={item => item.id.toString()}
 				renderItem={({ item }) => <ListItem item={item} />}
-				ListHeaderComponent={() => {
-					return (
-						<>
-							<TopNewsBlock />
-							<Filters />
-						</>
-					);
-				}}
-				// stickyHeaderIndices={[1]}
-			></FlatList>
+				ListHeaderComponent={
+					<>
+						<TopNewsBlock />
+						<Filters />
+					</>
+				}
+				// stickyHeaderIndices={[0]}
+			/>
 		</ThemedViewWithSafeArea>
 	);
 }
@@ -43,18 +41,5 @@ export default function AllNews() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-	},
-
-	stepContainer: {
-		gap: 8,
-		marginBottom: 8,
-	},
-
-	reactLogo: {
-		height: 178,
-		width: 290,
-		bottom: 0,
-		left: 0,
-		position: 'absolute',
 	},
 });
