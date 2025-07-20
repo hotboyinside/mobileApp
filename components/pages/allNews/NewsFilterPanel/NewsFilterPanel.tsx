@@ -2,10 +2,10 @@ import { Tab } from '@/components/ui/Tab/Tab';
 import SortIcon from '@/assets/icons/sort-icon.svg';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { SortBottomSheet } from './SortBottomSheet';
-import { FiltersBottomSheet } from './FiltersBottomSheet';
+import { SortList } from './SortList';
+import { Filters } from './Filters/Filters';
 
-export const Filters = () => {
+export const NewsFilterPanel = () => {
 	const [activeFilter, setActiveFilter] = useState<
 		null | 'sort' | 'filters' | 'keywords' | 'rating'
 	>(null);
@@ -44,17 +44,15 @@ export const Filters = () => {
 				style={styles.tabContainer}
 			/>
 
-			{activeFilter === 'sort' && (
-				<SortBottomSheet isVisible onClose={closeDialog} />
-			)}
+			{activeFilter === 'sort' && <SortList isVisible onClose={closeDialog} />}
 			{activeFilter === 'filters' && (
-				<FiltersBottomSheet isVisible onClose={closeDialog} />
+				<Filters isVisible onCloseFilters={closeDialog} />
 			)}
 			{activeFilter === 'keywords' && (
-				<SortBottomSheet isVisible onClose={closeDialog} />
+				<SortList isVisible onClose={closeDialog} />
 			)}
 			{activeFilter === 'rating' && (
-				<SortBottomSheet isVisible onClose={closeDialog} />
+				<SortList isVisible onClose={closeDialog} />
 			)}
 		</>
 	);
