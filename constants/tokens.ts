@@ -379,10 +379,13 @@ export const appTokens = {
         },
       },
       linkGray: {
-        bg: appColors.base.transparent,
+        bg: {
+          light: appColors.base.transparent,
+          dark: appColors.base.transparent,
+        },
         fg: {
-          light: appColors.gray["700"],
-          dark: appColors.gray["300"],
+          light: appColors.gray["400"],
+          dark: appColors.gray["500"],
         },
       },
       linkTertiary: {

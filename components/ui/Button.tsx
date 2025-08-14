@@ -58,6 +58,10 @@ export const Button = ({ size = "md", variant, ...props }: ButtonProps) => {
     {},
     appTokens.component.buttons.linkGray.fg
   );
+  const linkGrayBackgroundColor = useThemeColor(
+    {},
+    appTokens.component.buttons.linkGray.bg
+  );
   const linkFontColor = useThemeColor({}, appTokens.component.buttons.link.fg);
 
   switch (variant) {
@@ -90,10 +94,14 @@ export const Button = ({ size = "md", variant, ...props }: ButtonProps) => {
       break;
     case "tertiary":
       buttonColorStyles["color"] = tertiaryFontColor;
+      break;
     case "link-gray":
+      buttonColorStyles["backgroundColor"] = linkGrayBackgroundColor;
       buttonColorStyles["color"] = linkGrayFontColor;
+      break;
     case "link":
       buttonColorStyles["color"] = linkFontColor;
+      break;
   }
 
   return (
@@ -103,6 +111,7 @@ export const Button = ({ size = "md", variant, ...props }: ButtonProps) => {
         generalStyles.generalButtonStyles,
         buttonColorStyles,
         buttonSizeStyles,
+        props.buttonStyle,
       ]}
       titleStyle={[
         generalStyles.generalTextStyles,
