@@ -1,4 +1,4 @@
-export type FilterKey =
+export type AdditionalFilterKey =
 	| 'currentPrice'
 	| 'change'
 	| 'dollarChange'
@@ -6,7 +6,7 @@ export type FilterKey =
 	| 'float'
 	| 'dayRange';
 
-export const FILTER_LABELS: Record<FilterKey, string> = {
+export const additionalFiltersLabels: Record<AdditionalFilterKey, string> = {
 	currentPrice: 'Current Price',
 	change: 'Change',
 	dollarChange: '$ Change',
@@ -17,6 +17,6 @@ export const FILTER_LABELS: Record<FilterKey, string> = {
 
 export type Range = { from: string; to: string };
 
-type FilterState = { enabled: boolean; range: Range };
+type AdditionalFilterValue = { enabled: boolean; range: Range };
 
-export type FiltersStore = Record<FilterKey, FilterState>;
+export type FiltersStore = Record<AdditionalFilterKey, AdditionalFilterValue>;

@@ -1,68 +1,79 @@
-import { Tab } from "@/components/ui/Tab/Tab";
-import SortIcon from "@/assets/icons/sort-icon.svg";
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
-import { SortList } from "./SortList";
-import { Filters } from "./Filters/Filters";
+import { Tab } from '@/components/ui/Tab/Tab';
+import SortIcon from '@/assets/icons/sort-icon.svg';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { SortList } from './SortList';
+import { Filters } from './Filters/Filters';
+import { resetNewsTypeDraft } from '@/stores/allNews/filters/newsType/model';
+import { resetStockTypeDraft } from '@/stores/allNews/filters/stockType/model';
+import { resetMarketDraft } from '@/stores/allNews/filters/market/model';
 
 export const NewsFilterPanel = () => {
-  const [activeFilter, setActiveFilter] = useState<
-    null | "sort" | "filters" | "keywords" | "rating"
-  >(null);
-  const closeDialog = () => {
-    setActiveFilter(null);
-  };
+	const [activeFilter, setActiveFilter] = useState<
+		null | 'sort' | 'filters' | 'keywords' | 'rating'
+	>(null);
 
-  const handleTabChange = (index: number) => {
-    switch (index) {
-      case 0:
-        setActiveFilter("sort");
-        break;
-      case 1:
-        setActiveFilter("filters");
-        break;
-      case 2:
-        setActiveFilter("keywords");
-        break;
-      case 3:
-        setActiveFilter("rating");
-        break;
-      default:
-        break;
-    }
-  };
+	const closeDialog = () => {
+		setActiveFilter(null);
+	};
 
-  return (
-    <>
-      <Tab
-        value={-1}
-        onChange={handleTabChange}
-        tabsTitles={[
-          <SortIcon key={"sort"} />,
-          "FIlters",
-          "Keywords",
-          "Rating",
-        ]}
-        style={styles.tabContainer}
-      />
+	const closeFilters = () => {
+		setActiveFilter(null);
+		resetMarketDraft();
+		resetStockTypeDraft();
+		resetNewsTypeDraft();
+	};
 
-      {activeFilter === "sort" && <SortList isVisible onClose={closeDialog} />}
-      {activeFilter === "filters" && (
-        <Filters isVisible onCloseFilters={closeDialog} />
-      )}
-      {activeFilter === "keywords" && (
-        <SortList isVisible onClose={closeDialog} />
-      )}
-      {activeFilter === "rating" && (
-        <SortList isVisible onClose={closeDialog} />
-      )}
-    </>
-  );
+	const handleTabChange = (index: number) => {
+		switch (index) {
+			case 0:
+				setActiveFilter('sort');
+				break;
+			case 1:
+				setActiveFilter('filters');
+				break;
+			case 2:
+				setActiveFilter('keywords');
+				break;
+			case 3:
+				setActiveFilter('rating');
+				break;
+			default:
+				break;
+		}
+	};
+
+	return (
+		<>
+			<Tab
+				value={-1}
+				onChange={handleTabChange}
+				tabsTitles={[
+					<SortIcon key={'sort'} />,
+					'FIlters',
+					'Keywords',
+					'Rating',
+				]}
+				style={styles.tabContainer}
+			/>
+
+			{activeFilter === 'sort' && <SortList isVisible onClose={closeDialog} />}
+			{activeFilter === 'filters' && (
+				<Filters isVisible onCloseFilters={closeFilters} />
+			)}
+			{activeFilter === 'keywords' && (
+				<SortList isVisible onClose={closeDialog} />
+			)}
+			{activeFilter === 'rating' && (
+				<SortList isVisible onClose={closeDialog} />
+			)}
+		</>
+	);
 };
 
 const styles = StyleSheet.create({
-  tabContainer: {
-    marginHorizontal: 16,
-    marginBottom: 4,
-  },
+	tabContainer: {
+		marginHorizontal: 16,
+		marginBottom: 4,
+	},
 });

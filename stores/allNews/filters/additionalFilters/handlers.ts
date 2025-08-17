@@ -1,4 +1,8 @@
-import { FILTER_LABELS, FilterKey, FiltersStore } from '@/types/filters';
+import {
+	additionalFiltersLabels,
+	AdditionalFilterKey,
+	FiltersStore,
+} from '@/types/filters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createEffect } from 'effector';
 
@@ -17,17 +21,18 @@ export const getFiltersSnapshotFx = createEffect(
 	async (): Promise<FiltersStore> => {
 		const filterStore = { ...INITIAL_FILTERS };
 		try {
-			Object.keys(FILTER_LABELS).map(async filterLabel => {
+			Object.keys(additionalFiltersLabels).map(async filterLabel => {
 				const [filterValueFrom, filterValueTo] = await Promise.all([
 					AsyncStorage.getItem(`${PREFIX}-${filterLabel}-from`),
 					AsyncStorage.getItem(`${PREFIX}-${filterLabel}-to`),
 				]);
 
 				if (filterValueFrom || filterValueTo) {
-					filterStore[filterLabel as FilterKey].enabled = true;
-					filterStore[filterLabel as FilterKey].range.from =
+					filterStore[filterLabel as AdditionalFilterKey].enabled = true;
+					filterStore[filterLabel as AdditionalFilterKey].range.from =
 						filterValueFrom ?? '';
-					filterStore[filterLabel as FilterKey].range.to = filterValueTo ?? '';
+					filterStore[filterLabel as AdditionalFilterKey].range.to =
+						filterValueTo ?? '';
 				}
 			});
 		} catch (error) {

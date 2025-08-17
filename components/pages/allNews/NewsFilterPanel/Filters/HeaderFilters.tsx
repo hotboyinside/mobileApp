@@ -1,10 +1,12 @@
 import { ThemedText } from '@/components/ThemedText';
 import RestartIcon from '@/assets/icons/restart-icon.svg';
-import CloseIcon from '@/assets/icons/close.svg';
+import CloseIcon from '@/assets/icons/close-icon.svg';
 import { View, StyleSheet } from 'react-native';
 import { Button } from '@/components/ui/Button';
-import { resetDraftFilters } from '@/stores/allNews/filters/model';
 import { useUnit } from 'effector-react';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { appTokens } from '@/constants/tokens';
+import { resetDraftFilters } from '@/stores/allNews/filters/additionalFilters/model';
 
 type HeaderFiltersProps = {
 	onCloseFilters: () => void;
@@ -13,13 +15,18 @@ type HeaderFiltersProps = {
 export const HeaderFilters = ({ onCloseFilters }: HeaderFiltersProps) => {
 	const resetDraftFiltersFn = useUnit(resetDraftFilters);
 
+	const iconColor = useThemeColor(
+		{},
+		appTokens.component.buttons.secondaryGray.fg
+	);
+
 	return (
 		<View style={styles.header}>
 			<Button
-				style={styles.button}
-				variant='secondary'
 				onlyIcon
-				icon={<RestartIcon />}
+				variant='secondary'
+				icon={<RestartIcon fill={iconColor} width={20} height={20} />}
+				style={styles.button}
 			/>
 			<ThemedText type='displayXs' style={styles.title}>
 				Filters
@@ -28,7 +35,7 @@ export const HeaderFilters = ({ onCloseFilters }: HeaderFiltersProps) => {
 				style={styles.button}
 				variant='secondary'
 				onlyIcon
-				icon={<CloseIcon />}
+				icon={<CloseIcon width={20} height={20} fill={iconColor} />}
 				onPress={() => {
 					onCloseFilters();
 					resetDraftFiltersFn();

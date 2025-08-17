@@ -2,29 +2,29 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs';
 import {
-	$newsTypeDraft,
-	changeNewsTypeDraft,
-	getNewsTypeLabel,
-	NewsTypesNames,
-} from '@/stores/allNews/filters/newsType/model';
+	$stockTypeDraft,
+	changeStockTypeDraft,
+	getStockTypeLabel,
+	StockTypesNames,
+} from '@/stores/allNews/filters/stockType/model';
 import { useUnit } from 'effector-react';
 import { StyleSheet } from 'react-native';
 
-export const NewsTypeFilter = () => {
-	const newsTypeDraft = useUnit($newsTypeDraft);
-	const changeNewsTypeDraftFx = useUnit(changeNewsTypeDraft);
+export const StockTypeFilter = () => {
+	const stockTypeDraft = useUnit($stockTypeDraft);
+	const changeStockTypeDraftFx = useUnit(changeStockTypeDraft);
 
 	return (
 		<ThemedView>
 			<ThemedText style={styles.title} type='textLg'>
-				News type
+				Stock type
 			</ThemedText>
 
-			<MultiSelectTabs<NewsTypesNames>
-				tabsTitles={Object.values(NewsTypesNames)}
-				selectedValues={newsTypeDraft}
-				onSelectionChange={changeNewsTypeDraftFx}
-				getLabel={getNewsTypeLabel}
+			<MultiSelectTabs<StockTypesNames>
+				tabsTitles={Object.values(StockTypesNames)}
+				selectedValues={stockTypeDraft}
+				getLabel={getStockTypeLabel}
+				onSelectionChange={changeStockTypeDraftFx}
 			/>
 		</ThemedView>
 	);

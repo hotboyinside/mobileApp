@@ -1,4 +1,5 @@
 import { BadgeProps as RNBadgeProps } from '@rneui/base';
+import { ReactNode } from 'react';
 
 export type VariantColorMap = {
 	modern: ['gray'];
@@ -35,6 +36,7 @@ export type BadgeColor = 'gray' | 'primary' | 'red' | 'green';
 export type BadgeProps = RNBadgeProps & {
 	variant: keyof VariantColorMap;
 	color: BadgeColor;
-	size?: 'xs' | 'sm' | 'md' | 'lg';
+	icon?: ReactNode;
+	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 	onlyIcon?: boolean;
 };

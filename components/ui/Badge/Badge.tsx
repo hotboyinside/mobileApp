@@ -1,18 +1,21 @@
 import { Badge as RNBadge } from '@rneui/base';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useBadgeStyles } from './badgeStyles';
 import { BadgeProps } from './badgeTypes';
+import { ThemedText } from '@/components/ThemedText';
 
 type SizeBadgeStyles = {
 	paddingHorizontal: number;
 	paddingVertical: number;
+	borderRadius?: number;
 	fontSize?: number;
 	lineHeight?: number;
 };
 
 export const Badge = ({
 	onlyIcon,
+	icon,
 	size = 'md',
 	color = 'gray',
 	variant = 'modern',
@@ -58,7 +61,35 @@ export const Badge = ({
 				badgeColorStyles,
 				props.containerStyle,
 			]}
-			containerStyle={[{ borderWidth: badgeBorderWidth }, props.containerStyle]}
+			containerStyle={[
+				{
+					borderWidth: badgeBorderWidth,
+					borderRadius: sizeBadgeStyles.borderRadius,
+				},
+				props.containerStyle,
+			]}
+			value={
+				icon ? (
+					<View style={generalBadgeStyles.contentWrapper}>
+						<ThemedText
+							style={[
+								{
+									fontSize: sizeBadgeStyles.fontSize,
+									lineHeight: sizeBadgeStyles.lineHeight,
+								},
+								generalTextStyles.extraTextStyle,
+								{ color: textColor },
+								props.textStyle,
+							]}
+						>
+							{props.value}
+						</ThemedText>
+						<View>{icon}</View>
+					</View>
+				) : (
+					props.value
+				)
+			}
 		/>
 	);
 };
@@ -68,6 +99,12 @@ const generalBadgeStyles = StyleSheet.create({
 		borderWidth: 0,
 		borderRadius: 100,
 		height: 'auto',
+	},
+
+	contentWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 6,
 	},
 });
 
@@ -83,6 +120,7 @@ const generalTextStyles = StyleSheet.create({
 
 const sizeStyles = StyleSheet.create({
 	xs: {
+		borderRadius: 6,
 		paddingHorizontal: 6,
 		paddingVertical: 1,
 		fontSize: 10,
@@ -90,6 +128,7 @@ const sizeStyles = StyleSheet.create({
 	},
 
 	sm: {
+		borderRadius: 8,
 		paddingHorizontal: 8,
 		paddingVertical: 1,
 		fontSize: 12,
@@ -97,6 +136,7 @@ const sizeStyles = StyleSheet.create({
 	},
 
 	md: {
+		borderRadius: 8,
 		paddingHorizontal: 10,
 		paddingVertical: 2,
 		fontSize: 14,
@@ -104,8 +144,17 @@ const sizeStyles = StyleSheet.create({
 	},
 
 	lg: {
+		borderRadius: 8,
 		paddingHorizontal: 12,
 		paddingVertical: 4,
+		fontSize: 14,
+		lineHeight: 20,
+	},
+
+	xl: {
+		borderRadius: 12,
+		paddingVertical: 6,
+		paddingHorizontal: 16,
 		fontSize: 14,
 		lineHeight: 20,
 	},
@@ -123,12 +172,20 @@ const onlyIconSizeStyles = StyleSheet.create({
 	},
 
 	md: {
+		borderRadius: 8,
 		paddingHorizontal: 4,
 		paddingVertical: 4,
 	},
 
 	lg: {
+		borderRadius: 8,
 		paddingHorizontal: 6,
 		paddingVertical: 6,
+	},
+
+	xl: {
+		borderRadius: 8,
+		paddingVertical: 6,
+		paddingHorizontal: 16,
 	},
 });

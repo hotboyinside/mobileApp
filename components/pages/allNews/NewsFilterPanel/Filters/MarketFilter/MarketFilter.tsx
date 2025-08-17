@@ -1,40 +1,39 @@
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { Button } from "@/components/ui/Button";
-import { StyleSheet } from "react-native";
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs';
+import {
+	$marketDraft,
+	changeMarketDraft,
+	getMarketLabel,
+	MarketNames,
+} from '@/stores/allNews/filters/market/model';
+import { useUnit } from 'effector-react';
+import { StyleSheet } from 'react-native';
 
-type MarketFilterProps = {};
+export const MarketFilter = () => {
+	const marketDraft = useUnit($marketDraft);
+	const changeMarketDraftFx = useUnit(changeMarketDraft);
 
-export const MarketFilter = ({}: MarketFilterProps) => {
-  return (
-    <ThemedView>
-      <ThemedView style={styles.header}>
-        <ThemedText style={styles.title} type='textLg'>
-          Market
-        </ThemedText>
-        <Button
-          title='Clear'
-          variant='link-gray'
-          buttonStyle={styles.buttonExtra}
-        />
-      </ThemedView>
-    </ThemedView>
-  );
+	return (
+		<ThemedView>
+			<ThemedText style={styles.title} type='textLg'>
+				Market
+			</ThemedText>
+
+			<MultiSelectTabs<MarketNames>
+				tabsTitles={Object.values(MarketNames)}
+				selectedValues={marketDraft}
+				getLabel={getMarketLabel}
+				onSelectionChange={changeMarketDraftFx}
+			/>
+		</ThemedView>
+	);
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  title: {
-    fontWeight: 700,
-    fontFamily: "MontserratBold",
-  },
-
-  buttonExtra: {
-    paddingRight: 0,
-  },
+	title: {
+		marginBottom: 8,
+		fontWeight: 700,
+		fontFamily: 'MontserratBold',
+	},
 });
