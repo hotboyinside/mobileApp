@@ -17,11 +17,16 @@ export const getStockTypeLabel = (value: StockTypesNames): string =>
 export const $stockType = createStore<StockTypesNames[]>([]);
 export const $stockTypeDraft = createStore<StockTypesNames[]>([]);
 
-export const changeStockTypeDraft = createEvent<StockTypesNames[]>();
+export const toggleStockTypeDraft = createEvent<StockTypesNames>();
 export const removeStockTypeFromDraft = createEvent<StockTypesNames>();
 export const resetStockTypeDraft = createEvent();
 
-$stockTypeDraft.on(changeStockTypeDraft, (_, payload) => payload);
+$stockTypeDraft.on(toggleStockTypeDraft, (state, payload) => {
+	if (state.includes(payload)) {
+		return state.filter(val => val !== payload);
+	}
+	return [...state, payload];
+});
 $stockTypeDraft.on(removeStockTypeFromDraft, (state, payload) =>
 	state.filter(value => value !== payload)
 );

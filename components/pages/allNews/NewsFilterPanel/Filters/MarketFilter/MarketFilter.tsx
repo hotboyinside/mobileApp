@@ -1,11 +1,11 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs';
+import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
 import {
 	$marketDraft,
-	changeMarketDraft,
 	MarketNames,
 	getMarketLabel,
+	toggleMarketDraft,
 } from '@/stores/allNews/filtersPanel/filters/market/model';
 
 import { useUnit } from 'effector-react';
@@ -13,7 +13,7 @@ import { StyleSheet } from 'react-native';
 
 export const MarketFilter = () => {
 	const marketDraft = useUnit($marketDraft);
-	const changeMarketDraftFx = useUnit(changeMarketDraft);
+	const toggleMarketDraftFx = useUnit(toggleMarketDraft);
 
 	return (
 		<ThemedView>
@@ -25,7 +25,7 @@ export const MarketFilter = () => {
 				tabsTitles={Object.values(MarketNames)}
 				selectedValues={marketDraft}
 				getLabel={getMarketLabel}
-				onSelectionChange={changeMarketDraftFx}
+				onSelectionChange={toggleMarketDraftFx}
 			/>
 		</ThemedView>
 	);

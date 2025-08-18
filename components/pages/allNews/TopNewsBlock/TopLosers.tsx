@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Tab } from '@/components/ui/Tab/Tab';
+import { Tab } from '@/components/ui/Tabs/Tab';
 import { TabView } from '@rneui/base';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';

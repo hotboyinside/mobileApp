@@ -17,11 +17,16 @@ export const getNewsTypeLabel = (value: NewsTypesNames): string =>
 export const $newsType = createStore<NewsTypesNames[]>([]);
 export const $newsTypeDraft = createStore<NewsTypesNames[]>([]);
 
-export const changeNewsTypeDraft = createEvent<NewsTypesNames[]>();
+export const toggleNewsTypeDraft = createEvent<NewsTypesNames>();
 export const removeNewsTypeFromDraft = createEvent<NewsTypesNames>();
 export const resetNewsTypeDraft = createEvent();
 
-$newsTypeDraft.on(changeNewsTypeDraft, (_, payload) => payload);
+$newsTypeDraft.on(toggleNewsTypeDraft, (state, payload) => {
+	if (state.includes(payload)) {
+		return state.filter(val => val !== payload);
+	}
+	return [...state, payload];
+});
 $newsTypeDraft.on(removeNewsTypeFromDraft, (state, payload) =>
 	state.filter(value => value !== payload)
 );

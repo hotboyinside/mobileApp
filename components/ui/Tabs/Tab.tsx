@@ -1,7 +1,7 @@
 import { Tab as RNTab, TabProps as RNTabProps } from '@rneui/base';
 import React, { JSXElementConstructor, ReactElement } from 'react';
 import { ScrollView, StyleProp, StyleSheet, ViewStyle } from 'react-native';
-import { TabItem } from './TabItem';
+import { TabItem } from './TabItem/TabItem';
 
 type tabElement =
 	| string

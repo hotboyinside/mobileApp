@@ -1,11 +1,11 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs';
+import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
 import {
 	$newsTypeDraft,
-	changeNewsTypeDraft,
 	NewsTypesNames,
 	getNewsTypeLabel,
+	toggleNewsTypeDraft,
 } from '@/stores/allNews/filtersPanel/filters/newsType/model';
 
 import { useUnit } from 'effector-react';
@@ -13,7 +13,7 @@ import { StyleSheet } from 'react-native';
 
 export const NewsTypeFilter = () => {
 	const newsTypeDraft = useUnit($newsTypeDraft);
-	const changeNewsTypeDraftFx = useUnit(changeNewsTypeDraft);
+	const toggleNewsTypeDraftFx = useUnit(toggleNewsTypeDraft);
 
 	return (
 		<ThemedView>
@@ -24,7 +24,7 @@ export const NewsTypeFilter = () => {
 			<MultiSelectTabs<NewsTypesNames>
 				tabsTitles={Object.values(NewsTypesNames)}
 				selectedValues={newsTypeDraft}
-				onSelectionChange={changeNewsTypeDraftFx}
+				onSelectionChange={toggleNewsTypeDraftFx}
 				getLabel={getNewsTypeLabel}
 			/>
 		</ThemedView>

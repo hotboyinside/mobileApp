@@ -1,11 +1,11 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Tab } from '@/components/ui/Tab/Tab';
 import { TabView } from '@rneui/base';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { News } from './TopNewsCard';
 import { Cards } from './TopNews';
+import { Tab } from '@/components/ui/Tabs/Tab';
 
 export const topGainersMocks: News[] = [
 	{

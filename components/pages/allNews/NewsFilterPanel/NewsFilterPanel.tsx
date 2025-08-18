@@ -8,7 +8,7 @@ import { resetNewsTypeDraft } from '@/stores/allNews/filtersPanel/filters/newsTy
 import { resetStockTypeDraft } from '@/stores/allNews/filtersPanel/filters/stockType/model';
 import { useUnit } from 'effector-react';
 import { $activeFiltersCount } from '@/stores/allNews/filtersPanel/filters/selectableFIlters/model';
-import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs copy';
+import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
 import {
 	FilterTabVariant,
 	$selectedTabsFilters,
@@ -17,6 +17,7 @@ import {
 	openFilterTab,
 } from '@/stores/allNews/filtersPanel/model';
 import { ActiveTabWithCount } from './ActiveTabWithCount';
+import { ThemedView } from '@/components/ThemedView';
 
 export const NewsFilterPanel = () => {
 	const selectedTabFilters = useUnit($selectedTabsFilters);
@@ -55,7 +56,7 @@ export const NewsFilterPanel = () => {
 	};
 
 	return (
-		<>
+		<ThemedView>
 			<MultiSelectTabs<FilterTabVariant>
 				tabsTitles={Object.values(FilterTabVariant)}
 				selectedValues={selectedTabFilters}
@@ -76,7 +77,7 @@ export const NewsFilterPanel = () => {
 			{openedFilterTab === FilterTabVariant.rating && (
 				<SortList isVisible onClose={closeFilterTabFx} />
 			)}
-		</>
+		</ThemedView>
 	);
 };
 

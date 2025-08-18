@@ -13,11 +13,16 @@ export const getMarketLabel = (value: MarketNames): string =>
 export const $market = createStore<MarketNames[]>([]);
 export const $marketDraft = createStore<MarketNames[]>([]);
 
-export const changeMarketDraft = createEvent<MarketNames[]>();
+export const toggleMarketDraft = createEvent<MarketNames>();
 export const removeMarketFromDraft = createEvent<MarketNames>();
 export const resetMarketDraft = createEvent();
 
-$marketDraft.on(changeMarketDraft, (_, payload) => payload);
+$marketDraft.on(toggleMarketDraft, (state, payload) => {
+	if (state.includes(payload)) {
+		return state.filter(val => val !== payload);
+	}
+	return [...state, payload];
+});
 
 $marketDraft.on(removeMarketFromDraft, (state, payload) =>
 	state.filter(value => value !== payload)

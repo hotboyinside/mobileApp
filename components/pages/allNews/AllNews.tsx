@@ -8,18 +8,13 @@ import { MOCK_NEWS } from '@/mocks/allNews';
 import { useUnit } from 'effector-react';
 import { pageMounted } from '@/stores/allNews/model';
 import { NewsFilterPanel } from './NewsFilterPanel/NewsFilterPanel';
-import { ThemedView } from '@/components/ThemedView';
 
 const renderItem = ({ item }: { item: any }) => {
 	switch (item.type) {
 		case 'topNews':
 			return <TopNewsBlock />;
 		case 'filters':
-			return (
-				<ThemedView style={{ backgroundColor: 'white' }}>
-					<NewsFilterPanel />
-				</ThemedView>
-			);
+			return <NewsFilterPanel />;
 		case 'news':
 			return <ListItem item={item.item} />;
 		default:
