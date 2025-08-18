@@ -4,9 +4,10 @@ import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs
 import {
 	$marketDraft,
 	changeMarketDraft,
-	getMarketLabel,
 	MarketNames,
-} from '@/stores/allNews/filters/market/model';
+	getMarketLabel,
+} from '@/stores/allNews/filtersPanel/filters/market/model';
+
 import { useUnit } from 'effector-react';
 import { StyleSheet } from 'react-native';
 

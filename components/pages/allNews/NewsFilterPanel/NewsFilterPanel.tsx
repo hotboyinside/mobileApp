@@ -1,78 +1,87 @@
-import { Tab } from '@/components/ui/Tab/Tab';
 import SortIcon from '@/assets/icons/sort-icon.svg';
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SortList } from './SortList';
 import { Filters } from './Filters/Filters';
-import { resetNewsTypeDraft } from '@/stores/allNews/filters/newsType/model';
-import { resetStockTypeDraft } from '@/stores/allNews/filters/stockType/model';
-import { resetMarketDraft } from '@/stores/allNews/filters/market/model';
+import { resetMarketDraft } from '@/stores/allNews/filtersPanel/filters/market/model';
+import { resetNewsTypeDraft } from '@/stores/allNews/filtersPanel/filters/newsType/model';
+import { resetStockTypeDraft } from '@/stores/allNews/filtersPanel/filters/stockType/model';
+import { useUnit } from 'effector-react';
+import { $activeFiltersCount } from '@/stores/allNews/filtersPanel/filters/selectableFIlters/model';
+import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs copy';
+import {
+	FilterTabVariant,
+	$selectedTabsFilters,
+	$openedFilterTab,
+	closeFilterTab,
+	openFilterTab,
+} from '@/stores/allNews/filtersPanel/model';
+import { ActiveTabWithCount } from './ActiveTabWithCount';
 
 export const NewsFilterPanel = () => {
-	const [activeFilter, setActiveFilter] = useState<
-		null | 'sort' | 'filters' | 'keywords' | 'rating'
-	>(null);
+	const selectedTabFilters = useUnit($selectedTabsFilters);
+	const openedFilterTab = useUnit($openedFilterTab);
+	const countOfActiveFilters = useUnit($activeFiltersCount);
 
-	const closeDialog = () => {
-		setActiveFilter(null);
-	};
+	const closeFilterTabFx = useUnit(closeFilterTab);
+	const openFilterTabFx = useUnit(openFilterTab);
 
 	const closeFilters = () => {
-		setActiveFilter(null);
+		closeFilterTabFx();
 		resetMarketDraft();
 		resetStockTypeDraft();
 		resetNewsTypeDraft();
 	};
 
-	const handleTabChange = (index: number) => {
-		switch (index) {
-			case 0:
-				setActiveFilter('sort');
-				break;
-			case 1:
-				setActiveFilter('filters');
-				break;
-			case 2:
-				setActiveFilter('keywords');
-				break;
-			case 3:
-				setActiveFilter('rating');
-				break;
-			default:
-				break;
+	const getLabel = (tabTitle: FilterTabVariant) => {
+		switch (tabTitle) {
+			case FilterTabVariant.sort:
+				return <SortIcon />;
+			case FilterTabVariant.filters:
+				if (countOfActiveFilters > 0) {
+					return (
+						<ActiveTabWithCount
+							label={FilterTabVariant.filters}
+							count={countOfActiveFilters}
+						/>
+					);
+				}
+				return FilterTabVariant.filters;
+			case FilterTabVariant.keywords:
+				return FilterTabVariant.keywords;
+			case FilterTabVariant.rating:
+				return FilterTabVariant.rating;
 		}
 	};
 
 	return (
 		<>
-			<Tab
-				value={-1}
-				onChange={handleTabChange}
-				tabsTitles={[
-					<SortIcon key={'sort'} />,
-					'FIlters',
-					'Keywords',
-					'Rating',
-				]}
-				style={styles.tabContainer}
+			<MultiSelectTabs<FilterTabVariant>
+				tabsTitles={Object.values(FilterTabVariant)}
+				selectedValues={selectedTabFilters}
+				onSelectionChange={openFilterTabFx}
+				getLabel={getLabel}
+				extraStyle={styles.container}
 			/>
 
-			{activeFilter === 'sort' && <SortList isVisible onClose={closeDialog} />}
-			{activeFilter === 'filters' && (
+			{openedFilterTab === FilterTabVariant.sort && (
+				<SortList isVisible onClose={closeFilterTabFx} />
+			)}
+			{openedFilterTab === FilterTabVariant.filters && (
 				<Filters isVisible onCloseFilters={closeFilters} />
 			)}
-			{activeFilter === 'keywords' && (
-				<SortList isVisible onClose={closeDialog} />
+			{openedFilterTab === FilterTabVariant.keywords && (
+				<SortList isVisible onClose={closeFilterTabFx} />
 			)}
-			{activeFilter === 'rating' && (
-				<SortList isVisible onClose={closeDialog} />
+			{openedFilterTab === FilterTabVariant.rating && (
+				<SortList isVisible onClose={closeFilterTabFx} />
 			)}
 		</>
 	);
 };
 
 const styles = StyleSheet.create({
-	tabContainer: {
+	container: {
 		marginHorizontal: 16,
 		marginBottom: 4,
 	},

@@ -10,9 +10,9 @@ export type MultiSelectTabsProps<T> = RNTabProps & {
 	getLabel: (
 		value: T
 	) => string | ReactElement<{}, string | JSXElementConstructor<any>>;
-	onSelectionChange: (values: T[]) => void;
+	onSelectionChange: (value: T) => void;
 	isScroll?: boolean;
-	className?: ViewStyle;
+	extraStyle?: StyleProp<ViewStyle>;
 	scrollStyles?: StyleProp<ViewStyle>;
 };
 
@@ -22,27 +22,16 @@ export const MultiSelectTabs = <T extends string>({
 	getLabel,
 	onSelectionChange,
 	scrollStyles,
-	className,
+	extraStyle,
 	isScroll = false,
 }: MultiSelectTabsProps<T>) => {
-	const toggleValue = (value: T) => {
-		let newSelectedValues;
-		if (selectedValues.includes(value)) {
-			newSelectedValues = selectedValues.filter(val => val !== value);
-		} else {
-			newSelectedValues = [...selectedValues, value];
-		}
-
-		onSelectionChange(newSelectedValues);
-	};
-
 	return (
 		<>
 			{isScroll && (
 				<ScrollView
 					horizontal
 					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={[styles.contentContainerStyle, className]}
+					contentContainerStyle={[styles.contentContainerStyle, extraStyle]}
 					style={[scrollStyles]}
 				>
 					{tabsTitles.map((tabTitle, index) => (
@@ -50,20 +39,20 @@ export const MultiSelectTabs = <T extends string>({
 							key={index}
 							title={getLabel(tabTitle)}
 							active={selectedValues.includes(tabTitle)}
-							onPress={() => toggleValue(tabTitle)}
+							onPress={() => onSelectionChange(tabTitle)}
 						/>
 					))}
 				</ScrollView>
 			)}
 
 			{!isScroll && (
-				<ThemedView style={[styles.container, className]}>
+				<ThemedView style={[styles.container, extraStyle]}>
 					{tabsTitles.map((tabTitle, index) => (
 						<TabItem
 							key={index}
 							title={getLabel(tabTitle)}
 							active={selectedValues.includes(tabTitle)}
-							onPress={() => toggleValue(tabTitle)}
+							onPress={() => onSelectionChange(tabTitle)}
 						/>
 					))}
 				</ThemedView>

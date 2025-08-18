@@ -4,9 +4,10 @@ import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs
 import {
 	$stockTypeDraft,
 	changeStockTypeDraft,
-	getStockTypeLabel,
 	StockTypesNames,
-} from '@/stores/allNews/filters/stockType/model';
+	getStockTypeLabel,
+} from '@/stores/allNews/filtersPanel/filters/stockType/model';
+
 import { useUnit } from 'effector-react';
 import { StyleSheet } from 'react-native';
 

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { useUnit } from 'effector-react';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-import { resetDraftFilters } from '@/stores/allNews/filters/additionalFilters/model';
+import { resetDraftFilters } from '@/stores/allNews/filtersPanel/filters/additionalFilters/model';
 
 type HeaderFiltersProps = {
 	onCloseFilters: () => void;

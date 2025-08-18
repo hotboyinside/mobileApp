@@ -10,7 +10,7 @@ import {
 	$additionalFiltersDraft,
 	toggleFilterEnabled,
 	updateFilterRange,
-} from '@/stores/allNews/filters/additionalFilters/model';
+} from '@/stores/allNews/filtersPanel/filters/additionalFilters/model';
 
 export const AdditionalFilters = () => {
 	const additionalFiltersDraft = useUnit($additionalFiltersDraft);

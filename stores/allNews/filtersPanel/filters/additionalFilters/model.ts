@@ -1,7 +1,7 @@
 import { AdditionalFilterKey, FiltersStore, Range } from '@/types/filters';
 import { createEvent, createStore, sample } from 'effector';
 import { getFiltersSnapshotFx, saveFilterFx } from './handlers';
-import { pageMounted, filtersApplyClick } from '../../model';
+import { pageMounted, filtersApplyClick } from '@/stores/allNews/model';
 
 export const $additionalFilters = createStore<FiltersStore | null>(null);
 export const $additionalFiltersDraft = createStore<FiltersStore | null>(null);

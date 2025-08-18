@@ -1,9 +1,14 @@
-import { combine } from 'effector';
+import { combine, sample } from 'effector';
 import { $stockTypeDraft, getStockTypeLabel } from '../stockType/model';
 import { $newsTypeDraft, getNewsTypeLabel } from '../newsType/model';
 import { $marketDraft, getMarketLabel } from '../market/model';
 import { $additionalFiltersDraft } from '../additionalFilters/model';
 import { additionalFiltersLabels, AdditionalFilterKey } from '@/types/filters';
+import {
+	addSelectedTabFilters,
+	FilterTabVariant,
+	removeSelectedTabFilters,
+} from '../../model';
 
 export const $selectableFilters = combine(
 	$marketDraft,
@@ -35,3 +40,21 @@ export const $selectableFilters = combine(
 			})),
 	]
 );
+
+export const $activeFiltersCount = $selectableFilters.map(
+	filters => filters.length
+);
+
+sample({
+	source: $activeFiltersCount,
+	filter: count => count > 0,
+	fn: () => FilterTabVariant.filters,
+	target: addSelectedTabFilters,
+});
+
+sample({
+	source: $activeFiltersCount,
+	filter: count => count === 0,
+	fn: () => FilterTabVariant.filters,
+	target: removeSelectedTabFilters,
+});

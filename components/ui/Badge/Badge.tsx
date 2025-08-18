@@ -55,19 +55,15 @@ export const Badge = ({
 			badgeStyle={[
 				generalBadgeStyles.extraBadgeStyle,
 				{
+					borderWidth: badgeBorderWidth,
+					borderRadius: sizeBadgeStyles.borderRadius,
 					paddingVertical: sizeBadgeStyles.paddingVertical,
 					paddingHorizontal: sizeBadgeStyles.paddingHorizontal,
 				},
 				badgeColorStyles,
-				props.containerStyle,
+				props.badgeStyle,
 			]}
-			containerStyle={[
-				{
-					borderWidth: badgeBorderWidth,
-					borderRadius: sizeBadgeStyles.borderRadius,
-				},
-				props.containerStyle,
-			]}
+			containerStyle={[props.containerStyle]}
 			value={
 				icon ? (
 					<View style={generalBadgeStyles.contentWrapper}>

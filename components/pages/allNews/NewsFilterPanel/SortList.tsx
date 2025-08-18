@@ -13,7 +13,7 @@ import {
 	closeSortByClick,
 	resetSortingDraft,
 	updateSortingDraft,
-} from '@/stores/allNews/sortBy/model';
+} from '@/stores/allNews/filtersPanel/sortBy/model';
 import { useUnit } from 'effector-react';
 import { SortLabels } from '@/types/sortBy';
 import { appTokens } from '@/constants/tokens';

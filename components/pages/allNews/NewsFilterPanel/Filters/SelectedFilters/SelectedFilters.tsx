@@ -4,22 +4,24 @@ import { StyleSheet } from 'react-native';
 import CloseIcon from '@/assets/icons/close-icon.svg';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-import { $selectableFilters } from '@/stores/allNews/filters/selectableFIlters/model';
+
 import { useUnit } from 'effector-react';
+
+import { AdditionalFilterKey } from '@/types/filters';
+import { toggleFilterEnabled } from '@/stores/allNews/filtersPanel/filters/additionalFilters/model';
 import {
-	MarketNames,
 	removeMarketFromDraft,
-} from '@/stores/allNews/filters/market/model';
-import {
-	removeStockTypeFromDraft,
-	StockTypesNames,
-} from '@/stores/allNews/filters/stockType/model';
+	MarketNames,
+} from '@/stores/allNews/filtersPanel/filters/market/model';
 import {
 	removeNewsTypeFromDraft,
 	NewsTypesNames,
-} from '@/stores/allNews/filters/newsType/model';
-import { toggleFilterEnabled } from '@/stores/allNews/filters/additionalFilters/model';
-import { AdditionalFilterKey } from '@/types/filters';
+} from '@/stores/allNews/filtersPanel/filters/newsType/model';
+import { $selectableFilters } from '@/stores/allNews/filtersPanel/filters/selectableFIlters/model';
+import {
+	removeStockTypeFromDraft,
+	StockTypesNames,
+} from '@/stores/allNews/filtersPanel/filters/stockType/model';
 
 export const SelectedFilters = () => {
 	const selectableFilters = useUnit($selectableFilters);

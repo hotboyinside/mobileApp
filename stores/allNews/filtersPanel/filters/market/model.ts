@@ -1,5 +1,5 @@
+import { filtersApplyClick } from '@/stores/allNews/model';
 import { createEvent, createStore, sample } from 'effector';
-import { filtersApplyClick } from '../../model';
 
 export enum MarketNames {
 	NASDAQ = 'NASDAQ',
@@ -10,10 +10,8 @@ export enum MarketNames {
 export const getMarketLabel = (value: MarketNames): string =>
 	MarketNames[value];
 
-const defaultMarket = Object.values(MarketNames);
-
-export const $market = createStore<MarketNames[]>(defaultMarket);
-export const $marketDraft = createStore<MarketNames[]>(defaultMarket);
+export const $market = createStore<MarketNames[]>([]);
+export const $marketDraft = createStore<MarketNames[]>([]);
 
 export const changeMarketDraft = createEvent<MarketNames[]>();
 export const removeMarketFromDraft = createEvent<MarketNames>();

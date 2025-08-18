@@ -1,5 +1,5 @@
+import { filtersApplyClick } from '@/stores/allNews/model';
 import { createEvent, createStore, sample } from 'effector';
-import { filtersApplyClick } from '../../model';
 
 export enum StockTypesNames {
 	RegularSecurities = 'CS',
@@ -14,13 +14,8 @@ export const StockTypesLabels: Record<StockTypesNames, string> = {
 export const getStockTypeLabel = (value: StockTypesNames): string =>
 	StockTypesLabels[value];
 
-const defaultStockType = [
-	StockTypesNames.RegularSecurities,
-	StockTypesNames.PreferredSecurities,
-];
-
-export const $stockType = createStore<StockTypesNames[]>(defaultStockType);
-export const $stockTypeDraft = createStore<StockTypesNames[]>(defaultStockType);
+export const $stockType = createStore<StockTypesNames[]>([]);
+export const $stockTypeDraft = createStore<StockTypesNames[]>([]);
 
 export const changeStockTypeDraft = createEvent<StockTypesNames[]>();
 export const removeStockTypeFromDraft = createEvent<StockTypesNames>();

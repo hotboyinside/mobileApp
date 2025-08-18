@@ -1,5 +1,5 @@
+import { filtersApplyClick } from '@/stores/allNews/model';
 import { createEvent, createStore, sample } from 'effector';
-import { filtersApplyClick } from '../../model';
 
 export enum NewsTypesNames {
 	News = 'news',
@@ -14,10 +14,8 @@ export const NewsTypesLabels: Record<NewsTypesNames, string> = {
 export const getNewsTypeLabel = (value: NewsTypesNames): string =>
 	NewsTypesLabels[value];
 
-const defaultNewsType = [NewsTypesNames.News, NewsTypesNames.Filings];
-
-export const $newsType = createStore<NewsTypesNames[]>(defaultNewsType);
-export const $newsTypeDraft = createStore<NewsTypesNames[]>(defaultNewsType);
+export const $newsType = createStore<NewsTypesNames[]>([]);
+export const $newsTypeDraft = createStore<NewsTypesNames[]>([]);
 
 export const changeNewsTypeDraft = createEvent<NewsTypesNames[]>();
 export const removeNewsTypeFromDraft = createEvent<NewsTypesNames>();

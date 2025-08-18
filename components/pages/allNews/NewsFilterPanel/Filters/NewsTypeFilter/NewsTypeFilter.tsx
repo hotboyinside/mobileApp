@@ -4,9 +4,10 @@ import { MultiSelectTabs } from '@/components/ui/MultiSelectTabs/MultiSelectTabs
 import {
 	$newsTypeDraft,
 	changeNewsTypeDraft,
-	getNewsTypeLabel,
 	NewsTypesNames,
-} from '@/stores/allNews/filters/newsType/model';
+	getNewsTypeLabel,
+} from '@/stores/allNews/filtersPanel/filters/newsType/model';
+
 import { useUnit } from 'effector-react';
 import { StyleSheet } from 'react-native';
 
