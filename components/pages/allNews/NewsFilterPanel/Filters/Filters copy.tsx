@@ -1,11 +1,10 @@
-import { BottomSheet } from "@rneui/base";
 import { Button } from "@/components/ui/Button";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { AdditionalFilters } from "./AdditionalFilters/AdditionalFilters";
 import { ThemedView } from "@/components/ThemedView";
 import { useUnit } from "effector-react";
 import { HeaderBottomSheet } from "../HeaderBottomSheet";
-import React from "react";
+import React, { Ref } from "react";
 import { SelectedFilters } from "./SelectedFilters/SelectedFilters";
 import { MarketFilter } from "./MarketFilter/MarketFilter";
 import { StockTypeFilter } from "./StockTypeFilter/StockTypeFilter";
@@ -14,6 +13,12 @@ import { filtersApplyClick } from "@/stores/allNews/model";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { appTokens } from "@/constants/tokens";
 import { resetDraftFilters } from "@/stores/allNews/filtersPanel/filters/additionalFilters/model";
+import BottomSheet, {
+  BottomSheetModalProvider,
+  BottomSheetScrollView,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 type FiltersProps = {
   isVisible: boolean;
@@ -28,14 +33,7 @@ export const Filters = ({ isVisible, onCloseFilters }: FiltersProps) => {
   const borderColor = useThemeColor({}, appTokens.border.tertiary);
 
   return (
-    <BottomSheet
-      modalProps={{
-        animationType: "slide",
-        presentationStyle: "overFullScreen",
-        transparent: true,
-      }}
-      isVisible={isVisible}
-    >
+    <BottomSheetView style={{ flex: 1 }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         keyboardVerticalOffset={16}
@@ -47,13 +45,13 @@ export const Filters = ({ isVisible, onCloseFilters }: FiltersProps) => {
           headerLabel='Filters'
         />
 
-        <ThemedView style={styles.container}>
+        <BottomSheetScrollView style={styles.container}>
           <SelectedFilters />
           <MarketFilter />
           <StockTypeFilter />
           <NewsTypeFilter />
           <AdditionalFilters />
-        </ThemedView>
+        </BottomSheetScrollView>
 
         <ThemedView
           style={[styles.containerButton, { borderColor: borderColor }]}
@@ -69,7 +67,7 @@ export const Filters = ({ isVisible, onCloseFilters }: FiltersProps) => {
           />
         </ThemedView>
       </KeyboardAvoidingView>
-    </BottomSheet>
+    </BottomSheetView>
   );
 };
 
@@ -79,6 +77,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
+    flex: 1,
     padding: 16,
     gap: 24,
   },

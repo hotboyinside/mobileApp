@@ -41,7 +41,5 @@ Join our community of developers creating universal apps.
 
 ## Plans
 
-- Check TabItem
-- Add style for sticky filters Panel
-- Add styles for additional filters
+- Check TabItem styles
 - Add full touchopacity in rangeInput
