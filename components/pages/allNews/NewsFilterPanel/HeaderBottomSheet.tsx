@@ -30,18 +30,16 @@ export const HeaderBottomSheet = ({
         onlyIcon
         variant='secondary'
         icon={<RestartIcon fill={iconColor} width={20} height={20} />}
-        style={styles.button}
         onPress={onResetDefaultValues}
       />
       <ThemedText type='displayXs' style={styles.title}>
         {headerLabel}
       </ThemedText>
       <Button
-        style={styles.button}
         variant='secondary'
         onlyIcon
         icon={<CloseIcon width={20} height={20} fill={iconColor} />}
-        onPress={() => {
+        onPressIn={() => {
           onCloseFilters();
           onResetDefaultValues();
         }}
@@ -53,18 +51,13 @@ export const HeaderBottomSheet = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    gap: 17,
     padding: 16,
     borderBottomWidth: 1,
   },
 
-  button: {
-    alignSelf: "flex-start",
-  },
-
   title: {
-    flex: 1,
     fontWeight: 700,
     fontFamily: "MontserratBold",
     textAlign: "center",

@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/Button";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { AdditionalFilters } from "./AdditionalFilters/AdditionalFilters";
 import { ThemedView } from "@/components/ThemedView";
 import { useUnit } from "effector-react";
 import { HeaderBottomSheet } from "../HeaderBottomSheet";
-import React, { Ref } from "react";
+import React from "react";
 import { SelectedFilters } from "./SelectedFilters/SelectedFilters";
 import { MarketFilter } from "./MarketFilter/MarketFilter";
 import { StockTypeFilter } from "./StockTypeFilter/StockTypeFilter";
@@ -13,12 +13,11 @@ import { filtersApplyClick } from "@/stores/allNews/model";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { appTokens } from "@/constants/tokens";
 import { resetDraftFilters } from "@/stores/allNews/filtersPanel/filters/additionalFilters/model";
-import BottomSheet, {
-  BottomSheetModalProvider,
+import {
   BottomSheetScrollView,
-  BottomSheetView,
+  BottomSheetTextInput,
 } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ThemedViewWithSafeArea } from "@/components/ThemedViewWithSafeArea";
 
 type FiltersProps = {
   isVisible: boolean;
@@ -33,41 +32,40 @@ export const Filters = ({ isVisible, onCloseFilters }: FiltersProps) => {
   const borderColor = useThemeColor({}, appTokens.border.tertiary);
 
   return (
-    <BottomSheetView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={16}
-        style={[styles.wrapper, { backgroundColor: bgColor }]}
+    <BottomSheetScrollView
+      style={{ flex: 1, marginBottom: 80 }}
+      stickyHeaderIndices={[0]}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 120 }}
+    >
+      <HeaderBottomSheet
+        onResetDefaultValues={resetDraftFiltersFn}
+        onCloseFilters={onCloseFilters}
+        headerLabel='Filters'
+      />
+
+      <ThemedView style={styles.container}>
+        <SelectedFilters />
+        <MarketFilter />
+        <StockTypeFilter />
+        <NewsTypeFilter />
+        <AdditionalFilters />
+      </ThemedView>
+
+      {/* <ThemedView
+        style={[styles.containerButton, { borderColor: borderColor }]}
       >
-        <HeaderBottomSheet
-          onResetDefaultValues={resetDraftFiltersFn}
-          onCloseFilters={onCloseFilters}
-          headerLabel='Filters'
+        <Button
+          variant='primary'
+          size='lg'
+          title='Apply'
+          onPress={() => {
+            applyFiltersFn();
+            onCloseFilters();
+          }}
         />
-
-        <BottomSheetScrollView style={styles.container}>
-          <SelectedFilters />
-          <MarketFilter />
-          <StockTypeFilter />
-          <NewsTypeFilter />
-          <AdditionalFilters />
-        </BottomSheetScrollView>
-
-        <ThemedView
-          style={[styles.containerButton, { borderColor: borderColor }]}
-        >
-          <Button
-            variant='primary'
-            size='lg'
-            title='Apply'
-            onPress={() => {
-              applyFiltersFn();
-              onCloseFilters();
-            }}
-          />
-        </ThemedView>
-      </KeyboardAvoidingView>
-    </BottomSheetView>
+      </ThemedView> */}
+    </BottomSheetScrollView>
   );
 };
 

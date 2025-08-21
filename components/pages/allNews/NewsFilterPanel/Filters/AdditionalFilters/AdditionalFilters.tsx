@@ -20,7 +20,7 @@ export const AdditionalFilters = () => {
   if (!additionalFiltersDraft) return;
 
   return (
-    <ThemedView>
+    <ThemedView style={{ flex: 1 }}>
       <ThemedView style={styles.header}>
         <ThemedText style={styles.title} type='textLg'>
           Additional Filters

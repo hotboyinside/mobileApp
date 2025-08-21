@@ -1,8 +1,7 @@
 import SortIcon from "@/assets/icons/sort-icon.svg";
-import React from "react";
-import { StyleSheet } from "react-native";
+import React, { useCallback, useRef } from "react";
+import { StyleSheet, View } from "react-native";
 import { SortList } from "./SortList";
-import { Filters } from "./Filters/Filters";
 import { resetMarketDraft } from "@/stores/allNews/filtersPanel/filters/market/model";
 import { resetNewsTypeDraft } from "@/stores/allNews/filtersPanel/filters/newsType/model";
 import { resetStockTypeDraft } from "@/stores/allNews/filtersPanel/filters/stockType/model";
@@ -20,8 +19,53 @@ import { ActiveTabWithCount } from "./ActiveTabWithCount";
 import { ThemedView } from "@/components/ThemedView";
 import { appTokens } from "@/constants/tokens";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { Filters } from "./Filters/Filters copy";
+import {
+  BottomSheetFooter,
+  BottomSheetFooterProps,
+  BottomSheetModal,
+} from "@gorhom/bottom-sheet";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button } from "@/components/ui/Button";
+
+interface CustomFooterProps extends BottomSheetFooterProps {}
+
+const CustomFooter = ({ animatedFooterPosition }: CustomFooterProps) => {
+  const { bottom: bottomSafeArea } = useSafeAreaInsets();
+  const bgColor = useThemeColor({}, appTokens.background.primary);
+  const borderColor = useThemeColor({}, appTokens.border.tertiary);
+
+  return (
+    <BottomSheetFooter
+      bottomInset={bottomSafeArea}
+      animatedFooterPosition={animatedFooterPosition}
+    >
+      <ThemedView
+        style={{
+          backgroundColor: bgColor,
+          borderColor: borderColor,
+          borderWidth: 1,
+          borderBottomWidth: 0,
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
+          paddingHorizontal: 16,
+          padding: 16,
+          overflow: "hidden",
+        }}
+      >
+        <Button variant='primary' size='lg' title='Apply' onPress={() => {}} />
+      </ThemedView>
+    </BottomSheetFooter>
+  );
+};
 
 export const NewsFilterPanel = () => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
   const selectedTabFilters = useUnit($selectedTabsFilters);
   const openedFilterTab = useUnit($openedFilterTab);
   const countOfActiveFilters = useUnit($activeFiltersCount);
@@ -29,7 +73,13 @@ export const NewsFilterPanel = () => {
   const closeFilterTabFx = useUnit(closeFilterTab);
   const openFilterTabFx = useUnit(openFilterTab);
 
+  const openTabFilters = (value: any) => {
+    openFilterTabFx(value);
+    handlePresentModalPress();
+  };
+
   const closeFilters = () => {
+    bottomSheetModalRef.current?.dismiss();
     closeFilterTabFx();
     resetMarketDraft();
     resetStockTypeDraft();
@@ -64,23 +114,31 @@ export const NewsFilterPanel = () => {
       <MultiSelectTabs<FilterTabVariant>
         tabsTitles={Object.values(FilterTabVariant)}
         selectedValues={selectedTabFilters}
-        onSelectionChange={openFilterTabFx}
+        onSelectionChange={openTabFilters}
         getLabel={getLabel}
         extraStyle={styles.container}
       />
 
-      {openedFilterTab === FilterTabVariant.sort && (
-        <SortList isVisible onClose={closeFilterTabFx} />
-      )}
-      {openedFilterTab === FilterTabVariant.filters && (
-        <Filters isVisible onCloseFilters={closeFilters} />
-      )}
-      {openedFilterTab === FilterTabVariant.keywords && (
-        <SortList isVisible onClose={closeFilterTabFx} />
-      )}
-      {openedFilterTab === FilterTabVariant.rating && (
-        <SortList isVisible onClose={closeFilterTabFx} />
-      )}
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        snapPoints={["100%"]}
+        keyboardBehavior='interactive'
+        // keyboardBlurBehavior='restore'
+        footerComponent={CustomFooter}
+      >
+        {openedFilterTab === FilterTabVariant.sort && (
+          <SortList isVisible onClose={closeFilterTabFx} />
+        )}
+        {openedFilterTab === FilterTabVariant.filters && (
+          <Filters isVisible onCloseFilters={closeFilters} />
+        )}
+        {openedFilterTab === FilterTabVariant.keywords && (
+          <SortList isVisible onClose={closeFilterTabFx} />
+        )}
+        {openedFilterTab === FilterTabVariant.rating && (
+          <SortList isVisible onClose={closeFilterTabFx} />
+        )}
+      </BottomSheetModal>
     </ThemedView>
   );
 };

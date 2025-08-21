@@ -43,3 +43,9 @@ Join our community of developers creating universal apps.
 
 - Check TabItem styles
 - Add full touchopacity in rangeInput
+
+## Bugs associated with version
+
+- react-native: 0.79.2 - 0.79.5:  
+  Sticky header not working on Android devices when scrolling.  
+  **Solution:** Replace `onPress` with `onPressIn`.
