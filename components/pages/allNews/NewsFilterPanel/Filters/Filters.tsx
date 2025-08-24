@@ -1,94 +1,56 @@
-import { BottomSheet } from "@rneui/base";
-import { Button } from "@/components/ui/Button";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { AdditionalFilters } from "./AdditionalFilters/AdditionalFilters";
-import { ThemedView } from "@/components/ThemedView";
-import { useUnit } from "effector-react";
-import { HeaderBottomSheet } from "../HeaderBottomSheet";
-import React from "react";
-import { SelectedFilters } from "./SelectedFilters/SelectedFilters";
-import { MarketFilter } from "./MarketFilter/MarketFilter";
-import { StockTypeFilter } from "./StockTypeFilter/StockTypeFilter";
-import { NewsTypeFilter } from "./NewsTypeFilter/NewsTypeFilter";
-import { filtersApplyClick } from "@/stores/allNews/model";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { appTokens } from "@/constants/tokens";
-import { resetDraftFilters } from "@/stores/allNews/filtersPanel/filters/additionalFilters/model";
+import { StyleSheet } from 'react-native';
+import { AdditionalFilters } from './AdditionalFilters/AdditionalFilters';
+import { ThemedView } from '@/components/ThemedView';
+import { useUnit } from 'effector-react';
+import { HeaderBottomSheet } from '../HeaderBottomSheet';
+import React from 'react';
+import { SelectedFilters } from './SelectedFilters/SelectedFilters';
+import { MarketFilter } from './MarketFilter/MarketFilter';
+import { StockTypeFilter } from './StockTypeFilter/StockTypeFilter';
+import { NewsTypeFilter } from './NewsTypeFilter/NewsTypeFilter';
+import { resetDraftFilters } from '@/stores/allNews/filtersPanel/filters/additionalFilters/model';
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
 type FiltersProps = {
-  isVisible: boolean;
-  onCloseFilters: () => void;
+	onCloseFilters: () => void;
 };
 
-export const Filters = ({ isVisible, onCloseFilters }: FiltersProps) => {
-  const resetDraftFiltersFn = useUnit(resetDraftFilters);
-  const applyFiltersFn = useUnit(filtersApplyClick);
+export const Filters = ({ onCloseFilters }: FiltersProps) => {
+	const resetDraftFiltersFn = useUnit(resetDraftFilters);
 
-  const bgColor = useThemeColor({}, appTokens.background.primary);
-  const borderColor = useThemeColor({}, appTokens.border.tertiary);
+	return (
+		<BottomSheetScrollView
+			style={styles.wrapper}
+			stickyHeaderIndices={[0]}
+			showsVerticalScrollIndicator={false}
+			contentContainerStyle={{ paddingBottom: 120 }}
+		>
+			<HeaderBottomSheet
+				onResetDefaultValues={resetDraftFiltersFn}
+				onCloseFilters={onCloseFilters}
+				headerLabel='Filters'
+			/>
 
-  return (
-    <BottomSheet
-      modalProps={{
-        animationType: "slide",
-        presentationStyle: "overFullScreen",
-        transparent: true,
-      }}
-      isVisible={isVisible}
-    >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={16}
-        style={[styles.wrapper, { backgroundColor: bgColor }]}
-      >
-        <HeaderBottomSheet
-          onResetDefaultValues={resetDraftFiltersFn}
-          onCloseFilters={onCloseFilters}
-          headerLabel='Filters'
-        />
-
-        <ThemedView style={styles.container}>
-          <SelectedFilters />
-          <MarketFilter />
-          <StockTypeFilter />
-          <NewsTypeFilter />
-          <AdditionalFilters />
-        </ThemedView>
-
-        <ThemedView
-          style={[styles.containerButton, { borderColor: borderColor }]}
-        >
-          <Button
-            variant='primary'
-            size='lg'
-            title='Apply'
-            onPress={() => {
-              applyFiltersFn();
-              onCloseFilters();
-            }}
-          />
-        </ThemedView>
-      </KeyboardAvoidingView>
-    </BottomSheet>
-  );
+			<ThemedView style={[styles.container]}>
+				<SelectedFilters />
+				<MarketFilter />
+				<StockTypeFilter />
+				<NewsTypeFilter />
+				<AdditionalFilters />
+			</ThemedView>
+		</BottomSheetScrollView>
+	);
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
+	wrapper: {
+		flex: 1,
+		marginBottom: 80,
+	},
 
-  container: {
-    padding: 16,
-    gap: 24,
-  },
-
-  containerButton: {
-    borderWidth: 1,
-    borderBottomWidth: 0,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingHorizontal: 16,
-    padding: 16,
-  },
+	container: {
+		flex: 1,
+		padding: 16,
+		gap: 24,
+	},
 });

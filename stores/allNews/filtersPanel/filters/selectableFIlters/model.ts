@@ -1,14 +1,59 @@
 import { combine, sample } from 'effector';
-import { $stockTypeDraft, getStockTypeLabel } from '../stockType/model';
-import { $newsTypeDraft, getNewsTypeLabel } from '../newsType/model';
-import { $marketDraft, getMarketLabel } from '../market/model';
-import { $additionalFiltersDraft } from '../additionalFilters/model';
+import {
+	$stockType,
+	$stockTypeDraft,
+	getStockTypeLabel,
+} from '../stockType/model';
+import { $newsType, $newsTypeDraft, getNewsTypeLabel } from '../newsType/model';
+import { $market, $marketDraft, getMarketLabel } from '../market/model';
+import {
+	$additionalFilters,
+	$additionalFiltersDraft,
+} from '../additionalFilters/model';
 import { additionalFiltersLabels, AdditionalFilterKey } from '@/types/filters';
 import {
 	addSelectedTabFilters,
 	FilterTabVariant,
 	removeSelectedTabFilters,
 } from '../../model';
+
+export const $hasChangesInFilters = combine(
+	$marketDraft,
+	$market,
+	$stockTypeDraft,
+	$stockType,
+	$newsTypeDraft,
+	$newsType,
+	$additionalFiltersDraft,
+	$additionalFilters,
+	(
+		marketDraft,
+		market,
+		stockTypeDraft,
+		stockType,
+		newsTypeDraft,
+		newsType,
+		additionalDraft,
+		additional
+	) => {
+		const marketChanged =
+			JSON.stringify([...market].sort()) !==
+			JSON.stringify([...marketDraft].sort());
+		const stockTypeChanged =
+			JSON.stringify([...stockType].sort()) !==
+			JSON.stringify([...stockTypeDraft].sort());
+		const newsTypeChanged =
+			JSON.stringify([...newsType].sort()) !==
+			JSON.stringify([...newsTypeDraft].sort());
+
+		const additionalChanged =
+			JSON.stringify(additionalDraft) !== JSON.stringify(additional);
+
+		return (
+			marketChanged || stockTypeChanged || newsTypeChanged || additionalChanged
+		);
+	}
+);
 
 export const $selectableFilters = combine(
 	$marketDraft,

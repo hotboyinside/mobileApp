@@ -4,7 +4,7 @@ import {
 	sortMapping,
 	sortByStoreDefault,
 } from '@/types/sortBy';
-import { createEvent, createStore, sample } from 'effector';
+import { combine, createEvent, createStore, sample } from 'effector';
 import {
 	FilterTabVariant,
 	addSelectedTabFilters,
@@ -15,6 +15,11 @@ export const $sortBy = createStore<SortByStore>(sortByStoreDefault);
 export const $sortByDraft = createStore<SortLabels>(SortLabels.NewestFirst);
 export const $isSortDefault = $sortBy.map(
 	sortValue => sortValue.currentLabel === sortByStoreDefault.currentLabel
+);
+export const $isSortByChanged = combine(
+	$sortBy,
+	$sortByDraft,
+	(sortBy, sortByDraft) => sortBy.currentLabel !== sortByDraft
 );
 
 export const updateSortingDraft = createEvent<SortLabels>();

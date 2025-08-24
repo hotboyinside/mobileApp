@@ -6,7 +6,7 @@ import {
 } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 type ButtonColorStyles = {
 	color?: string;

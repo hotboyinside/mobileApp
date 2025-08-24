@@ -1,29 +1,42 @@
-import { ThemedView } from "@/components/ThemedView";
-import { BottomSheet } from "@rneui/base";
-import { StyleSheet } from "react-native";
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { StyleSheet } from 'react-native';
+import { HeaderBottomSheet } from './HeaderBottomSheet';
+import { KeywordCreator } from './KeywordCreator';
+import { ThemedView } from '@/components/ThemedView';
 
 type KeywordsProps = {
-  isVisible: boolean;
-  onClose: () => void;
+	onClose: () => void;
 };
 
-export const Keywords = ({ isVisible, onClose }: KeywordsProps) => {
-  return (
-    <BottomSheet
-      modalProps={{
-        animationType: "slide",
-        presentationStyle: "overFullScreen",
-        transparent: true,
-      }}
-      isVisible={isVisible}
-    >
-      <ThemedView style={styles.container}></ThemedView>
-    </BottomSheet>
-  );
+export const Keywords = ({ onClose }: KeywordsProps) => {
+	return (
+		<BottomSheetScrollView
+			style={styles.wrapper}
+			stickyHeaderIndices={[0]}
+			showsVerticalScrollIndicator={false}
+			contentContainerStyle={{ paddingBottom: 120 }}
+		>
+			<HeaderBottomSheet
+				headerLabel='Keywords'
+				onResetDefaultValues={() => {}}
+				onCloseFilters={() => {
+					onClose();
+				}}
+			/>
+			<ThemedView style={styles.container}>
+				<KeywordCreator />
+			</ThemedView>
+		</BottomSheetScrollView>
+	);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
+	wrapper: {
+		flex: 1,
+		marginBottom: 80,
+	},
+
+	container: {
+		padding: 16,
+	},
 });

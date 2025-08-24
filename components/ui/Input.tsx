@@ -76,11 +76,16 @@ export const Input = ({
 				styles.inputContainerExtra,
 				isError && { borderColor: inputBorderErrorColor },
 				isFocused && { borderColor: inputBorderFocusColor },
+				props.containerStyle,
 			]}
 			placeholderTextColor={placeholderColor}
 			selectionColor={appTokens.border.brand.light}
 			labelStyle={[{ color: labelColor }, styles.labelExtra]}
-			inputStyle={[{ color: inputTextColor }, styles.inputExtra]}
+			inputStyle={[
+				{ color: inputTextColor },
+				styles.inputExtra,
+				props.inputStyle,
+			]}
 			onFocus={e => {
 				setIsFocused(true);
 				props.onFocus?.(e);

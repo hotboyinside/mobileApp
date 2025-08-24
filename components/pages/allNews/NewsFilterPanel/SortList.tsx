@@ -1,103 +1,66 @@
-import { ThemedView } from "@/components/ThemedView";
-import { Button } from "@/components/ui/Button";
-import { Checkbox } from "@/components/ui/CheckBox";
-import { BottomSheet } from "@rneui/base";
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import { ThemedView } from '@/components/ThemedView';
+import { Checkbox } from '@/components/ui/CheckBox';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import {
-  $sortByDraft,
-  applySortingClick,
-  closeSortByClick,
-  resetSortingDraft,
-  updateSortingDraft,
-} from "@/stores/allNews/filtersPanel/sortBy/model";
-import { useUnit } from "effector-react";
-import { SortLabels } from "@/types/sortBy";
-import { HeaderBottomSheet } from "./HeaderBottomSheet";
+	$sortByDraft,
+	closeSortByClick,
+	resetSortingDraft,
+	updateSortingDraft,
+} from '@/stores/allNews/filtersPanel/sortBy/model';
+import { useUnit } from 'effector-react';
+import { SortLabels } from '@/types/sortBy';
+import { HeaderBottomSheet } from './HeaderBottomSheet';
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
 type SortListProps = {
-  isVisible: boolean;
-  onClose: () => void;
+	onClose: () => void;
 };
 
-export const SortList = ({ isVisible, onClose }: SortListProps) => {
-  const currentSortValue = useUnit($sortByDraft);
+export const SortList = ({ onClose }: SortListProps) => {
+	const currentSortValue = useUnit($sortByDraft);
 
-  const updateSortValueFx = useUnit(updateSortingDraft);
-  const resetSortingFx = useUnit(resetSortingDraft);
-  const applySortingClickFx = useUnit(applySortingClick);
-  const closeSortByClickFx = useUnit(closeSortByClick);
+	const updateSortValueFx = useUnit(updateSortingDraft);
+	const resetSortingFx = useUnit(resetSortingDraft);
+	const closeSortByClickFx = useUnit(closeSortByClick);
 
-  return (
-    <BottomSheet
-      modalProps={{
-        animationType: "slide",
-        presentationStyle: "overFullScreen",
-        transparent: true,
-      }}
-      isVisible={isVisible}
-    >
-      <ThemedView style={styles.container}>
-        <HeaderBottomSheet
-          onResetDefaultValues={resetSortingFx}
-          onCloseFilters={() => {
-            onClose();
-            closeSortByClickFx();
-          }}
-          headerLabel='Sort by'
-        />
-
-        <View style={styles.list}>
-          {Object.values(SortLabels).map((filter, index) => (
-            <Checkbox
-              key={filter}
-              checked={filter === currentSortValue}
-              title={filter}
-              onPress={() => updateSortValueFx(filter)}
-            />
-          ))}
-        </View>
-        <Button
-          variant='primary'
-          size='lg'
-          title='Apply'
-          onPress={() => {
-            applySortingClickFx();
-            onClose();
-          }}
-        />
-      </ThemedView>
-    </BottomSheet>
-  );
+	return (
+		<BottomSheetScrollView
+			style={styles.container}
+			stickyHeaderIndices={[0]}
+			showsVerticalScrollIndicator={false}
+			contentContainerStyle={{ paddingBottom: 120 }}
+		>
+			<HeaderBottomSheet
+				onResetDefaultValues={resetSortingFx}
+				onCloseFilters={() => {
+					onClose();
+					closeSortByClickFx();
+				}}
+				headerLabel='Sort by'
+			/>
+			<ThemedView style={styles.list}>
+				{Object.values(SortLabels).map((filter, _) => (
+					<Checkbox
+						key={filter}
+						checked={filter === currentSortValue}
+						title={filter}
+						onPress={() => updateSortValueFx(filter)}
+					/>
+				))}
+			</ThemedView>
+		</BottomSheetScrollView>
+	);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 16,
-  },
+	container: {
+		flex: 1,
+		marginBottom: 80,
+	},
 
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 17,
-    paddingBottom: 16,
-  },
-
-  button: {
-    alignSelf: "flex-start",
-  },
-
-  title: {
-    flex: 1,
-    fontWeight: 700,
-    fontFamily: "MontserratBold",
-    textAlign: "center",
-  },
-
-  list: {
-    paddingVertical: 16,
-    gap: 8,
-  },
+	list: {
+		padding: 16,
+		gap: 8,
+	},
 });
