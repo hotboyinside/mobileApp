@@ -44,6 +44,8 @@ Join our community of developers creating universal apps.
 - Check TabItem styles
 - Add full touchopacity in rangeInput
 - Improve all icons (delete fill; delete "currentColor")
+- Don't show correct number of enabled filters before press on the button
+- Add animated in KeywordColorPicker for colors buttons
 
 ## Bugs associated with version
 
