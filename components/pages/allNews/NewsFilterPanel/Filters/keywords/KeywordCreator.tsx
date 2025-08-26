@@ -5,10 +5,22 @@ import { StyleSheet } from 'react-native';
 import CheckLineIcon from '@/assets/icons/check-line-icon.svg';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
+import CircleIcon from '@/assets/icons/circle-icon.svg';
+import SmileIcon from '@/assets/icons/smile-icon.svg';
+import VoiceOverOff from '@/assets/icons/voiceover-off-icon.svg';
+import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
+import { Filters } from '../Filters';
 
 export const KeywordCreator = () => {
+	const { openBottomSheet, closeBottomSheet } = useGlobalSheet();
+
 	const disabledColor = useThemeColor({}, appTokens.foreground.disabled);
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
+	const utilityGray = useThemeColor({}, appTokens.utilityGray[400]);
+
+	const openNewBottomSheet = () => {
+		openBottomSheet(<Filters onCloseFilters={() => {}} />);
+	};
 
 	return (
 		<ThemedView style={[styles.container, { borderColor: borderColor }]}>
@@ -25,9 +37,25 @@ export const KeywordCreator = () => {
 				/>
 			</ThemedView>
 			<ThemedView style={styles.bottomButtons}>
-				<Button variant='link-gray' />
-				<Button variant='link-gray' />
-				<Button variant='link-gray' />
+				<Button
+					icon={<CircleIcon width={20} height={20} fill={utilityGray} />}
+					title='Color'
+					variant='link-gray'
+					iconPosition='left'
+					onPress={openNewBottomSheet}
+				/>
+				<Button
+					icon={<SmileIcon width={20} height={20} fill={utilityGray} />}
+					title='Icon'
+					variant='link-gray'
+					iconPosition='left'
+				/>
+				<Button
+					icon={<VoiceOverOff width={20} height={20} fill={utilityGray} />}
+					title='Voiceover off'
+					variant='link-gray'
+					iconPosition='left'
+				/>
 			</ThemedView>
 		</ThemedView>
 	);
@@ -41,7 +69,7 @@ const styles = StyleSheet.create({
 	},
 
 	inputContainer: {
-		width: 278,
+		flex: 1,
 	},
 
 	topButtons: {
@@ -53,5 +81,6 @@ const styles = StyleSheet.create({
 	bottomButtons: {
 		flex: 1,
 		flexDirection: 'row',
+		gap: 12,
 	},
 });

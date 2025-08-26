@@ -1,5 +1,6 @@
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { IconNode } from '@rneui/base';
 import {
 	ButtonProps as RNButtonProps,
 	Button as RNButton,
@@ -26,6 +27,17 @@ type ButtonProps = RNButtonProps & {
 	onlyIcon?: boolean;
 	size?: 'sm' | 'md' | 'lg';
 	variant?: 'primary' | 'secondary' | 'tertiary' | 'link-gray' | 'link';
+};
+
+const getTitlePadding = (
+	icon?: IconNode,
+	onlyIcon?: boolean,
+	iconPosition?: 'left' | 'right' | 'top' | 'bottom'
+) => {
+	if (onlyIcon || !icon) return {};
+	if (iconPosition === 'right') return { paddingRight: 8 };
+	else if (iconPosition === 'left') return { paddingLeft: 8 };
+	return { paddingLeft: 8 };
 };
 
 export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
@@ -82,8 +94,8 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 						{
 							fontSize: buttonSizeStyles.fontSize,
 							lineHeight: buttonSizeStyles.lineHeight,
+							color: primaryFontColor,
 						},
-						{ color: primaryFontColor },
 						props.titleStyle,
 					]}
 				/>
@@ -100,6 +112,11 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 		case 'link-gray':
 			buttonColorStyles['backgroundColor'] = linkGrayBackgroundColor;
 			buttonColorStyles['color'] = linkGrayFontColor;
+			buttonSizeStyles = {
+				...buttonSizeStyles,
+				paddingHorizontal: 0,
+				paddingVertical: 0,
+			};
 			break;
 		case 'link':
 			buttonColorStyles['color'] = linkFontColor;
@@ -121,8 +138,9 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 				{
 					fontSize: buttonSizeStyles.fontSize,
 					lineHeight: buttonSizeStyles.lineHeight,
+					color: buttonColorStyles.color,
 				},
-				{ color: buttonColorStyles.color },
+				getTitlePadding(props.icon, props.onlyIcon, props.iconPosition),
 				props.titleStyle,
 			]}
 		/>

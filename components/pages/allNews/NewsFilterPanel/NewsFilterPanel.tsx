@@ -1,6 +1,5 @@
 import SortIcon from '@/assets/icons/sort-icon.svg';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Keyboard, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SortList } from './SortList';
 import { resetMarketDraft } from '@/stores/allNews/filtersPanel/filters/market/model';
 import { resetNewsTypeDraft } from '@/stores/allNews/filtersPanel/filters/newsType/model';
@@ -12,6 +11,7 @@ import {
 	FilterTabVariant,
 	$selectedTabsFilters,
 	openFilterTab,
+	closeFilterTab,
 } from '@/stores/allNews/filtersPanel/model';
 import { ActiveTabWithCount } from './ActiveTabWithCount';
 import { ThemedView } from '@/components/ThemedView';
@@ -20,27 +20,43 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { Filters } from './Filters/Filters';
 import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
 import { BottomSheetApplyFooter } from './BottomSheetApplyFooter';
-import { Keywords } from './Keywords';
+import { Keywords } from './Filters/keywords/Keywords';
 
 export const NewsFilterPanel = () => {
 	const selectedTabFilters = useUnit($selectedTabsFilters);
 	const countOfActiveFilters = useUnit($activeFiltersCount);
 
 	const openFilterTabFx = useUnit(openFilterTab);
+	const closeFilterTabFx = useUnit(closeFilterTab);
 
 	const openTabFilters = (tab: FilterTabVariant) => {
 		switch (tab) {
 			case FilterTabVariant.sort:
 				openFilterTabFx(FilterTabVariant.sort);
-				openBottomSheet(<SortList onClose={closeBottomSheet} />, props => (
-					<BottomSheetApplyFooter {...props} onClose={closeBottomSheet} />
-				));
+				openBottomSheet(
+					<SortList
+						onClose={() => {
+							closeFilterTabFx();
+							closeBottomSheet();
+						}}
+					/>,
+					props => (
+						<BottomSheetApplyFooter
+							{...props}
+							onClose={() => {
+								closeFilterTabFx();
+								closeBottomSheet();
+							}}
+						/>
+					)
+				);
 				break;
 			case FilterTabVariant.filters:
 				openFilterTabFx(FilterTabVariant.filters);
 				openBottomSheet(
 					<Filters
 						onCloseFilters={() => {
+							closeFilterTabFx();
 							closeBottomSheet();
 							resetMarketDraft();
 							resetStockTypeDraft();
@@ -48,12 +64,25 @@ export const NewsFilterPanel = () => {
 						}}
 					/>,
 					props => (
-						<BottomSheetApplyFooter {...props} onClose={closeBottomSheet} />
+						<BottomSheetApplyFooter
+							{...props}
+							onClose={() => {
+								closeFilterTabFx();
+								closeBottomSheet();
+							}}
+						/>
 					)
 				);
 				break;
 			case FilterTabVariant.keywords:
-				openBottomSheet(<Keywords onClose={closeBottomSheet} />);
+				openBottomSheet(
+					<Keywords
+						onClose={() => {
+							closeFilterTab();
+							closeBottomSheet();
+						}}
+					/>
+				);
 				break;
 			case FilterTabVariant.rating:
 				openBottomSheet(<SortList onClose={closeBottomSheet} />);

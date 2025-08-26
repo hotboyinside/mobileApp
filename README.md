@@ -43,6 +43,7 @@ Join our community of developers creating universal apps.
 
 - Check TabItem styles
 - Add full touchopacity in rangeInput
+- Improve all icons (delete fill; delete "currentColor")
 
 ## Bugs associated with version
 

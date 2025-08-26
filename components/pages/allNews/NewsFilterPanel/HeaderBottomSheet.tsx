@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/ThemedText';
 import RestartIcon from '@/assets/icons/restart-icon.svg';
 import CloseIcon from '@/assets/icons/close-icon.svg';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button } from '@/components/ui/Button';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
@@ -9,14 +9,14 @@ import { ThemedView } from '@/components/ThemedView';
 
 type HeaderBottomSheetProps = {
 	headerLabel: string;
-	onResetDefaultValues: () => void;
 	onCloseFilters: () => void;
+	onResetDefaultValues?: () => void;
 };
 
 export const HeaderBottomSheet = ({
 	headerLabel,
-	onResetDefaultValues,
 	onCloseFilters,
+	onResetDefaultValues,
 }: HeaderBottomSheetProps) => {
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
 	const iconColor = useThemeColor(
@@ -26,12 +26,16 @@ export const HeaderBottomSheet = ({
 
 	return (
 		<ThemedView style={[styles.container, { borderColor: borderColor }]}>
-			<Button
-				onlyIcon
-				variant='secondary'
-				icon={<RestartIcon fill={iconColor} width={20} height={20} />}
-				onPress={onResetDefaultValues}
-			/>
+			{onResetDefaultValues ? (
+				<Button
+					onlyIcon
+					variant='secondary'
+					icon={<RestartIcon fill={iconColor} width={20} height={20} />}
+					onPress={onResetDefaultValues}
+				/>
+			) : (
+				<View style={{ width: 40, height: 40 }} />
+			)}
 			<ThemedText type='displayXs' style={styles.title}>
 				{headerLabel}
 			</ThemedText>
@@ -41,7 +45,7 @@ export const HeaderBottomSheet = ({
 				icon={<CloseIcon width={20} height={20} fill={iconColor} />}
 				onPressIn={() => {
 					onCloseFilters();
-					onResetDefaultValues();
+					onResetDefaultValues?.();
 				}}
 			/>
 		</ThemedView>
