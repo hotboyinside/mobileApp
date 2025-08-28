@@ -16,6 +16,7 @@ export const VisualOnlyKeywords = () => {
 			<ThemedText type='textLg' style={styles.title}>
 				Visual only
 			</ThemedText>
+
 			<ThemedView style={styles.keywords}>
 				{MOCK_KEYWORDS.map(keyword => (
 					<Badge
@@ -34,7 +35,6 @@ export const VisualOnlyKeywords = () => {
 
 const styles = StyleSheet.create({
 	title: {
-		marginBottom: 8,
 		fontWeight: 700,
 		fontFamily: 'MontserratBold',
 	},
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		gap: 4,
-		marginTop: 12,
+		marginTop: 8,
 	},
 });

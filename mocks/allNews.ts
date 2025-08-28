@@ -9,8 +9,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '2 часа назад',
 		rating: 4,
 		keywords: [
-			{ text: 'электротранспорт', icon: '⚡', bgColor: 'pink' },
-			{ text: 'технологии', bgColor: 'red' },
+			{ text: 'электротранспорт', icon: '⚡', color: 'pink' },
+			{ text: 'технологии', color: 'red' },
 		],
 		symbols: [
 			{
@@ -33,8 +33,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '5 часов назад',
 		rating: 3,
 		keywords: [
-			{ text: 'экономика', bgColor: 'green' },
-			{ text: 'финансы', icon: '💰', bgColor: 'gray' },
+			{ text: 'экономика', color: 'green' },
+			{ text: 'финансы', icon: '💰', color: 'gray' },
 		],
 		symbols: [
 			{
@@ -92,8 +92,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '8 часов назад',
 		rating: 2,
 		keywords: [
-			{ text: 'криптовалюта', icon: '🪙', bgColor: 'pink' },
-			{ text: 'блокчейн', bgColor: 'red' },
+			{ text: 'криптовалюта', icon: '🪙', color: 'pink' },
+			{ text: 'блокчейн', color: 'red' },
 		],
 		symbols: [
 			{
@@ -124,8 +124,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '12 часов назад',
 		rating: 4,
 		keywords: [
-			{ text: 'гаджеты', icon: '📱', bgColor: 'green' },
-			{ text: 'инновации', bgColor: 'green' },
+			{ text: 'гаджеты', icon: '📱', color: 'green' },
+			{ text: 'инновации', color: 'green' },
 		],
 		symbols: [
 			{
@@ -147,8 +147,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '1 день назад',
 		rating: 1,
 		keywords: [
-			{ text: 'энергетика', bgColor: 'red' },
-			{ text: 'сырье', icon: '🛢️', bgColor: 'pink' },
+			{ text: 'энергетика', color: 'red' },
+			{ text: 'сырье', icon: '🛢️', color: 'pink' },
 		],
 		symbols: [
 			{
@@ -179,8 +179,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '1 день назад',
 		rating: 3,
 		keywords: [
-			{ text: 'ритейл', icon: '🛒', bgColor: 'green' },
-			{ text: 'технологии', bgColor: 'red' },
+			{ text: 'ритейл', icon: '🛒', color: 'green' },
+			{ text: 'технологии', color: 'red' },
 		],
 		symbols: [
 			{
@@ -202,8 +202,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '2 дня назад',
 		rating: 4,
 		keywords: [
-			{ text: 'софт', icon: '💻', bgColor: 'green' },
-			{ text: 'искусственный интеллект', bgColor: 'gray' },
+			{ text: 'софт', icon: '💻', color: 'green' },
+			{ text: 'искусственный интеллект', color: 'gray' },
 		],
 		symbols: [
 			{
@@ -225,8 +225,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '2 дня назад',
 		rating: 3,
 		keywords: [
-			{ text: 'игры', icon: '🎮', bgColor: 'gray' },
-			{ text: 'железо', bgColor: 'green' },
+			{ text: 'игры', icon: '🎮', color: 'gray' },
+			{ text: 'железо', color: 'green' },
 		],
 		symbols: [
 			{
@@ -248,8 +248,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '3 дня назад',
 		rating: 4,
 		keywords: [
-			{ text: 'космос', icon: '🚀', bgColor: 'red' },
-			{ text: 'инновации', bgColor: 'pink' },
+			{ text: 'космос', icon: '🚀', color: 'red' },
+			{ text: 'инновации', color: 'pink' },
 		],
 		symbols: [
 			{
@@ -271,8 +271,8 @@ export const MOCK_NEWS: MockItem[] = [
 		createdTime: '3 дня назад',
 		rating: 2,
 		keywords: [
-			{ text: 'VR/AR', icon: '👓', bgColor: 'red' },
-			{ text: 'метавселенная', bgColor: 'green' },
+			{ text: 'VR/AR', icon: '👓', color: 'red' },
+			{ text: 'метавселенная', color: 'green' },
 		],
 		symbols: [
 			{

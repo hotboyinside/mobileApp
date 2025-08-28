@@ -1,22 +1,20 @@
-import { combine, createEvent, createStore, sample } from "effector";
-import { SvgProps } from "react-native-svg";
-import { FC } from "react";
+import { combine, createEvent, createStore, sample } from 'effector';
 
-export const $selectedIcon = createStore<FC<SvgProps> | null>(null);
-export const $selectedIconDraft = createStore<FC<SvgProps> | null>(null);
+export const $selectedKeyIcon = createStore<string>('like');
+export const $selectedKeyIconDraft = createStore<string>('like');
 export const $hasChangesInSelectedIcon = combine(
-  $selectedIcon,
-  $selectedIconDraft,
-  (selectedIcon, selectedIconDraft) => selectedIcon !== selectedIconDraft
+	$selectedKeyIcon,
+	$selectedKeyIconDraft,
+	(selectedIcon, selectedIconDraft) => selectedIcon !== selectedIconDraft
 );
 
-export const changeSelectedIconDraft = createEvent<FC<SvgProps>>();
-export const applySelectedIconClick = createEvent();
+export const changeSelectedKeyIconDraft = createEvent<string>();
+export const applySelectedKeyIconClick = createEvent();
 
-$selectedIconDraft.on(changeSelectedIconDraft, (_, payload) => payload);
+$selectedKeyIconDraft.on(changeSelectedKeyIconDraft, (_, payload) => payload);
 
 sample({
-  clock: applySelectedIconClick,
-  source: $selectedIconDraft,
-  target: $selectedIcon,
+	clock: applySelectedKeyIconClick,
+	source: $selectedKeyIconDraft,
+	target: $selectedKeyIcon,
 });

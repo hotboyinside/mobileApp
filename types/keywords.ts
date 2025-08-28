@@ -1,37 +1,94 @@
-import { appTokens } from "@/constants/tokens";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
-export enum KeywordsColorVariants {
-  Red = "Red",
-  Blue = "Blue",
-  Green = "Green",
-  Gray = "Gray",
-  Pink = "Pink",
-  Orange = "Orange",
-  Yellow = "Yellow",
-  Lime = "Lime",
-  Slate = "Slate",
-  Violet = "Violet",
-}
-
-const keywordsColorsMap: Record<
-  KeywordsColorVariants,
-  { dark: string; light: string }
-> = {
-  [KeywordsColorVariants.Red]: appTokens.utilityRed[500],
-  [KeywordsColorVariants.Blue]: appTokens.utilityBlue[500],
-  [KeywordsColorVariants.Green]: appTokens.utilityGreen[500],
-  [KeywordsColorVariants.Gray]: appTokens.utilityGray[500],
-  [KeywordsColorVariants.Pink]: appTokens.utilityPink[500],
-  [KeywordsColorVariants.Orange]: appTokens.utilityOrange[500],
-  [KeywordsColorVariants.Yellow]: appTokens.utilityYellow[500],
-  [KeywordsColorVariants.Lime]: appTokens.utilityLime[500],
-  [KeywordsColorVariants.Slate]: appTokens.utilityGrayBlue[500],
-  [KeywordsColorVariants.Violet]: appTokens.utilityViolet[500],
+export type UserKeyword = {
+	_id: string;
+	text: string;
+	color: KeywordsColorVariants;
+	isVoiceoverEnabled: boolean;
+	iconKey?: string;
 };
 
-export const keywordsColors: Record<KeywordsColorVariants, string> =
-  Object.values(KeywordsColorVariants).reduce((acc, key) => {
-    acc[key] = useThemeColor({}, keywordsColorsMap[key]);
-    return acc;
-  }, {} as Record<KeywordsColorVariants, string>);
+export enum KeywordsColorVariants {
+	Red = 'Red',
+	Blue = 'Blue',
+	Green = 'Green',
+	Gray = 'Gray',
+	Pink = 'Pink',
+	Orange = 'Orange',
+	Yellow = 'Yellow',
+	Lime = 'Lime',
+	Slate = 'Slate',
+	Violet = 'Violet',
+}
+
+type KeywordColors = {
+	icon: { dark: string; light: string };
+	text: { dark: string; light: string };
+	background: { dark: string; light: string };
+};
+
+const keywordsColorsMap: Record<KeywordsColorVariants, KeywordColors> = {
+	[KeywordsColorVariants.Red]: {
+		icon: appTokens.utilityRed[500],
+		text: appTokens.utilityRed[700],
+		background: appTokens.utilityRed[50],
+	},
+	[KeywordsColorVariants.Blue]: {
+		icon: appTokens.utilityBlue[500],
+		text: appTokens.utilityBlue[700],
+		background: appTokens.utilityBlue[100],
+	},
+	[KeywordsColorVariants.Green]: {
+		icon: appTokens.utilityGreen[500],
+		text: appTokens.utilityGreen[700],
+		background: appTokens.utilityGreen[100],
+	},
+	[KeywordsColorVariants.Gray]: {
+		icon: appTokens.utilityGray[500],
+		text: appTokens.utilityGray[700],
+		background: appTokens.utilityGray[100],
+	},
+	[KeywordsColorVariants.Pink]: {
+		icon: appTokens.utilityPink[500],
+		text: appTokens.utilityPink[700],
+		background: appTokens.utilityPink[100],
+	},
+	[KeywordsColorVariants.Orange]: {
+		icon: appTokens.utilityOrange[500],
+		text: appTokens.utilityOrange[700],
+		background: appTokens.utilityOrange[100],
+	},
+	[KeywordsColorVariants.Yellow]: {
+		icon: appTokens.utilityYellow[500],
+		text: appTokens.utilityYellow[700],
+		background: appTokens.utilityYellow[100],
+	},
+	[KeywordsColorVariants.Lime]: {
+		icon: appTokens.utilityLime[500],
+		text: appTokens.utilityLime[700],
+		background: appTokens.utilityLime[100],
+	},
+	[KeywordsColorVariants.Slate]: {
+		icon: appTokens.utilityGrayBlue[500],
+		text: appTokens.utilityGrayBlue[700],
+		background: appTokens.utilityGrayBlue[100],
+	},
+	[KeywordsColorVariants.Violet]: {
+		icon: appTokens.utilityViolet[500],
+		text: appTokens.utilityViolet[700],
+		background: appTokens.utilityViolet[100],
+	},
+};
+
+export const keywordsColors: Record<
+	KeywordsColorVariants,
+	{ icon: string; text: string; background: string }
+> = Object.values(KeywordsColorVariants).reduce((acc, key) => {
+	acc[key] = {
+		icon: useThemeColor({}, keywordsColorsMap[key].icon),
+		text: useThemeColor({}, keywordsColorsMap[key].text),
+		background: useThemeColor({}, keywordsColorsMap[key].background),
+	};
+	return acc;
+}, {} as Record<KeywordsColorVariants, { icon: string; text: string; background: string }>);

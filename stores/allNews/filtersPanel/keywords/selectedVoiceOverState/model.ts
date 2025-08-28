@@ -1,7 +1,10 @@
-import { createEvent, createStore } from "effector";
+import { createEvent, createStore } from 'effector';
 
-export const $selectedVoiceoverState = createStore<boolean>(false);
+export const $isSelectedVoiceoverEnabled = createStore<boolean>(false);
 
-export const toggleSelectedVoiceoverState = createEvent();
+export const toggleIsSelectedVoiceoverEnabled = createEvent();
 
-$selectedVoiceoverState.on(toggleSelectedVoiceoverState, (state, _) => !state);
+$isSelectedVoiceoverEnabled.on(
+	toggleIsSelectedVoiceoverEnabled,
+	(state, _) => !state
+);
