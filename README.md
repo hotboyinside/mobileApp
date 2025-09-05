@@ -47,6 +47,9 @@ Join our community of developers creating universal apps.
 - Don't show correct number of enabled filters before press on the button
 - Add animated in KeywordColorPicker for colors buttons
 - Remake structure of stores (keywords relate to all pages, not only for all news)
+- rename effector's events functions names (fnFx -> handleFn)
+- check dark mode styles
+- check shadow
 
 ## Bugs associated with version
 

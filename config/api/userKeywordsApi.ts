@@ -1,13 +1,26 @@
-import { USERS_KEYWORDS } from "@/constants/apiRoutes";
-import { api } from "./axios";
-import { KeywordFromClient, UserKeyword } from "@/types/keywords";
+import { USERS_KEYWORDS, USERS_KEYWORDS_ITEM } from '@/constants/apiRoutes';
+import { api } from './axios';
+import {
+	KeywordForPostBackend,
+	UserKeywordFromBackend,
+} from '@/types/keywords';
 
 export interface PostKeywordResponse {
-  result: {
-    keyword: UserKeyword;
-  };
+	success: {
+		keyword: UserKeywordFromBackend;
+	};
 }
 
-export const postUserKeywordRequest = (data: KeywordFromClient) => {
-  return api.post(USERS_KEYWORDS, data);
+export type DeleteKeywordResponse = PostKeywordResponse;
+
+export const getUserKeywordsRequest = () => {
+	return api.get(USERS_KEYWORDS);
+};
+
+export const postUserKeywordRequest = (data: KeywordForPostBackend) => {
+	return api.post(USERS_KEYWORDS, data);
+};
+
+export const deleteUserKeywordRequest = (keywordId: string) => {
+	return api.delete(USERS_KEYWORDS_ITEM({ keywordId }));
 };
