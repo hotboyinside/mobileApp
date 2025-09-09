@@ -8,6 +8,10 @@ import { Keyword } from './Keyword';
 export const VisualOnlyKeywords = () => {
 	const onlyVisualKeywords = useUnit($onlyVisualKeywords);
 
+	if (onlyVisualKeywords.length === 0) {
+		return null;
+	}
+
 	return (
 		<ThemedView>
 			<ThemedText type='textLg' style={styles.title}>

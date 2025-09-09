@@ -47,9 +47,10 @@ Join our community of developers creating universal apps.
 - Don't show correct number of enabled filters before press on the button
 - Add animated in KeywordColorPicker for colors buttons
 - Remake structure of stores (keywords relate to all pages, not only for all news)
-- rename effector's events functions names (fnFx -> handleFn)
+- rename effector's events functions names (fnFx -> handleFn or onFn)
 - check dark mode styles
 - check shadow
+- close tab's stores when swipe modal sheet
 
 ## Bugs associated with version
 

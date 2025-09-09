@@ -1,7 +1,7 @@
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import CheckLineIcon from '@/assets/icons/check-line-icon.svg';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
@@ -28,32 +28,53 @@ import {
 } from '@/stores/allNews/filtersPanel/keywords/selectedVoiceOverState/model';
 import { keywordsIcons } from '@/assets/icons/keywordsIcons';
 import {
-	$selectedTextDraft,
-	changeSelectedTextDraft,
+	$isNotEmptyValueInInsertMode,
+	$selectedText,
+	changeSelectedText,
 } from '@/stores/allNews/filtersPanel/keywords/selectedText/model';
-import { postKeywordFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
-import { $keywordMode } from '@/stores/allNews/filtersPanel/keywords/model';
+import {
+	postKeywordFx,
+	updateKeywordFx,
+} from '@/stores/allNews/filtersPanel/keywords/handlers';
+import {
+	$keywordMode,
+	cancelEditKeyword,
+} from '@/stores/allNews/filtersPanel/keywords/model';
+import CloseIcon from '@/assets/icons/close-icon.svg';
+import {
+	$editingKeyword,
+	$hasChangesInEditingKeyword,
+} from '@/stores/allNews/filtersPanel/keywords/editingKeyword/model';
 
 export const KeywordCreator = () => {
 	const { openSheetModal, closeSheetModal } = useGlobalSheet();
-	const selectedTextDraft = useUnit($selectedTextDraft);
+	const mode = useUnit($keywordMode);
+	const selectedText = useUnit($selectedText);
 	const selectedColor = useUnit($selectedColor);
 	const selectedKeyIcon = useUnit($selectedKeyIcon);
-	const mode = useUnit($keywordMode);
 	const isSelectedVoiceoverEnabled = useUnit($isSelectedVoiceoverEnabled);
+	const editingKeyword = useUnit($editingKeyword);
+	const hasChangesInEditingKeyword = useUnit($hasChangesInEditingKeyword);
+	const isNotEmptyValueInInsertMode = useUnit($isNotEmptyValueInInsertMode);
 
 	const onToggleIsSelectedVoiceoverEnabled = useUnit(
 		toggleIsSelectedVoiceoverEnabled
 	);
 	const onOpenFilterSubTab = useUnit(openFilterSubTab);
 	const onCloseFilterSubTab = useUnit(closeFilterSubTab);
-	const onChangeSelectedTextDraft = useUnit(changeSelectedTextDraft);
-	const onSubmitKeyword = useUnit(postKeywordFx);
+	const onChangeSelectedText = useUnit(changeSelectedText);
+
+	const onCreateKeyword = useUnit(postKeywordFx);
+	const onUpdateKeyword = useUnit(updateKeywordFx);
 
 	const currentKeyIcon = selectedKeyIcon || 'smile';
 	const CurrentIcon = keywordsIcons[currentKeyIcon];
 
 	const disabledColor = useThemeColor({}, appTokens.foreground.disabled);
+	const secondaryColor = useThemeColor(
+		{},
+		appTokens.component.buttons.secondaryGray.fg
+	);
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
 	const utilityGray = useThemeColor({}, appTokens.utilityGray[400]);
 	const tertiaryGray = useThemeColor(
@@ -111,36 +132,52 @@ export const KeywordCreator = () => {
 				<Input
 					placeholder='Add keyword'
 					containerStyle={styles.inputContainer}
-					value={selectedTextDraft}
-					onChangeText={text => onChangeSelectedTextDraft(text)}
+					value={selectedText}
+					onChangeText={text => onChangeSelectedText(text)}
 				/>
 				{mode === KeywordsMode.EditMode && (
 					<Button
 						variant='secondary'
 						size='lg'
 						onlyIcon
-						icon={<CheckLineIcon width={20} height={20} fill={disabledColor} />}
-						onPress={() => {}}
+						icon={<CloseIcon width={20} height={20} fill={secondaryColor} />}
+						onPress={() => cancelEditKeyword()}
 					/>
 				)}
 				<Button
 					variant='secondary'
 					size='lg'
 					onlyIcon
-					icon={<CheckLineIcon width={20} height={20} fill={disabledColor} />}
+					icon={
+						<CheckLineIcon
+							width={20}
+							height={20}
+							fill={
+								hasChangesInEditingKeyword || isNotEmptyValueInInsertMode
+									? secondaryColor
+									: disabledColor
+							}
+						/>
+					}
 					onPress={() => {
-						if (!selectedTextDraft.trim()) return;
+						if (!selectedText.trim()) return;
 						if (mode === KeywordsMode.InsertMode) {
-							onSubmitKeyword({
-								word: selectedTextDraft,
+							onCreateKeyword({
+								word: selectedText,
 								color: selectedColor,
 								iconKey: currentKeyIcon,
 								isVoiceoverEnabled: isSelectedVoiceoverEnabled,
 							});
 						} else if (mode === KeywordsMode.EditMode) {
-							console.log('edit mode enabled');
+							onUpdateKeyword({
+								_id: editingKeyword?._id!,
+								word: selectedText,
+								color: selectedColor,
+								iconKey: selectedKeyIcon!,
+								isVoiceoverEnabled: isSelectedVoiceoverEnabled,
+							});
 						}
-						onChangeSelectedTextDraft('');
+						onChangeSelectedText('');
 					}}
 				/>
 			</ThemedView>

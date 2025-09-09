@@ -56,12 +56,12 @@ export const desktopToMobileColorMap: Record<
 	[KeywordsColorVariantsFromDesktop.GreenJungle]: KeywordsColorVariants.Green,
 	[KeywordsColorVariantsFromDesktop.GrayCharcoal]: KeywordsColorVariants.Gray,
 	[KeywordsColorVariantsFromDesktop.PinkLavender]: KeywordsColorVariants.Pink,
-	[KeywordsColorVariantsFromDesktop.Olive]: KeywordsColorVariants.Lime,
 	[KeywordsColorVariantsFromDesktop.YellowMustard]:
-		KeywordsColorVariants.Yellow,
-	[KeywordsColorVariantsFromDesktop.BlueTurquoise]: KeywordsColorVariants.Blue,
-	[KeywordsColorVariantsFromDesktop.BlueIndigo]: KeywordsColorVariants.Blue,
-	[KeywordsColorVariantsFromDesktop.Purple]: KeywordsColorVariants.Violet,
+		KeywordsColorVariants.Orange,
+	[KeywordsColorVariantsFromDesktop.Olive]: KeywordsColorVariants.Yellow,
+	[KeywordsColorVariantsFromDesktop.BlueTurquoise]: KeywordsColorVariants.Lime,
+	[KeywordsColorVariantsFromDesktop.BlueIndigo]: KeywordsColorVariants.Violet,
+	[KeywordsColorVariantsFromDesktop.Purple]: KeywordsColorVariants.Slate,
 };
 
 export const mobileToDesktopColorMap: Record<
@@ -73,12 +73,12 @@ export const mobileToDesktopColorMap: Record<
 	[KeywordsColorVariants.Green]: KeywordsColorVariantsFromDesktop.GreenJungle,
 	[KeywordsColorVariants.Gray]: KeywordsColorVariantsFromDesktop.GrayCharcoal,
 	[KeywordsColorVariants.Pink]: KeywordsColorVariantsFromDesktop.PinkLavender,
-	[KeywordsColorVariants.Lime]: KeywordsColorVariantsFromDesktop.Olive,
-	[KeywordsColorVariants.Yellow]:
+	[KeywordsColorVariants.Orange]:
 		KeywordsColorVariantsFromDesktop.YellowMustard,
-	[KeywordsColorVariants.Violet]: KeywordsColorVariantsFromDesktop.Purple,
-	[KeywordsColorVariants.Orange]: KeywordsColorVariantsFromDesktop.Olive,
-	[KeywordsColorVariants.Slate]: KeywordsColorVariantsFromDesktop.GrayCharcoal,
+	[KeywordsColorVariants.Yellow]: KeywordsColorVariantsFromDesktop.Olive,
+	[KeywordsColorVariants.Lime]: KeywordsColorVariantsFromDesktop.BlueTurquoise,
+	[KeywordsColorVariants.Violet]: KeywordsColorVariantsFromDesktop.BlueIndigo,
+	[KeywordsColorVariants.Slate]: KeywordsColorVariantsFromDesktop.Purple,
 };
 
 type KeywordColors = {

@@ -5,17 +5,26 @@ import {
 	getUserKeywordsRequest,
 	deleteUserKeywordRequest,
 	DeleteKeywordResponse,
+	putUserKeywordRequest,
 } from '@/config/api/userKeywordsApi';
 import {
 	desktopToMobileColorMap,
+	KeywordForPostBackend,
 	KeywordFromClient,
 	KeywordsColorVariants,
 	KeywordsColorVariantsFromDesktop,
 	mobileToDesktopColorMap,
+	UserKeyword,
 	UserKeywordFromBackend,
 } from '@/types/keywords';
 import { AxiosResponse } from 'axios';
-import { addKeyword, deleteKeyword, setKeywords } from './model';
+import {
+	addKeyword,
+	deleteKeyword,
+	finishEditKeyword,
+	setKeywords,
+	updateKeyword,
+} from './model';
 
 export const getAllNewsKeywordsFx = createEffect(
 	async () => await getUserKeywordsRequest()
@@ -71,4 +80,30 @@ deleteKeywordFx.done.watch(({ result }) => {
 	const deletedKeyword = result.success.keyword;
 
 	deleteKeyword(deletedKeyword._id);
+});
+
+export const updateKeywordFx = createEffect<UserKeyword, PostKeywordResponse>(
+	async keyword => {
+		const { _id, ...rest } = keyword;
+		const keywordWithMappedColor: KeywordForPostBackend = {
+			...rest,
+			color: mobileToDesktopColorMap[rest.color],
+		};
+
+		const response: AxiosResponse<PostKeywordResponse> =
+			await putUserKeywordRequest(_id, keywordWithMappedColor);
+
+		return response.data;
+	}
+);
+
+updateKeywordFx.done.watch(({ result }) => {
+	const keyword = result.success.keyword;
+	const keywordWithMappedColor = {
+		...keyword,
+		color: desktopToMobileColorMap[keyword.color],
+	};
+
+	updateKeyword(keywordWithMappedColor);
+	finishEditKeyword();
 });

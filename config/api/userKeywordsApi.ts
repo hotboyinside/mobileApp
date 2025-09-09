@@ -24,3 +24,10 @@ export const postUserKeywordRequest = (data: KeywordForPostBackend) => {
 export const deleteUserKeywordRequest = (keywordId: string) => {
 	return api.delete(USERS_KEYWORDS_ITEM({ keywordId }));
 };
+
+export const putUserKeywordRequest = (
+	keywordId: string,
+	data: KeywordForPostBackend
+) => {
+	return api.put(USERS_KEYWORDS_ITEM({ keywordId }), data);
+};

@@ -21,6 +21,10 @@ export const WithVoiceOverKeywords = () => {
 	const iconBorderColor = useThemeColor({}, appTokens.border.tertiary);
 	const descriptionColor = useThemeColor({}, appTokens.text.quaternary);
 
+	if (withVoiceOverKeywords.length === 0) {
+		return null;
+	}
+
 	return (
 		<ThemedView>
 			<ThemedView style={styles.header}>

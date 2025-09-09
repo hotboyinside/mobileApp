@@ -22,6 +22,7 @@ import {
 	$isSortByChanged,
 } from '@/stores/allNews/filtersPanel/sortBy/model';
 import { filtersApplyClick } from '@/stores/allNews/model';
+import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
 import {
 	BottomSheetFooterProps,
 	BottomSheetFooter,
@@ -33,11 +34,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface BottomSheetApplyFooterProps extends BottomSheetFooterProps {
 	applyButtonTitle?: string;
+	closeButtonTitle?: string;
 	onClose: () => void;
 }
 
 export const BottomSheetApplyFooter = ({
 	applyButtonTitle = 'Apply',
+	closeButtonTitle = 'Close',
 	animatedFooterPosition,
 	onClose,
 }: BottomSheetApplyFooterProps) => {
@@ -61,6 +64,8 @@ export const BottomSheetApplyFooter = ({
 	const applySelectedKeyIconClickFx = useUnit(applySelectedKeyIconClick);
 	const hasChangesInSelectedIcon = useUnit($hasChangesInSelectedIcon);
 
+	const isVoiceOverEnabled = useUnit($isVoiceOverEnabled);
+
 	let applyAction: () => void;
 	let hasChanges = false;
 
@@ -74,6 +79,10 @@ export const BottomSheetApplyFooter = ({
 			applyAction = applyFiltersFx;
 			hasChanges = hasChangesInFilters;
 			break;
+
+		case FilterTabVariant.keywords:
+			applyAction = () => {};
+			hasChanges = !isVoiceOverEnabled;
 	}
 
 	switch (openedFilterSubTab) {
@@ -118,7 +127,7 @@ export const BottomSheetApplyFooter = ({
 				<Button
 					variant='primary'
 					size='lg'
-					title={hasChanges ? applyButtonTitle : 'Close'}
+					title={hasChanges ? applyButtonTitle : closeButtonTitle}
 					onPress={() => {
 						applyAction();
 						onClose();

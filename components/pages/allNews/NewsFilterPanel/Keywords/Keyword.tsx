@@ -5,11 +5,11 @@ import { Pressable, StyleSheet } from 'react-native';
 import CloseIcon from '@/assets/icons/close-icon.svg';
 import { useUnit } from 'effector-react';
 import { deleteKeywordFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
-import { editKeyword } from '@/stores/allNews/filtersPanel/keywords/model';
+import { startEditKeyword } from '@/stores/allNews/filtersPanel/keywords/model';
 
 export const Keyword = ({ keyword }: { keyword: UserKeyword }) => {
 	const deleteKeyword = useUnit(deleteKeywordFx);
-	const onEditKeyword = useUnit(editKeyword);
+	const onStartEditKeyword = useUnit(startEditKeyword);
 
 	const Icon = keywordsIcons[keyword.iconKey || ''];
 	const bgColor = keywordsColors[keyword.color].background;
@@ -19,7 +19,7 @@ export const Keyword = ({ keyword }: { keyword: UserKeyword }) => {
 	return (
 		<Pressable
 			onPress={() => {
-				onEditKeyword(keyword);
+				onStartEditKeyword(keyword);
 			}}
 			style={({ pressed }) => [
 				styles.container,

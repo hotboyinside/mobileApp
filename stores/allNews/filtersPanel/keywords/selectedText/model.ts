@@ -1,15 +1,31 @@
 import { combine, createEvent, createStore } from 'effector';
-import { editKeyword } from '../model';
+import {
+	$keywordMode,
+	cancelEditKeyword,
+	finishEditKeyword,
+	startEditKeyword,
+} from '../model';
+import { KeywordsMode } from '@/types/keywords';
 
-export const $selectedText = createStore<string>('');
-export const $selectedTextDraft = createStore<string>('');
-export const $hasChangesInSelectedIcon = combine(
+export const defaultSelectedText = '';
+export const $selectedText = createStore<string>(defaultSelectedText);
+export const $isNotEmptyValueInInsertMode = combine(
 	$selectedText,
-	$selectedTextDraft,
-	(selectedIcon, selectedIconDraft) => selectedIcon !== selectedIconDraft
+	$keywordMode,
+	(selectedText, keywordMode) => {
+		if (keywordMode === KeywordsMode.InsertMode) {
+			return selectedText.trim() !== defaultSelectedText;
+		}
+
+		return false;
+	}
 );
 
-export const changeSelectedTextDraft = createEvent<string>();
+export const changeSelectedText = createEvent<string>();
 
-$selectedTextDraft.on(changeSelectedTextDraft, (_, payload) => payload);
-$selectedTextDraft.on(editKeyword, (_, payload) => payload.word);
+$selectedText.on(changeSelectedText, (_, payload) => payload);
+$selectedText.on(startEditKeyword, (_, payload) => payload.word);
+
+const resetEvents = [cancelEditKeyword, finishEditKeyword];
+
+$selectedText.reset(resetEvents);
