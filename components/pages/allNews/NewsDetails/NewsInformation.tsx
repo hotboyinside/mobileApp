@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { StarRating } from '@/components/ui/StarRating';
+import { Stars } from '@/components/ui/Stars';
 import { MockItem } from '../News/News';
 import { ThemedText } from '@/components/ThemedText';
 import { appTokens } from '@/constants/tokens';
@@ -20,7 +20,7 @@ export const NewsInformation = ({ news }: NewsInformationProps) => {
 
 	return (
 		<ScrollView style={styles.container}>
-			<StarRating
+			<Stars
 				rating={rating}
 				starHeight={20}
 				starWidth={20}

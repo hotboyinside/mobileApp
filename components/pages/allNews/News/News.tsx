@@ -8,7 +8,7 @@ import { appTokens } from '@/constants/tokens';
 import { useRouter } from 'expo-router';
 import { NEWS_DETAILS } from '@/constants/routes';
 import React from 'react';
-import { StarRating } from '@/components/ui/StarRating';
+import { Stars } from '@/components/ui/Stars';
 import { IFilteredNews, INews } from '@/stores/allNews/news/model';
 import {
 	format,
@@ -108,7 +108,7 @@ export const ListItem = ({ item }: ListItemProps) => {
 						</View>
 					))}
 				</View>
-				{/* <StarRating rating={rating} /> */}
+				{/* <Stars rating={rating} /> */}
 			</View>
 			<ThemedText type='textSm' style={styles.title}>
 				{title}

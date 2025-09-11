@@ -22,6 +22,7 @@ import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetP
 import { BottomSheetApplyFooter } from './BottomSheetApplyFooter';
 import { Keywords } from './Keywords/Keywords';
 import { toggleVoiceoverEnabled } from '@/stores/userSettings/voiceOver/model';
+import { StarRating } from './StarRating/StarRating';
 
 export const NewsFilterPanel = () => {
 	const { openSheetModal, closeSheetModal } = useGlobalSheet();
@@ -102,7 +103,7 @@ export const NewsFilterPanel = () => {
 			case FilterTabVariant.rating:
 				openSheetModal(
 					'main',
-					<SortList onClose={() => closeSheetModal('main')} />
+					<StarRating onClose={() => closeSheetModal('main')} />
 				);
 				break;
 		}

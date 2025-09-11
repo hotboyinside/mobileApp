@@ -12,7 +12,7 @@ type StarRatingProps = {
 	containerStyle?: ViewStyle;
 };
 
-export const StarRating = ({
+export const Stars = ({
 	rating,
 	starHeight = 16,
 	starWidth = 16,
