@@ -42,7 +42,7 @@ Join our community of developers creating universal apps.
 ## Plans
 
 - Check TabItem styles
-- Add full touchopacity in rangeInput
+- Add full touch opacity in rangeInput
 - Improve all icons (delete fill; delete "currentColor")
 - Don't show correct number of enabled filters before press on the button
 - Add animated in KeywordColorPicker for colors buttons
@@ -51,6 +51,7 @@ Join our community of developers creating universal apps.
 - check dark mode styles
 - check shadow
 - close tab's stores when swipe modal sheet
+- delete sse events logs
 
 ## Bugs associated with version
 

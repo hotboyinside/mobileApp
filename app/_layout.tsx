@@ -8,6 +8,16 @@ import { AppProvider } from "@/components/appProvider/AppProvider";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { SplashScreenController } from "@/components/splash/SplashScreenController";
 import { useSession } from "@/components/appProvider/session/SessionContext";
+import {
+  subscribeToSseEventNews,
+  addListener,
+  SseEvents,
+  closeToSseEventNews,
+} from "@/stores/sse/model";
+import { useEffect } from "react";
+import { addNewsFromSseEvent } from "@/stores/allNews/news/model";
+import { tick } from "@/stores/allNews/globalTick/model";
+import { connectSocketEvent } from "@/stores/socket/model";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -33,6 +43,21 @@ export default function RootLayout() {
 function RootNavigator() {
   const { session } = useSession();
   const isEmptySession = Object.keys(session ?? {}).length === 0;
+
+  useEffect(() => {
+    if (!session) return;
+    subscribeToSseEventNews();
+    connectSocketEvent();
+
+    return () => {
+      closeToSseEventNews();
+    };
+  }, [session]);
+
+  useEffect(() => {
+    const interval = setInterval(() => tick(), 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Stack

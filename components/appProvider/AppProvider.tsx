@@ -7,9 +7,6 @@ import { DialogProvider } from "./dialog/DialogProvider";
 import { SessionProvider } from "./session/SessionContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { GlobalSheetProvider } from "./sheetModal/GlobalSheetProvider";
-import { config } from "@/config/vars";
-import EventSource, { EventType } from "react-native-sse";
-import { SSE_NEWS } from "@/constants/apiSse";
 export interface NavigateOptions {
   history?: "auto" | "push" | "replace";
 }
@@ -31,11 +28,6 @@ export interface Session {
   };
 }
 
-export const SseEvents = {
-  Error: "error",
-  News: "news",
-  Symbols: "symbols",
-} as const;
 
 export interface AppProviderProps {
   /**
@@ -57,33 +49,6 @@ export interface AppProviderProps {
 function AppProvider(props: AppProviderProps) {
   const { children, theme } = props;
   const queryClient = new QueryClient();
-
-  React.useEffect(() => {
-    const eventSource = new EventSource(config.apiUrl + SSE_NEWS, {
-      withCredentials: true,
-    });
-
-    eventSource.addEventListener("open", event => {
-      console.log("Open SSE connection.", event);
-    });
-
-    eventSource.addEventListener(SseEvents.News as EventType<never>, event => {
-      console.log(event);
-      console.log("📰 News:", event.data);
-    });
-
-    eventSource.addEventListener("error", event => {
-      if (event.type === "error") {
-        console.error("Connection error:", event.message);
-      } else if (event.type === "exception") {
-        console.error("Error:", event.message, event.error);
-      }
-    });
-
-    return () => {
-      eventSource.close();
-    };
-  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

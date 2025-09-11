@@ -7,7 +7,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { useRouter } from 'expo-router';
 import { NEWS_DETAILS } from '@/constants/routes';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stars } from '@/components/ui/Stars';
 import { IFilteredNews, INews } from '@/stores/allNews/news/model';
 import {
@@ -21,6 +21,8 @@ import {
 import { enUS } from 'date-fns/locale';
 import { keywordsColors } from '@/types/keywords';
 import { ReadOnlyKeyword } from './ReadOnlyKeyword';
+import { $now } from '@/stores/allNews/globalTick/model';
+import { useStore, useUnit } from 'effector-react';
 
 export type Symbol = {
 	symbol: string;
@@ -52,9 +54,8 @@ type ListItemProps = {
 	item: IFilteredNews;
 };
 
-function formatNewsTime(isoString: string) {
+function formatNewsTime(isoString: string, now: Date) {
 	const date = new Date(isoString);
-	const now = new Date();
 
 	const diffMinutes = differenceInMinutes(now, date);
 	const diffHours = differenceInHours(now, date);
@@ -79,8 +80,9 @@ function formatNewsTime(isoString: string) {
 }
 
 export const ListItem = ({ item }: ListItemProps) => {
-	const { _id, title, publishedAt, description, keywords, symbols } = item;
+	const { _id, title, createdAt, description, keywords, symbols } = item;
 	const router = useRouter();
+	const now = useUnit($now);
 
 	const timeColor = useThemeColor({}, appTokens.text.quaternary);
 
@@ -119,7 +121,7 @@ export const ListItem = ({ item }: ListItemProps) => {
 				))}
 			</View>
 			<ThemedText type='textXs' style={[styles.time, { color: timeColor }]}>
-				{formatNewsTime(publishedAt)}
+				{formatNewsTime(createdAt, now)}
 			</ThemedText>
 		</TouchableOpacity>
 	);

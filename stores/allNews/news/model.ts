@@ -1,166 +1,96 @@
-import { combine, createStore } from 'effector';
-import { fetchNewsFx } from './handlers';
-import { $keywords } from '../filtersPanel/keywords/model';
-import { UserKeyword } from '@/types/keywords';
-
-export interface ISymbol {
-	_id: string;
-	isDelisted?: boolean;
-	symbol: string;
-	name?: string;
-	micCode?: string;
-	exchange?: string;
-	exchangeTimezone?: string;
-	currency?: string;
-	country?: string;
-	type?: string;
-	price?: number;
-	change?: number;
-	priceChange?: number;
-	absoluteChange?: number;
-	pricePrePost?: number;
-	changePrePost?: number;
-	priceChangePrePost?: number;
-	absoluteChangePrePost?: number;
-	float?: number;
-	volume?: number;
-	averageVolume?: number;
-	dayVolume?: number;
-	highestPrice?: number;
-	lowestPrice?: number;
-	openPrice?: number;
-	closePrice?: number;
-	averageDailyVolume?: number;
-	averageDailyRanges?: number;
-	sharesShort?: number;
-	shortRatio?: number;
-	shortPercentOfSharesOutstanding?: number;
-	daysRange?: number;
-	moneyFlow?: number;
-	vwap?: number;
-	fiftyTwoWeekRange?: string;
-	enterpriseValue?: number;
-	marketCapitalization?: number;
-	trailingPE?: number;
-	forwardAnnualDividendRate?: number;
-	forwardAnnualDividendYield?: number;
-	trailingAnnualDividendRate?: number;
-	trailingAnnualDividendYield?: number;
-	fiveYearAverageDividendYield?: number;
-	payoutRatio?: number;
-	dividendDate?: Date;
-	exDividendDate?: Date;
-	lastSplitFactor?: string;
-	lastSplitDate?: Date;
-	totalCashMRQ?: number;
-	totalCashPerShareMRQ?: number;
-	totalDebtMRQ?: number;
-	totalDebtToEquityMRQ?: number;
-	currentRatioMRQ?: number;
-	bookValuePerShareMRQ?: number;
-	leveredFreeCashFlowTTM?: number;
-	operatingCashFlowTTM?: number;
-	fiscalYearEnds?: Date;
-	mostRecentQuarter?: Date;
-	profitMargin?: number;
-	operatingMargin?: number;
-	returnOnAssetsTTM?: number;
-	returnOnEquityTTM?: number;
-	fiftyTwoWeekLow?: number;
-	fiftyTwoWeekHigh?: number;
-	fiftyTwoWeekChange?: number;
-	beta?: number;
-	dayFiftyMA?: number;
-	dayTwoHundredMA?: number;
-	forwardPE?: number;
-	pegRatio?: number;
-	priceToSalesTTM?: number;
-	priceToBookMRQ?: number;
-	enterpriseToRevenue?: number;
-	enterpriseToEbitda?: number;
-	sharesOutstanding?: number;
-	avgTenVolume?: number;
-	avgNinetyVolume?: number;
-	percentHeldByInsiders?: number;
-	percentHeldByInstitutions?: number;
-	trends?: {
-		rating?: number;
-		strongBuy?: number;
-		buy?: number;
-		hold?: number;
-		sell?: number;
-		strongSell?: number;
-	};
-	priceTarget?: {
-		high?: number;
-		median?: number;
-		low?: number;
-		average?: number;
-		current?: number;
-		currency?: string;
-	};
-	SMA?: number;
-	EMA?: number;
-	MACD?: number;
-	RSI?: number;
-}
+import { combine, createEvent, createStore } from "effector";
+import { fetchNewsFx, loadMoreNewsFx } from "./handlers";
+import { $keywords } from "../filtersPanel/keywords/model";
+import { UserKeyword } from "@/types/keywords";
+import { ISymbol } from "@/types/symbols";
 
 export interface INews {
-	_id: string;
-	title: string;
-	description: string;
-	publishedAt: string;
-	symbols: ISymbol[];
-	url: string;
-	createdAt: string;
-	sourceId: string;
-	industries: string[];
-	content: string;
-	categories: string[];
-	sectors: string[];
+  _id: string;
+  title: string;
+  description: string;
+  publishedAt: string;
+  symbols: ISymbol[];
+  url: string;
+  createdAt: string;
+  sourceId: string;
+  industries: string[];
+  content: string;
+  categories: string[];
+  sectors: string[];
 }
 
 export interface IFilteredNews extends INews {
-	keywords: UserKeyword[];
+  keywords: UserKeyword[];
 }
 
 export enum NewsSortValuesExtended {
-	Time = 'time',
-	Float = 'float',
-	Rating = 'rating',
-	Change = 'change',
+  Time = "time",
+  Float = "float",
+  Rating = "rating",
+  Change = "change",
 }
 
+export enum NewsLoadStatus {
+  Idle = "idle",
+  Loading = "loading",
+  LoadingMore = "loadingMore",
+  Error = "error",
+}
+
+export const $allNewsLoadStatus = createStore<NewsLoadStatus>(
+  NewsLoadStatus.Idle
+);
 export const $allNews = createStore<INews[]>([]);
-export const $lastAllNewsDocDateStore = $allNews.map(docs => {
-	const lastDoc = docs.at(-1);
+export const $lastAllNewsNewsDate = $allNews.map(docs => {
+  if (docs.length < 1) return null;
 
-	if (!lastDoc) {
-		return new Date().getTime();
-	}
+  const lastDoc = docs.at(-1);
+  return new Date((lastDoc as INews).createdAt).getTime();
+});
+export const $filteredNews = combine(
+  $allNews,
+  $keywords,
+  (news: INews[], keywords: UserKeyword[]): IFilteredNews[] => {
+    return news.map(item => {
+      const title = item.title.toLowerCase();
+      const description = item.description.toLowerCase();
 
-	return new Date((lastDoc as INews).createdAt).getTime();
+      const matchedKeywords = keywords.filter(keyword => {
+        const word = keyword.word.toLowerCase();
+        return title.includes(word) || description.includes(word);
+      });
+
+      return {
+        ...item,
+        keywords: matchedKeywords,
+      };
+    });
+  }
+);
+
+export const addNewsFromSseEvent = createEvent<MessageEvent>();
+
+$allNews.on(addNewsFromSseEvent, (state, payload) => {
+  const newsFromSse = JSON.parse(payload.data);
+
+  return [...newsFromSse, ...state];
 });
 
 $allNews.on(fetchNewsFx.doneData, (_, docs) => docs);
+$allNews.on(loadMoreNewsFx.doneData, (state, payload) => {
+  return [...state, ...payload];
+});
 
-export const $filteredNews = combine(
-	$allNews,
-	$keywords,
-	(news: INews[], keywords: UserKeyword[]): IFilteredNews[] => {
-		return news.map(item => {
-			const title = item.title.toLowerCase();
-			const description = item.description.toLowerCase();
+$allNewsLoadStatus
+  .on(fetchNewsFx.pending, (_, pending) =>
+    pending ? NewsLoadStatus.Loading : NewsLoadStatus.Idle
+  )
+  .on(fetchNewsFx.fail, () => NewsLoadStatus.Error)
+  .on(fetchNewsFx.done, () => NewsLoadStatus.Idle);
 
-			const matchedKeywords = keywords.filter(keyword => {
-				const word = keyword.word.toLowerCase();
-				return title.includes(word) || description.includes(word);
-			});
-
-			return {
-				...item,
-				keywords: matchedKeywords,
-			};
-		});
-	}
-);
+$allNewsLoadStatus
+  .on(loadMoreNewsFx.pending, (_, pending) =>
+    pending ? NewsLoadStatus.LoadingMore : NewsLoadStatus.Idle
+  )
+  .on(loadMoreNewsFx.fail, () => NewsLoadStatus.Error)
+  .on(loadMoreNewsFx.done, () => NewsLoadStatus.Idle);

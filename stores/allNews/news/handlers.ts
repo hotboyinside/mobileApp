@@ -8,3 +8,10 @@ export const fetchNewsFx = createEffect<IParamsGetNews, INews[]>(
     return response.data.success.docs;
   }
 );
+
+export const loadMoreNewsFx = createEffect<IParamsGetNews, INews[]>(
+  async params => {
+    const response = await getNewsRequest(params);
+    return response.data.success.docs;
+  }
+);
