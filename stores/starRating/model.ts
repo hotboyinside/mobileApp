@@ -1,12 +1,13 @@
 import { initialStarRating } from '@/constants/starRatingDefaultSet';
 import { StarRatingChangeEvent, StarRatingKeywords } from '@/types/starRating';
-import { createEvent, createStore } from 'effector';
+import { createEvent, createStore, sample } from 'effector';
 
 export const $starRatingKeywords =
 	createStore<StarRatingKeywords>(initialStarRating);
 export const $draftStarRatingKeywords =
 	createStore<StarRatingKeywords>(initialStarRating);
 
+export const setStarRatingKeywords = createEvent<StarRatingKeywords>();
 export const addDraftStarRatingKeyword = createEvent<StarRatingChangeEvent>();
 export const deleteDraftStarRatingKeyword =
 	createEvent<StarRatingChangeEvent>();
@@ -28,3 +29,12 @@ $draftStarRatingKeywords.on(deleteDraftStarRatingKeyword, (state, payload) => {
 		[payload.changeableStar]: [...starRatingWithDeletedKeyword],
 	};
 });
+
+$starRatingKeywords.on(setStarRatingKeywords, (_, payload) => payload);
+
+sample({
+	clock: setStarRatingKeywords,
+	target: $draftStarRatingKeywords,
+});
+
+$draftStarRatingKeywords.watch(state => console.log(state));

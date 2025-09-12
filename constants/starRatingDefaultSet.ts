@@ -1,4 +1,4 @@
-import { StarRatingKeywords } from '@/types/starRating';
+import { StarNumber, StarRatingKeywords } from '@/types/starRating';
 
 export const DefaultStarRatingSet = {
 	userRating: {

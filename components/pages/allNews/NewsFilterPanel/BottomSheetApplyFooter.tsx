@@ -83,6 +83,11 @@ export const BottomSheetApplyFooter = ({
 		case FilterTabVariant.keywords:
 			applyAction = () => {};
 			hasChanges = !isVoiceOverEnabled;
+			break;
+
+		case FilterTabVariant.rating:
+			applyAction = () => {};
+			break;
 	}
 
 	switch (openedFilterSubTab) {
@@ -95,6 +100,9 @@ export const BottomSheetApplyFooter = ({
 			applyAction = applySelectedKeyIconClickFx;
 			hasChanges = hasChangesInSelectedIcon;
 			break;
+
+		case FilterSubTabVariant.editRating:
+			applyAction = () => {};
 	}
 
 	useEffect(() => {

@@ -18,12 +18,7 @@ export const Keywords = ({ onClose }: KeywordsProps) => {
 			showsVerticalScrollIndicator={false}
 			contentContainerStyle={{ paddingBottom: 120 }}
 		>
-			<HeaderBottomSheet
-				headerLabel='Keywords'
-				onCloseFilters={() => {
-					onClose();
-				}}
-			/>
+			<HeaderBottomSheet headerLabel='Keywords' onCloseFilters={onClose} />
 			<ThemedView style={styles.container}>
 				<KeywordCreator />
 				<VisualOnlyKeywords />

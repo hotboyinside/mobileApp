@@ -21,7 +21,7 @@ export const SortList = ({ onClose }: SortListProps) => {
 	const currentSortValue = useUnit($sortByDraft);
 
 	const updateSortValueFx = useUnit(updateSortingDraft);
-	const resetSortingFx = useUnit(resetSortingDraft);
+	const onResetSorting = useUnit(resetSortingDraft);
 	const closeSortByClickFx = useUnit(closeSortByClick);
 
 	return (
@@ -32,7 +32,10 @@ export const SortList = ({ onClose }: SortListProps) => {
 			contentContainerStyle={{ paddingBottom: 120 }}
 		>
 			<HeaderBottomSheet
-				onResetDefaultValues={resetSortingFx}
+				onResetDefaultValues={() => {
+					onResetSorting();
+					onClose();
+				}}
 				onCloseFilters={() => {
 					onClose();
 					closeSortByClickFx();

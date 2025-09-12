@@ -30,18 +30,18 @@ export const NewsFilterPanel = () => {
 	const selectedTabFilters = useUnit($selectedTabsFilters);
 	const countOfActiveFilters = useUnit($activeFiltersCount);
 
-	const openFilterTabFx = useUnit(openFilterTab);
-	const closeFilterTabFx = useUnit(closeFilterTab);
+	const onOpenFilterTab = useUnit(openFilterTab);
+	const onCloseFilterTab = useUnit(closeFilterTab);
 
 	const openTabFilters = (tab: FilterTabVariant) => {
 		switch (tab) {
 			case FilterTabVariant.sort:
-				openFilterTabFx(FilterTabVariant.sort);
+				onOpenFilterTab(FilterTabVariant.sort);
 				openSheetModal(
 					'main',
 					<SortList
 						onClose={() => {
-							closeFilterTabFx();
+							onCloseFilterTab();
 							closeSheetModal('main');
 						}}
 					/>,
@@ -49,7 +49,7 @@ export const NewsFilterPanel = () => {
 						<BottomSheetApplyFooter
 							{...props}
 							onClose={() => {
-								closeFilterTabFx();
+								onCloseFilterTab();
 								closeSheetModal('main');
 							}}
 						/>
@@ -57,12 +57,12 @@ export const NewsFilterPanel = () => {
 				);
 				break;
 			case FilterTabVariant.filters:
-				openFilterTabFx(FilterTabVariant.filters);
+				onOpenFilterTab(FilterTabVariant.filters);
 				openSheetModal(
 					'main',
 					<Filters
 						onCloseFilters={() => {
-							closeFilterTabFx();
+							onCloseFilterTab();
 							closeSheetModal('main');
 							resetMarketDraft();
 							resetStockTypeDraft();
@@ -73,7 +73,7 @@ export const NewsFilterPanel = () => {
 						<BottomSheetApplyFooter
 							{...props}
 							onClose={() => {
-								closeFilterTabFx();
+								onCloseFilterTab();
 								closeSheetModal('main');
 							}}
 						/>
@@ -81,12 +81,12 @@ export const NewsFilterPanel = () => {
 				);
 				break;
 			case FilterTabVariant.keywords:
-				openFilterTabFx(FilterTabVariant.keywords);
+				onOpenFilterTab(FilterTabVariant.keywords);
 				openSheetModal(
 					'main',
 					<Keywords
 						onClose={() => {
-							closeFilterTab();
+							onCloseFilterTab();
 							closeSheetModal('main');
 						}}
 					/>,
@@ -101,9 +101,24 @@ export const NewsFilterPanel = () => {
 				);
 				break;
 			case FilterTabVariant.rating:
+				onOpenFilterTab(FilterTabVariant.rating);
 				openSheetModal(
 					'main',
-					<StarRating onClose={() => closeSheetModal('main')} />
+					<StarRating
+						onClose={() => {
+							onCloseFilterTab();
+							closeSheetModal('main');
+						}}
+					/>,
+					props => (
+						<BottomSheetApplyFooter
+							{...props}
+							onClose={() => {
+								onCloseFilterTab();
+								closeSheetModal('main');
+							}}
+						/>
+					)
 				);
 				break;
 		}

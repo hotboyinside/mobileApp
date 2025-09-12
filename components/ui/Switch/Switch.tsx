@@ -1,49 +1,53 @@
-import { ThemedView } from '@/components/ThemedView';
-import { useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet } from 'react-native';
-import { interpolate, interpolateColor } from 'react-native-reanimated';
+import { appColors } from '@/constants/colors';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { useState } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
+import Animated, {
+	useSharedValue,
+	withSpring,
+	useAnimatedStyle,
+	interpolateColor,
+} from 'react-native-reanimated';
 
 export const Switch = () => {
-	const translateAnimation = useRef(new Animated.Value(0)).current;
-	const colorChange = useRef(new Animated.Value(0)).current;
 	const [isActive, setIsActive] = useState(false);
+	const translateX = useSharedValue<number>(0);
+	const progress = useSharedValue<number>(0);
 
-	const translateIn = () => {
-		Animated.parallel([
-			Animated.timing(translateAnimation, {
-				toValue: 20,
-				duration: 240,
-				useNativeDriver: true,
-			}),
-		]).start();
+	const brandColor = appColors.brand[400];
+	const tertiaryColor = useThemeColor({}, appTokens.background.tertiary);
+
+	const toggle = () => {
+		setIsActive(prev => {
+			const next = !prev;
+			translateX.value = withSpring(next ? 20 : 0);
+			progress.value = withSpring(next ? 1 : 0);
+			return next;
+		});
 	};
 
-	const translateOut = () => {
-		Animated.timing(translateAnimation, {
-			toValue: 0,
-			duration: 240,
-			useNativeDriver: true,
-		}).start();
-	};
+	const animatedStyles = useAnimatedStyle(() => ({
+		transform: [{ translateX: withSpring(translateX.value) }],
+	}));
+
+	const animatedColor = useAnimatedStyle(() => {
+		const backgroundColor = interpolateColor(
+			progress.value,
+			[0, 1],
+			[brandColor, tertiaryColor]
+		);
+
+		return { backgroundColor };
+	});
 
 	return (
-		<Pressable
-			onPress={() => {
-				setIsActive(prev => !prev);
-				if (isActive) {
-					translateOut();
-				} else {
-					translateIn();
-				}
-			}}
-			style={styles.root}
-		>
+		<Pressable onPress={toggle}>
 			<Animated.View
-				style={[
-					styles.circle,
-					{ transform: [{ translateX: translateAnimation }] },
-				]}
-			></Animated.View>
+				style={[styles.root, animatedColor, !isActive && styles.boxShadow]}
+			>
+				<Animated.View style={[styles.circle, animatedStyles]}></Animated.View>
+			</Animated.View>
 		</Pressable>
 	);
 };
@@ -55,7 +59,6 @@ const styles = StyleSheet.create({
 		width: 44,
 		height: 24,
 		padding: 2,
-		backgroundColor: 'orange',
 	},
 
 	circle: {
@@ -63,5 +66,15 @@ const styles = StyleSheet.create({
 		width: 20,
 		height: 20,
 		backgroundColor: 'white',
+	},
+
+	boxShadow: {
+		shadowColor: '#0A0D121F',
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.12,
+		shadowRadius: 3,
+
+		// Android
+		elevation: 3,
 	},
 });

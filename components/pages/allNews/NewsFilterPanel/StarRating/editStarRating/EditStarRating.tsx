@@ -1,6 +1,5 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
-import { HeaderBottomSheet } from '../HeaderBottomSheet';
 import { ThemedView } from '@/components/ThemedView';
 import { Stars } from '@/components/ui/Stars';
 import { Switch } from '@/components/ui/Switch/Switch';
@@ -10,55 +9,19 @@ import { useUnit } from 'effector-react';
 import { $draftStarRatingKeywords } from '@/stores/starRating/model';
 import { StarNumber } from '@/types/starRating';
 import { Badge } from '@/components/ui/Badge/Badge';
-import EditIcon from '@/assets/icons/edit-icon.svg';
-import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
-import {
-	FilterSubTabVariant,
-	closeFilterSubTab,
-	openFilterSubTab,
-} from '@/stores/allNews/filtersPanel/model';
-import { BottomSheetApplyFooter } from '../BottomSheetApplyFooter';
-import { EditStarRating } from './editStarRating/EditStarRating';
-import { useCallback } from 'react';
+import { HeaderBottomSheet } from '../../HeaderBottomSheet';
 
-type StarRatingProps = {
+type EditStarRatingProps = {
 	onClose: () => void;
 };
 
 const STARS = [4, 3, 2, 1, 0];
 
-export const StarRating = ({ onClose }: StarRatingProps) => {
+export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
-
-	const { openSheetModal, closeSheetModal } = useGlobalSheet();
-	const onOpenFilterSubTab = useUnit(openFilterSubTab);
-	const onCloseFilterSubTab = useUnit(closeFilterSubTab);
 
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
 	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
-
-	const openEditRatingSheet = useCallback(() => {
-		onClose();
-		onOpenFilterSubTab(FilterSubTabVariant.editRating);
-		openSheetModal(
-			'secondary',
-			<EditStarRating
-				onClose={() => {
-					onCloseFilterSubTab();
-					closeSheetModal('secondary');
-				}}
-			/>,
-			props => (
-				<BottomSheetApplyFooter
-					{...props}
-					onClose={() => {
-						onCloseFilterSubTab();
-						closeSheetModal('secondary');
-					}}
-				/>
-			)
-		);
-	}, []);
 
 	return (
 		<BottomSheetScrollView
@@ -66,12 +29,7 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 			showsVerticalScrollIndicator={false}
 			contentContainerStyle={{ paddingBottom: 120 }}
 		>
-			<HeaderBottomSheet
-				headerLabel='Rating'
-				leftIcon={EditIcon}
-				onResetDefaultValues={openEditRatingSheet}
-				onCloseFilters={() => onClose()}
-			/>
+			<HeaderBottomSheet headerLabel='Edit Rating' onCloseFilters={onClose} />
 			<ThemedView style={styles.container}>
 				{STARS.map(star => (
 					<ThemedView

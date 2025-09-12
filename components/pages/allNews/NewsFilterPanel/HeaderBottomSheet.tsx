@@ -6,18 +6,24 @@ import { Button } from '@/components/ui/Button';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { ThemedView } from '@/components/ThemedView';
+import { FC } from 'react';
+import { SvgProps } from 'react-native-svg';
 
 type HeaderBottomSheetProps = {
 	headerLabel: string;
+	leftIcon?: FC<SvgProps>;
 	onCloseFilters: () => void;
 	onResetDefaultValues?: () => void;
 };
 
 export const HeaderBottomSheet = ({
 	headerLabel,
+	leftIcon = RestartIcon,
 	onCloseFilters,
 	onResetDefaultValues,
 }: HeaderBottomSheetProps) => {
+	const Icon = leftIcon;
+
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
 	const iconColor = useThemeColor(
 		{},
@@ -30,7 +36,7 @@ export const HeaderBottomSheet = ({
 				<Button
 					onlyIcon
 					variant='secondary'
-					icon={<RestartIcon fill={iconColor} width={20} height={20} />}
+					icon={<Icon fill={iconColor} width={20} height={20} />}
 					onPress={onResetDefaultValues}
 				/>
 			) : (
@@ -43,10 +49,7 @@ export const HeaderBottomSheet = ({
 				variant='secondary'
 				onlyIcon
 				icon={<CloseIcon width={20} height={20} fill={iconColor} />}
-				onPressIn={() => {
-					onCloseFilters();
-					onResetDefaultValues?.();
-				}}
+				onPressIn={onCloseFilters}
 			/>
 		</ThemedView>
 	);

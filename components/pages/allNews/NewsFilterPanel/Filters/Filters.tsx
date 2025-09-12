@@ -16,7 +16,7 @@ type FiltersProps = {
 };
 
 export const Filters = ({ onCloseFilters }: FiltersProps) => {
-	const resetDraftFiltersFn = useUnit(resetDraftFilters);
+	const onResetDraftFilters = useUnit(resetDraftFilters);
 
 	return (
 		<BottomSheetScrollView
@@ -26,7 +26,10 @@ export const Filters = ({ onCloseFilters }: FiltersProps) => {
 			contentContainerStyle={{ paddingBottom: 120 }}
 		>
 			<HeaderBottomSheet
-				onResetDefaultValues={resetDraftFiltersFn}
+				onResetDefaultValues={() => {
+					onResetDraftFilters();
+					onCloseFilters();
+				}}
 				onCloseFilters={onCloseFilters}
 				headerLabel='Filters'
 			/>

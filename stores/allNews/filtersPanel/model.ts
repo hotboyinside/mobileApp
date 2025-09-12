@@ -1,21 +1,22 @@
-import { createEvent, createStore } from "effector";
+import { createEvent, createStore } from 'effector';
 
 export enum FilterTabVariant {
-  sort = "sort",
-  filters = "Filters",
-  keywords = "Keywords",
-  rating = "Rating",
+	sort = 'Sort',
+	filters = 'Filters',
+	keywords = 'Keywords',
+	rating = 'Rating',
 }
 
 export enum FilterSubTabVariant {
-  keywordsColor = "Color",
-  keywordsIcon = "Icon",
+	keywordsColor = 'Color',
+	keywordsIcon = 'Icon',
+	editRating = 'EditRating',
 }
 
 export const $selectedTabsFilters = createStore<FilterTabVariant[]>([]);
 export const $openedFilterTab = createStore<FilterTabVariant | null>(null);
 export const $openedFilterSubTab = createStore<FilterSubTabVariant | null>(
-  null
+	null
 );
 
 export const addSelectedTabFilters = createEvent<FilterTabVariant>();
@@ -28,14 +29,14 @@ export const openFilterSubTab = createEvent<FilterSubTabVariant>();
 export const closeFilterSubTab = createEvent();
 
 $selectedTabsFilters.on(addSelectedTabFilters, (state, payload) => {
-  if (!state.includes(payload)) {
-    return [...state, payload];
-  }
-  return state;
+	if (!state.includes(payload)) {
+		return [...state, payload];
+	}
+	return state;
 });
 
 $selectedTabsFilters.on(removeSelectedTabFilters, (state, payload) => {
-  return state.filter(tab => tab !== payload);
+	return state.filter(tab => tab !== payload);
 });
 
 $openedFilterTab.on(openFilterTab, (_, payload) => payload);
