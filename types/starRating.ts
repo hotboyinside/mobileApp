@@ -1,4 +1,5 @@
 export type StarNumber = 1 | 2 | 3 | 4;
+export type StarNumberStateKey = StarNumber | 0;
 
 export interface StarRatingKeywords {
 	1: string[];
@@ -12,11 +13,11 @@ export interface UserModificationCountInStarRating {
 }
 
 export interface StarRatingEnabledState {
-	isEnabledZeroStar: boolean;
-	isEnabledOneStar: boolean;
-	isEnabledTwoStar: boolean;
-	isEnabledThreeStar: boolean;
-	isEnabledFourStar: boolean;
+	0: boolean;
+	1: boolean;
+	2: boolean;
+	3: boolean;
+	4: boolean;
 }
 
 export interface StarRatingChangeEvent {

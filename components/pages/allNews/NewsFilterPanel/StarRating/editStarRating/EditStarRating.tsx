@@ -2,26 +2,50 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { Stars } from '@/components/ui/Stars';
-import { Switch } from '@/components/ui/Switch/Switch';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { useUnit } from 'effector-react';
-import { $draftStarRatingKeywords } from '@/stores/starRating/model';
+import {
+	$draftStarRatingKeywords,
+	addDraftStarRatingKeyword,
+	clearDraftStarRatingKeywordsByStar,
+	deleteDraftStarRatingKeyword,
+} from '@/stores/starRating/model';
 import { StarNumber } from '@/types/starRating';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { HeaderBottomSheet } from '../../HeaderBottomSheet';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import CloseIcon from '@/assets/icons/close-icon.svg';
+import {
+	$inputErrors,
+	$userInputKeywords,
+	changeUserInputKeyword,
+	clearInputError,
+} from '@/stores/allNews/filtersPanel/starRating/model';
 
 type EditStarRatingProps = {
 	onClose: () => void;
 };
 
-const STARS = [4, 3, 2, 1, 0];
+const STARS = [4, 3, 2, 1];
 
 export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
+	const userInputKeywords = useUnit($userInputKeywords);
 	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
+	const inputErrors = useUnit($inputErrors);
+
+	const onDeleteDraftStarRatingKeyword = useUnit(deleteDraftStarRatingKeyword);
+	const onChangeUserInputKeyword = useUnit(changeUserInputKeyword);
+	const onAddDraftStarRatingKeyword = useUnit(addDraftStarRatingKeyword);
+	const onClearDraftStarRatingKeywordsByStar = useUnit(
+		clearDraftStarRatingKeywordsByStar
+	);
+	const onClearInputError = useUnit(clearInputError);
 
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
 	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
+	const iconColor = useThemeColor({}, appTokens.foreground.quinary);
 
 	return (
 		<BottomSheetScrollView
@@ -41,8 +65,31 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 					>
 						<ThemedView style={[styles.header, { backgroundColor: bgColor }]}>
 							<Stars rating={star} />
-							<Switch />
+							<Button
+								title='Clear'
+								variant='link-gray'
+								onPress={() =>
+									onClearDraftStarRatingKeywordsByStar(star as StarNumber)
+								}
+							/>
 						</ThemedView>
+						<Input
+							placeholder='Add keyword'
+							containerStyle={styles.inputContainer}
+							value={userInputKeywords[star as StarNumber]}
+							onChangeText={text => {
+								onClearInputError(star as StarNumber);
+								onChangeUserInputKeyword({ star: star as StarNumber, text });
+							}}
+							onBlur={() => {
+								onAddDraftStarRatingKeyword({
+									changeableStar: star as StarNumber,
+									word: userInputKeywords[star as StarNumber],
+								});
+							}}
+							isError={!!inputErrors[star as StarNumber]}
+							errorMessage={inputErrors[star as StarNumber] ?? ''}
+						/>
 						{draftStarRatingKeywords[star as StarNumber] && (
 							<ThemedView
 								style={[styles.starKeywords, { backgroundColor: bgColor }]}
@@ -50,9 +97,24 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 								{draftStarRatingKeywords[star as StarNumber]?.map(
 									ratingWord => (
 										<Badge
-											variant='pillColor'
 											key={ratingWord}
 											value={ratingWord}
+											size='xl'
+											variant='pillColor'
+											color='gray'
+											icon={
+												<CloseIcon
+													width={16}
+													height={16}
+													fill={iconColor}
+													onPress={() => {
+														onDeleteDraftStarRatingKeyword({
+															changeableStar: star as StarNumber,
+															word: ratingWord,
+														});
+													}}
+												/>
+											}
 										/>
 									)
 								)}
@@ -77,6 +139,10 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		padding: 12,
 		gap: 12,
+	},
+
+	inputContainer: {
+		flex: 1,
 	},
 
 	header: {

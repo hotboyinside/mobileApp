@@ -1,7 +1,7 @@
 import { appColors } from '@/constants/colors';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
 	useSharedValue,
@@ -10,43 +10,57 @@ import Animated, {
 	interpolateColor,
 } from 'react-native-reanimated';
 
-export const Switch = () => {
-	const [isActive, setIsActive] = useState(false);
+type SwitchProps = {
+	value: boolean;
+	onChange: (value: boolean) => void;
+	disabled?: boolean;
+};
+
+export const Switch = ({ value, onChange, disabled }: SwitchProps) => {
 	const translateX = useSharedValue<number>(0);
 	const progress = useSharedValue<number>(0);
 
 	const brandColor = appColors.brand[400];
 	const tertiaryColor = useThemeColor({}, appTokens.background.tertiary);
 
-	const toggle = () => {
-		setIsActive(prev => {
-			const next = !prev;
-			translateX.value = withSpring(next ? 20 : 0);
-			progress.value = withSpring(next ? 1 : 0);
-			return next;
+	useEffect(() => {
+		translateX.value = withSpring(value ? 20 : 0, {
+			damping: 15,
+			stiffness: 150,
 		});
+		progress.value = withSpring(value ? 1 : 0, { damping: 15, stiffness: 150 });
+	}, [value, progress, translateX]);
+
+	const handleToggle = () => {
+		if (!disabled) {
+			onChange(!value);
+		}
 	};
 
-	const animatedStyles = useAnimatedStyle(() => ({
-		transform: [{ translateX: withSpring(translateX.value) }],
+	const animatedCircle = useAnimatedStyle(() => ({
+		transform: [{ translateX: translateX.value }],
 	}));
 
-	const animatedColor = useAnimatedStyle(() => {
+	const animatedBackground = useAnimatedStyle(() => {
 		const backgroundColor = interpolateColor(
 			progress.value,
 			[0, 1],
-			[brandColor, tertiaryColor]
+			[tertiaryColor, brandColor]
 		);
-
 		return { backgroundColor };
 	});
 
 	return (
-		<Pressable onPress={toggle}>
+		<Pressable onPress={handleToggle} disabled={disabled}>
 			<Animated.View
-				style={[styles.root, animatedColor, !isActive && styles.boxShadow]}
+				style={[
+					styles.root,
+					animatedBackground,
+					!value && styles.boxShadow,
+					disabled && styles.disabled,
+				]}
 			>
-				<Animated.View style={[styles.circle, animatedStyles]}></Animated.View>
+				<Animated.View style={[styles.circle, animatedCircle]} />
 			</Animated.View>
 		</Pressable>
 	);
@@ -76,5 +90,9 @@ const styles = StyleSheet.create({
 
 		// Android
 		elevation: 3,
+	},
+
+	disabled: {
+		opacity: 0.5,
 	},
 });

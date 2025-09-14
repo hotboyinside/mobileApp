@@ -4,9 +4,7 @@ import { StyleSheet } from 'react-native';
 import CloseIcon from '@/assets/icons/close-icon.svg';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-
 import { useUnit } from 'effector-react';
-
 import { AdditionalFilterKey } from '@/types/filters';
 import { toggleFilterEnabled } from '@/stores/allNews/filtersPanel/filters/additionalFilters/model';
 import {

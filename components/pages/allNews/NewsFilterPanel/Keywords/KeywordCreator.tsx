@@ -6,7 +6,6 @@ import CheckLineIcon from '@/assets/icons/check-line-icon.svg';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import CircleIcon from '@/assets/icons/circle-icon.svg';
-import SmileIcon from '@/assets/icons/smile-icon.svg';
 import VoiceOverOff from '@/assets/icons/voiceover-off-icon.svg';
 import VoiceOverOn from '@/assets/icons/voiceover-on-icon.svg';
 import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';

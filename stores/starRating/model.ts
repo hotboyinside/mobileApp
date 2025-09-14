@@ -1,6 +1,14 @@
 import { initialStarRating } from '@/constants/starRatingDefaultSet';
-import { StarRatingChangeEvent, StarRatingKeywords } from '@/types/starRating';
+import {
+	StarNumber,
+	StarRatingChangeEvent,
+	StarRatingKeywords,
+} from '@/types/starRating';
 import { createEvent, createStore, sample } from 'effector';
+import {
+	changeUserInputKeyword,
+	showDuplicateError,
+} from '../allNews/filtersPanel/starRating/model';
 
 export const $starRatingKeywords =
 	createStore<StarRatingKeywords>(initialStarRating);
@@ -11,14 +19,9 @@ export const setStarRatingKeywords = createEvent<StarRatingKeywords>();
 export const addDraftStarRatingKeyword = createEvent<StarRatingChangeEvent>();
 export const deleteDraftStarRatingKeyword =
 	createEvent<StarRatingChangeEvent>();
+export const clearDraftStarRatingKeywordsByStar = createEvent<StarNumber>();
 
-$draftStarRatingKeywords.on(addDraftStarRatingKeyword, (state, payload) => {
-	return {
-		...state,
-		[payload.changeableStar]: [...state[payload.changeableStar], payload.word],
-	};
-});
-
+$starRatingKeywords.on(setStarRatingKeywords, (_, payload) => payload);
 $draftStarRatingKeywords.on(deleteDraftStarRatingKeyword, (state, payload) => {
 	const starRatingWithDeletedKeyword = state[payload.changeableStar].filter(
 		keyword => keyword !== payload.word
@@ -30,11 +33,68 @@ $draftStarRatingKeywords.on(deleteDraftStarRatingKeyword, (state, payload) => {
 	};
 });
 
-$starRatingKeywords.on(setStarRatingKeywords, (_, payload) => payload);
+$draftStarRatingKeywords.on(
+	clearDraftStarRatingKeywordsByStar,
+	(state, payload) => ({
+		...state,
+		[payload]: [],
+	})
+);
 
 sample({
 	clock: setStarRatingKeywords,
 	target: $draftStarRatingKeywords,
 });
 
-$draftStarRatingKeywords.watch(state => console.log(state));
+sample({
+	clock: addDraftStarRatingKeyword,
+	fn: ({ changeableStar }) => ({ star: changeableStar, text: '' }),
+	target: changeUserInputKeyword,
+});
+
+sample({
+	clock: addDraftStarRatingKeyword,
+	source: $draftStarRatingKeywords,
+	filter: (state, { changeableStar, word }) => {
+		const trimmedWord = word.trim();
+		return (
+			trimmedWord !== '' &&
+			Object.values(state).some(keywords =>
+				keywords.some(
+					(keyword: string) =>
+						keyword.toLowerCase() === trimmedWord.toLowerCase()
+				)
+			)
+		);
+	},
+	fn: (_, { changeableStar, word }) => ({
+		star: changeableStar,
+		message: `Word "${word.trim()}" already exists in another rating`,
+	}),
+	target: showDuplicateError,
+});
+
+sample({
+	clock: addDraftStarRatingKeyword,
+	source: $draftStarRatingKeywords,
+	fn: (state, { changeableStar, word }) => {
+		const trimmedWord = word.trim();
+		if (
+			trimmedWord === '' ||
+			Object.values(state).some(keywords =>
+				keywords.some(
+					(keyword: string) =>
+						keyword.toLowerCase() === trimmedWord.toLowerCase()
+				)
+			)
+		) {
+			return state;
+		}
+
+		return {
+			...state,
+			[changeableStar]: [...state[changeableStar], trimmedWord],
+		};
+	},
+	target: $draftStarRatingKeywords,
+});

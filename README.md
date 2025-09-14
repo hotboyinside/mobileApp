@@ -52,6 +52,7 @@ Join our community of developers creating universal apps.
 - check shadow
 - close tab's stores when swipe modal sheet
 - delete sse events logs
+- connect star rating with backend; reset errors/input stores after quit filter's page
 
 ## Bugs associated with version
 

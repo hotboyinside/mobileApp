@@ -8,7 +8,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { useUnit } from 'effector-react';
 import { $draftStarRatingKeywords } from '@/stores/starRating/model';
-import { StarNumber } from '@/types/starRating';
+import { StarNumber, StarNumberStateKey } from '@/types/starRating';
 import { Badge } from '@/components/ui/Badge/Badge';
 import EditIcon from '@/assets/icons/edit-icon.svg';
 import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
@@ -20,6 +20,10 @@ import {
 import { BottomSheetApplyFooter } from '../BottomSheetApplyFooter';
 import { EditStarRating } from './editStarRating/EditStarRating';
 import { useCallback } from 'react';
+import {
+	$draftStarRatingEnabledState,
+	toggleDraftStarRatingEnabledState,
+} from '@/stores/allNews/filtersPanel/starRating/starRatingEnabledState/model';
 
 type StarRatingProps = {
 	onClose: () => void;
@@ -28,11 +32,16 @@ type StarRatingProps = {
 const STARS = [4, 3, 2, 1, 0];
 
 export const StarRating = ({ onClose }: StarRatingProps) => {
+	const { openSheetModal, closeSheetModal } = useGlobalSheet();
+
+	const draftStarRatingEnabledState = useUnit($draftStarRatingEnabledState);
 	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
 
-	const { openSheetModal, closeSheetModal } = useGlobalSheet();
 	const onOpenFilterSubTab = useUnit(openFilterSubTab);
 	const onCloseFilterSubTab = useUnit(closeFilterSubTab);
+	const onToggleDraftStarRatingEnabledState = useUnit(
+		toggleDraftStarRatingEnabledState
+	);
 
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
 	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
@@ -83,7 +92,14 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 					>
 						<ThemedView style={[styles.header, { backgroundColor: bgColor }]}>
 							<Stars rating={star} />
-							<Switch />
+							<Switch
+								value={draftStarRatingEnabledState[star as StarNumberStateKey]}
+								onChange={() =>
+									onToggleDraftStarRatingEnabledState(
+										star as StarNumberStateKey
+									)
+								}
+							/>
 						</ThemedView>
 						{draftStarRatingKeywords[star as StarNumber] && (
 							<ThemedView
@@ -92,7 +108,9 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 								{draftStarRatingKeywords[star as StarNumber]?.map(
 									ratingWord => (
 										<Badge
+											size='sm'
 											variant='pillColor'
+											color='gray'
 											key={ratingWord}
 											value={ratingWord}
 										/>

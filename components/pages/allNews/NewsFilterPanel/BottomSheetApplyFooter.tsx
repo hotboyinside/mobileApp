@@ -21,6 +21,10 @@ import {
 	applySortingClick,
 	$isSortByChanged,
 } from '@/stores/allNews/filtersPanel/sortBy/model';
+import {
+	$isStarRatingEnabledStateChanged,
+	applyDraftStarRatingEnabledState,
+} from '@/stores/allNews/filtersPanel/starRating/starRatingEnabledState/model';
 import { filtersApplyClick } from '@/stores/allNews/model';
 import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
 import {
@@ -64,6 +68,13 @@ export const BottomSheetApplyFooter = ({
 	const applySelectedKeyIconClickFx = useUnit(applySelectedKeyIconClick);
 	const hasChangesInSelectedIcon = useUnit($hasChangesInSelectedIcon);
 
+	const onApplyDraftStarRatingEnabledState = useUnit(
+		applyDraftStarRatingEnabledState
+	);
+	const isStarRatingEnabledStateChanged = useUnit(
+		$isStarRatingEnabledStateChanged
+	);
+
 	const isVoiceOverEnabled = useUnit($isVoiceOverEnabled);
 
 	let applyAction: () => void;
@@ -86,7 +97,8 @@ export const BottomSheetApplyFooter = ({
 			break;
 
 		case FilterTabVariant.rating:
-			applyAction = () => {};
+			applyAction = onApplyDraftStarRatingEnabledState;
+			hasChanges = isStarRatingEnabledStateChanged;
 			break;
 	}
 
