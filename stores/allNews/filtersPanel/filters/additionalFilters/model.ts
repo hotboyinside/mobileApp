@@ -2,6 +2,7 @@ import { AdditionalFilterKey, FiltersStore, Range } from '@/types/filters';
 import { createEvent, createStore, sample } from 'effector';
 import { getFiltersSnapshotFx, saveFilterFx } from './handlers';
 import { pageMounted, filtersApplyClick } from '@/stores/allNews/model';
+import { defaultAdditionalFiltersSet } from '@/constants/additionalFilters/defaultAdditionalFiltersSet';
 
 export const $additionalFilters = createStore<FiltersStore | null>(null);
 export const $additionalFiltersDraft = createStore<FiltersStore | null>(null);
@@ -11,7 +12,7 @@ export const updateFilterRange = createEvent<{
 	key: AdditionalFilterKey;
 	range: Range;
 }>();
-export const resetDraftFilters = createEvent();
+export const resetAdditionalFiltersDraft = createEvent();
 
 $additionalFiltersDraft.on(toggleFilterEnabled, (state, key) => {
 	if (!state) return state;
@@ -38,6 +39,11 @@ $additionalFiltersDraft.on(updateFilterRange, (state, { key, range }) => {
 	};
 });
 
+$additionalFiltersDraft.on(
+	resetAdditionalFiltersDraft,
+	_ => defaultAdditionalFiltersSet
+);
+
 sample({
 	clock: pageMounted,
 	target: getFiltersSnapshotFx,
@@ -46,12 +52,6 @@ sample({
 sample({
 	clock: getFiltersSnapshotFx.doneData,
 	target: [$additionalFiltersDraft, $additionalFilters],
-});
-
-sample({
-	clock: resetDraftFilters,
-	source: $additionalFilters,
-	target: $additionalFiltersDraft,
 });
 
 sample({

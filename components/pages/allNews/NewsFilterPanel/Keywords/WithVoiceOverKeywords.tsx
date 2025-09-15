@@ -18,6 +18,10 @@ export const WithVoiceOverKeywords = () => {
 		{},
 		appTokens.component.buttons.secondaryGray.bg
 	);
+	const iconFgColor = useThemeColor(
+		{},
+		appTokens.component.buttons.secondaryGray.fg
+	);
 	const iconBorderColor = useThemeColor({}, appTokens.border.tertiary);
 	const descriptionColor = useThemeColor({}, appTokens.text.quaternary);
 
@@ -48,7 +52,11 @@ export const WithVoiceOverKeywords = () => {
 						{ backgroundColor: iconBgColor, borderColor: iconBorderColor },
 					]}
 				>
-					{isVoiceOverEnabled ? <VoiceOverOn /> : <VoiceOverOff />}
+					{isVoiceOverEnabled ? (
+						<VoiceOverOn fill={iconFgColor} />
+					) : (
+						<VoiceOverOff fill={iconFgColor} />
+					)}
 				</ThemedView>
 			</ThemedView>
 

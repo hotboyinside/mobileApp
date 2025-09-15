@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { TopNewsCard, News } from './TopNewsCard';
 
 type CardsProps = {
@@ -29,5 +29,9 @@ const styles = StyleSheet.create({
 	container: {
 		marginHorizontal: 16,
 		gap: 8,
+		paddingRight: Platform.select({
+			ios: 16,
+			android: 32,
+		}),
 	},
 });

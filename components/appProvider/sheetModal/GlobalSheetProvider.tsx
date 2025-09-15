@@ -13,7 +13,9 @@ import {
 	BottomSheetModal,
 	BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
-import { Dimensions } from 'react-native';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { appTokens } from '@/constants/tokens';
+import { StyleSheet, View } from 'react-native';
 
 interface SheetContextType {
 	openSheetModal: (
@@ -35,9 +37,6 @@ const SheetContext = createContext<SheetContextType | null>(null);
 export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 	const mainModalRef = useRef<BottomSheetModal>(null);
 	const secondaryModalRef = useRef<BottomSheetModal>(null);
-
-	const { height: screenHeight } = Dimensions.get('window');
-	const maxDynamicHeight = screenHeight - 36;
 
 	const [mainContent, setMainContent] = useState<ReactNode>(null);
 	const [secondaryContent, setSecondaryContent] = useState<ReactNode>(null);
@@ -78,12 +77,15 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 		[openSheetModal, closeSheetModal]
 	);
 
+	const backgroundColor = useThemeColor({}, appTokens.background.primary);
+
 	return (
 		<SheetContext value={contextValue}>
 			{children}
 			<BottomSheetModalProvider>
 				<BottomSheetModal
 					ref={mainModalRef}
+					handleComponent={() => <View style={styles.handle} />}
 					backdropComponent={props => (
 						<BottomSheetBackdrop
 							{...props}
@@ -91,9 +93,11 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 							appearsOnIndex={0}
 						/>
 					)}
-					backgroundStyle={{ borderRadius: 20 }}
+					backgroundStyle={[
+						styles.background,
+						{ backgroundColor: backgroundColor },
+					]}
 					footerComponent={mainFooter || undefined}
-					maxDynamicContentSize={maxDynamicHeight}
 				>
 					{mainContent}
 				</BottomSheetModal>
@@ -102,6 +106,7 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 			<BottomSheetModalProvider>
 				<BottomSheetModal
 					ref={secondaryModalRef}
+					handleComponent={() => <View style={styles.handle} />}
 					backdropComponent={props => (
 						<BottomSheetBackdrop
 							{...props}
@@ -109,9 +114,11 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 							appearsOnIndex={0}
 						/>
 					)}
-					backgroundStyle={{ borderRadius: 20 }}
+					backgroundStyle={[
+						styles.background,
+						{ backgroundColor: backgroundColor },
+					]}
 					footerComponent={secondaryFooter || undefined}
-					maxDynamicContentSize={maxDynamicHeight}
 				>
 					{secondaryContent}
 				</BottomSheetModal>
@@ -119,6 +126,16 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 		</SheetContext>
 	);
 };
+
+export const styles = StyleSheet.create({
+	handle: {
+		height: 24,
+	},
+
+	background: {
+		borderRadius: 16,
+	},
+});
 
 export const useGlobalSheet = (): SheetContextType => {
 	const context = useContext(SheetContext);

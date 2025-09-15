@@ -6,6 +6,8 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { News } from './TopNewsCard';
 import { Cards } from './TopNews';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 export const topLosersMocks: News[] = [
 	{
@@ -28,8 +30,13 @@ export const topLosersMocks: News[] = [
 export default function TopLosers() {
 	const [index, setIndex] = useState(0);
 
+	const backgroundColor = useThemeColor(
+		{},
+		appTokens.background.secondarySubtle
+	);
+
 	return (
-		<ThemedView>
+		<ThemedView style={{ backgroundColor: backgroundColor }}>
 			<ThemedText type='textLg' style={styles.title}>
 				Top Losers
 			</ThemedText>

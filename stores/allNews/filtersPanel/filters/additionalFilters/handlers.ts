@@ -1,3 +1,4 @@
+import { defaultAdditionalFiltersSet } from '@/constants/additionalFilters/defaultAdditionalFiltersSet';
 import {
 	additionalFiltersLabels,
 	AdditionalFilterKey,
@@ -8,18 +9,9 @@ import { createEffect } from 'effector';
 
 const PREFIX = 'all-news-filters';
 
-export const INITIAL_FILTERS: FiltersStore = {
-	currentPrice: { enabled: false, range: { from: '', to: '' } },
-	change: { enabled: false, range: { from: '', to: '' } },
-	dollarChange: { enabled: false, range: { from: '', to: '' } },
-	volume: { enabled: false, range: { from: '', to: '' } },
-	float: { enabled: false, range: { from: '', to: '' } },
-	dayRange: { enabled: false, range: { from: '', to: '' } },
-};
-
 export const getFiltersSnapshotFx = createEffect(
 	async (): Promise<FiltersStore> => {
-		const filterStore = { ...INITIAL_FILTERS };
+		const filterStore = { ...defaultAdditionalFiltersSet };
 		try {
 			Object.keys(additionalFiltersLabels).map(async filterLabel => {
 				const [filterValueFrom, filterValueTo] = await Promise.all([

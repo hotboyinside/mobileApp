@@ -32,15 +32,14 @@ export const SortList = ({ onClose }: SortListProps) => {
 			contentContainerStyle={{ paddingBottom: 120 }}
 		>
 			<HeaderBottomSheet
+				headerLabel='Sort by'
 				onResetDefaultValues={() => {
 					onResetSorting();
-					onClose();
 				}}
 				onCloseFilters={() => {
 					onClose();
 					closeSortByClickFx();
 				}}
-				headerLabel='Sort by'
 			/>
 			<ThemedView style={styles.list}>
 				{Object.values(SortLabels).map((filter, _) => (

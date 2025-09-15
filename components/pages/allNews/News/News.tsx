@@ -80,19 +80,25 @@ function formatNewsTime(isoString: string, now: Date) {
 }
 
 export const ListItem = ({ item }: ListItemProps) => {
-	const { _id, title, createdAt, description, keywords, symbols } = item;
+	const { _id, title, createdAt, description, keywords, symbols, rating } =
+		item;
 	const router = useRouter();
 	const now = useUnit($now);
-
-	const timeColor = useThemeColor({}, appTokens.text.quaternary);
 
 	const handlePress = () => {
 		router.push(NEWS_DETAILS(_id.toString()));
 	};
 
+	const timeColor = useThemeColor({}, appTokens.text.quaternary);
+	const backgroundColor = useThemeColor({}, appTokens.background.primary);
+	const borderColor = useThemeColor({}, appTokens.border.tertiary);
+
 	return (
 		<TouchableOpacity
-			style={styles.container}
+			style={[
+				styles.container,
+				{ backgroundColor: backgroundColor, borderColor: borderColor },
+			]}
 			activeOpacity={0.6}
 			onPress={handlePress}
 		>
@@ -110,7 +116,7 @@ export const ListItem = ({ item }: ListItemProps) => {
 						</View>
 					))}
 				</View>
-				{/* <Stars rating={rating} /> */}
+				<Stars rating={rating.score} />
 			</View>
 			<ThemedText type='textSm' style={styles.title}>
 				{title}

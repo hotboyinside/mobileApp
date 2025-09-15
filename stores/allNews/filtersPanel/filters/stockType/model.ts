@@ -30,15 +30,10 @@ $stockTypeDraft.on(toggleStockTypeDraft, (state, payload) => {
 $stockTypeDraft.on(removeStockTypeFromDraft, (state, payload) =>
 	state.filter(value => value !== payload)
 );
+$stockTypeDraft.on(resetStockTypeDraft, _ => []);
 
 sample({
 	clock: filtersApplyClick,
 	source: $stockTypeDraft,
 	target: $stockType,
-});
-
-sample({
-	clock: resetStockTypeDraft,
-	source: $stockType,
-	target: $stockTypeDraft,
 });

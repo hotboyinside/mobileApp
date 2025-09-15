@@ -26,6 +26,11 @@ import {
 	applyDraftStarRatingEnabledState,
 } from '@/stores/allNews/filtersPanel/starRating/starRatingEnabledState/model';
 import { filtersApplyClick } from '@/stores/allNews/model';
+import { updateStarRatingFx } from '@/stores/starRating/handlers';
+import {
+	$draftStarRatingKeywords,
+	$isStarRatingChanged,
+} from '@/stores/starRating/model';
 import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
 import {
 	BottomSheetFooterProps,
@@ -34,6 +39,11 @@ import {
 import { useUnit } from 'effector-react';
 import { useState, useEffect } from 'react';
 import { Keyboard, StyleSheet } from 'react-native';
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface BottomSheetApplyFooterProps extends BottomSheetFooterProps {
@@ -52,6 +62,7 @@ export const BottomSheetApplyFooter = ({
 	const openedFilterSubTab = useUnit($openedFilterSubTab);
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
 	const { bottom: bottomSafeArea } = useSafeAreaInsets();
+	const padding = useSharedValue({ top: 8, bottom: 8 });
 
 	const bgColor = useThemeColor({}, appTokens.background.primary);
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
@@ -74,6 +85,10 @@ export const BottomSheetApplyFooter = ({
 	const isStarRatingEnabledStateChanged = useUnit(
 		$isStarRatingEnabledStateChanged
 	);
+
+	const updateStarRating = useUnit(updateStarRatingFx);
+	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
+	const isStarRatingChanged = useUnit($isStarRatingChanged);
 
 	const isVoiceOverEnabled = useUnit($isVoiceOverEnabled);
 
@@ -114,7 +129,8 @@ export const BottomSheetApplyFooter = ({
 			break;
 
 		case FilterSubTabVariant.editRating:
-			applyAction = () => {};
+			applyAction = () => updateStarRating(draftStarRatingKeywords);
+			hasChanges = isStarRatingChanged;
 	}
 
 	useEffect(() => {
@@ -131,17 +147,31 @@ export const BottomSheetApplyFooter = ({
 		};
 	}, []);
 
+	useEffect(() => {
+		if (keyboardVisible) {
+			padding.value = { top: 8, bottom: 8 };
+		} else {
+			padding.value = { top: 16, bottom: 16 + bottomSafeArea };
+		}
+	}, [keyboardVisible, bottomSafeArea, padding]);
+
+	const animatedPadding = useAnimatedStyle(() => {
+		return {
+			paddingTop: withSpring(padding.value.top),
+			paddingBottom: withSpring(padding.value.bottom),
+		};
+	});
+
 	return (
 		<BottomSheetFooter animatedFooterPosition={animatedFooterPosition}>
-			<ThemedView
+			<Animated.View
 				style={[
 					styles.container,
 					{
 						borderColor: borderColor,
 						backgroundColor: bgColor,
-						paddingTop: keyboardVisible ? 8 : 16,
-						paddingBottom: keyboardVisible ? 8 : bottomSafeArea + 16,
 					},
+					animatedPadding,
 				]}
 			>
 				<Button
@@ -153,7 +183,7 @@ export const BottomSheetApplyFooter = ({
 						onClose();
 					}}
 				/>
-			</ThemedView>
+			</Animated.View>
 		</BottomSheetFooter>
 	);
 };

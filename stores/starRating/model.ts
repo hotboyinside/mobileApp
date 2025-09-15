@@ -1,10 +1,13 @@
-import { initialStarRating } from '@/constants/starRatingDefaultSet';
+import {
+	DefaultStarRatingSet,
+	initialStarRating,
+} from '@/constants/starRatingDefaultSet';
 import {
 	StarNumber,
 	StarRatingChangeEvent,
 	StarRatingKeywords,
 } from '@/types/starRating';
-import { createEvent, createStore, sample } from 'effector';
+import { combine, createEvent, createStore, sample } from 'effector';
 import {
 	changeUserInputKeyword,
 	showDuplicateError,
@@ -15,11 +18,14 @@ export const $starRatingKeywords =
 export const $draftStarRatingKeywords =
 	createStore<StarRatingKeywords>(initialStarRating);
 
+export const openEditStarRating = createEvent();
 export const setStarRatingKeywords = createEvent<StarRatingKeywords>();
 export const addDraftStarRatingKeyword = createEvent<StarRatingChangeEvent>();
 export const deleteDraftStarRatingKeyword =
 	createEvent<StarRatingChangeEvent>();
 export const clearDraftStarRatingKeywordsByStar = createEvent<StarNumber>();
+export const resetToDefaultStarRatingKeywords = createEvent();
+export const saveDraftStarRatingKeyword = createEvent();
 
 $starRatingKeywords.on(setStarRatingKeywords, (_, payload) => payload);
 $draftStarRatingKeywords.on(deleteDraftStarRatingKeyword, (state, payload) => {
@@ -32,6 +38,16 @@ $draftStarRatingKeywords.on(deleteDraftStarRatingKeyword, (state, payload) => {
 		[payload.changeableStar]: [...starRatingWithDeletedKeyword],
 	};
 });
+export const $isStarRatingChanged = combine(
+	$starRatingKeywords,
+	$draftStarRatingKeywords,
+	(saved, draft) => {
+		const savedStr = JSON.stringify(saved);
+		const draftStr = JSON.stringify(draft);
+
+		return savedStr !== draftStr;
+	}
+);
 
 $draftStarRatingKeywords.on(
 	clearDraftStarRatingKeywordsByStar,
@@ -40,6 +56,17 @@ $draftStarRatingKeywords.on(
 		[payload]: [],
 	})
 );
+
+$draftStarRatingKeywords.on(
+	resetToDefaultStarRatingKeywords,
+	_ => DefaultStarRatingSet.userRating.keywordsByStar
+);
+
+sample({
+	clock: openEditStarRating,
+	source: $starRatingKeywords,
+	target: $draftStarRatingKeywords,
+});
 
 sample({
 	clock: setStarRatingKeywords,
@@ -97,4 +124,10 @@ sample({
 		};
 	},
 	target: $draftStarRatingKeywords,
+});
+
+sample({
+	clock: saveDraftStarRatingKeyword,
+	source: $draftStarRatingKeywords,
+	target: $starRatingKeywords,
 });

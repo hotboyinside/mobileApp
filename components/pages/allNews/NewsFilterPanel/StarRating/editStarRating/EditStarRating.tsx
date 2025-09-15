@@ -10,6 +10,7 @@ import {
 	addDraftStarRatingKeyword,
 	clearDraftStarRatingKeywordsByStar,
 	deleteDraftStarRatingKeyword,
+	resetToDefaultStarRatingKeywords,
 } from '@/stores/starRating/model';
 import { StarNumber } from '@/types/starRating';
 import { Badge } from '@/components/ui/Badge/Badge';
@@ -28,7 +29,7 @@ type EditStarRatingProps = {
 	onClose: () => void;
 };
 
-const STARS = [4, 3, 2, 1];
+const STARS: StarNumber[] = [4, 3, 2, 1];
 
 export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 	const userInputKeywords = useUnit($userInputKeywords);
@@ -38,6 +39,9 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 	const onDeleteDraftStarRatingKeyword = useUnit(deleteDraftStarRatingKeyword);
 	const onChangeUserInputKeyword = useUnit(changeUserInputKeyword);
 	const onAddDraftStarRatingKeyword = useUnit(addDraftStarRatingKeyword);
+	const onResetToDefaultStarRatingKeywords = useUnit(
+		resetToDefaultStarRatingKeywords
+	);
 	const onClearDraftStarRatingKeywordsByStar = useUnit(
 		clearDraftStarRatingKeywordsByStar
 	);
@@ -53,7 +57,11 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 			showsVerticalScrollIndicator={false}
 			contentContainerStyle={{ paddingBottom: 120 }}
 		>
-			<HeaderBottomSheet headerLabel='Edit Rating' onCloseFilters={onClose} />
+			<HeaderBottomSheet
+				headerLabel='Edit Rating'
+				onCloseFilters={onClose}
+				onResetDefaultValues={onResetToDefaultStarRatingKeywords}
+			/>
 			<ThemedView style={styles.container}>
 				{STARS.map(star => (
 					<ThemedView
@@ -68,56 +76,52 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 							<Button
 								title='Clear'
 								variant='link-gray'
-								onPress={() =>
-									onClearDraftStarRatingKeywordsByStar(star as StarNumber)
-								}
+								onPress={() => onClearDraftStarRatingKeywordsByStar(star)}
 							/>
 						</ThemedView>
 						<Input
 							placeholder='Add keyword'
 							containerStyle={styles.inputContainer}
-							value={userInputKeywords[star as StarNumber]}
+							value={userInputKeywords[star]}
 							onChangeText={text => {
-								onClearInputError(star as StarNumber);
-								onChangeUserInputKeyword({ star: star as StarNumber, text });
+								onClearInputError(star);
+								onChangeUserInputKeyword({ star, text });
 							}}
 							onBlur={() => {
 								onAddDraftStarRatingKeyword({
-									changeableStar: star as StarNumber,
-									word: userInputKeywords[star as StarNumber],
+									changeableStar: star,
+									word: userInputKeywords[star],
 								});
 							}}
-							isError={!!inputErrors[star as StarNumber]}
-							errorMessage={inputErrors[star as StarNumber] ?? ''}
+							isError={!!inputErrors[star]}
+							errorMessage={inputErrors[star] ?? ''}
 						/>
-						{draftStarRatingKeywords[star as StarNumber] && (
+						{draftStarRatingKeywords[star] && (
 							<ThemedView
 								style={[styles.starKeywords, { backgroundColor: bgColor }]}
 							>
-								{draftStarRatingKeywords[star as StarNumber]?.map(
-									ratingWord => (
-										<Badge
-											key={ratingWord}
-											value={ratingWord}
-											size='xl'
-											variant='pillColor'
-											color='gray'
-											icon={
-												<CloseIcon
-													width={16}
-													height={16}
-													fill={iconColor}
-													onPress={() => {
-														onDeleteDraftStarRatingKeyword({
-															changeableStar: star as StarNumber,
-															word: ratingWord,
-														});
-													}}
-												/>
-											}
-										/>
-									)
-								)}
+								{draftStarRatingKeywords[star]?.map(ratingWord => (
+									<Badge
+										key={ratingWord}
+										value={ratingWord}
+										size='xl'
+										variant='pillColor'
+										color='gray'
+										icon={
+											<CloseIcon
+												width={16}
+												height={16}
+												fill={iconColor}
+												onPress={() => {
+													onDeleteDraftStarRatingKeyword({
+														changeableStar: star,
+														word: ratingWord,
+													});
+												}}
+											/>
+										}
+									/>
+								))}
 							</ThemedView>
 						)}
 					</ThemedView>

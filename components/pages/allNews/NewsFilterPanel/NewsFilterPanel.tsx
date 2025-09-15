@@ -1,7 +1,6 @@
 import SortIcon from '@/assets/icons/sort-icon.svg';
 import { StyleSheet } from 'react-native';
 import { SortList } from './SortList';
-import { resetMarketDraft } from '@/stores/allNews/filtersPanel/filters/market/model';
 import { resetNewsTypeDraft } from '@/stores/allNews/filtersPanel/filters/newsType/model';
 import { resetStockTypeDraft } from '@/stores/allNews/filtersPanel/filters/stockType/model';
 import { useUnit } from 'effector-react';
@@ -64,9 +63,6 @@ export const NewsFilterPanel = () => {
 						onCloseFilters={() => {
 							onCloseFilterTab();
 							closeSheetModal('main');
-							resetMarketDraft();
-							resetStockTypeDraft();
-							resetNewsTypeDraft();
 						}}
 					/>,
 					props => (
@@ -92,7 +88,7 @@ export const NewsFilterPanel = () => {
 					/>,
 					props => (
 						<BottomSheetApplyFooter
-							{...props}
+							animatedFooterPosition={props.animatedFooterPosition}
 							applyButtonTitle='Enable Keywords'
 							closeButtonTitle='Disable Keywords'
 							onClose={toggleVoiceoverEnabled}
@@ -145,22 +141,29 @@ export const NewsFilterPanel = () => {
 		}
 	};
 
-	const bgColor = useThemeColor({}, appTokens.background.primary);
+	const backgroundColor = useThemeColor(
+		{},
+		appTokens.background.secondarySubtle
+	);
 
 	return (
-		<ThemedView style={{ backgroundColor: bgColor }}>
+		<ThemedView style={[styles.wrapper, { backgroundColor: backgroundColor }]}>
 			<MultiSelectTabs<FilterTabVariant>
 				tabsTitles={Object.values(FilterTabVariant)}
 				selectedValues={selectedTabFilters}
 				onSelectionChange={openTabFilters}
 				getLabel={getLabel}
-				extraStyle={styles.container}
+				extraStyle={[styles.container, { backgroundColor: backgroundColor }]}
 			/>
 		</ThemedView>
 	);
 };
 
 const styles = StyleSheet.create({
+	wrapper: {
+		paddingVertical: 8,
+	},
+
 	container: {
 		marginHorizontal: 16,
 		marginBottom: 4,

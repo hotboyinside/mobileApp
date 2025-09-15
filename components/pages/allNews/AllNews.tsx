@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet } from 'react-native';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import Header from '@/components/ui/Header';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { TopNewsBlock } from './TopNewsBlock/TopNewsBlock';
 import { ListItem } from './News/News';
 import { useUnit } from 'effector-react';
@@ -18,6 +18,8 @@ import {
 import { getAllNewsKeywordsFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
 import { addListener, removeListener, SseEvents } from '@/stores/sse/model';
 import { getStarRatingFx } from '@/stores/starRating/handlers';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { appTokens } from '@/constants/tokens';
 
 const renderItem = ({ item }: { item: any }) => {
 	switch (item.type) {
@@ -40,11 +42,17 @@ const keyExtractor = (item: any, index: number) => {
 };
 
 export default function AllNews() {
-	const handlePageMount = useUnit(pageMounted);
 	const allNews = useUnit($filteredNews);
 	const allNewsLoadStatus = useUnit($allNewsLoadStatus);
 	const lastAllNewsNewsDate = useUnit($lastAllNewsNewsDate);
 	const isLoading = allNewsLoadStatus === NewsLoadStatus.Loading;
+	const handlePageMount = useUnit(pageMounted);
+
+	const [isShowBottomHeader, setIsShowBottomHeader] = useState(false);
+
+	const handleScroll = (offsetY: number) => {
+		setIsShowBottomHeader(offsetY > 0);
+	};
 
 	const combinedData = useMemo(() => {
 		return [
@@ -57,6 +65,11 @@ export default function AllNews() {
 			})),
 		];
 	}, [allNews]);
+
+	const backgroundColor = useThemeColor(
+		{},
+		appTokens.background.secondarySubtle
+	);
 
 	useEffect(() => {
 		handlePageMount();
@@ -83,10 +96,10 @@ export default function AllNews() {
 
 	return (
 		<ThemedViewWithSafeArea
-			style={styles.container}
+			style={[styles.container, { backgroundColor: backgroundColor }]}
 			safeEdges={['right', 'left']}
 		>
-			<Header />
+			<Header isShowBottomBorder={isShowBottomHeader} />
 			<FlatList
 				data={combinedData}
 				keyExtractor={keyExtractor}
@@ -94,6 +107,8 @@ export default function AllNews() {
 				stickyHeaderIndices={[1]}
 				onEndReached={() => loadMoreNewsFx({ start: lastAllNewsNewsDate! })}
 				onEndReachedThreshold={0.5}
+				onScroll={event => handleScroll(event.nativeEvent.contentOffset.y)}
+				scrollEventThrottle={16}
 				// onViewableItemsChanged={onViewableItemsChanged.current}
 			/>
 		</ThemedViewWithSafeArea>

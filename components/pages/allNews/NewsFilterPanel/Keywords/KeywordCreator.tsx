@@ -224,6 +224,9 @@ export const KeywordCreator = () => {
 					titleStyle={{
 						color: isSelectedVoiceoverEnabled ? tertiaryGray : utilityGray,
 					}}
+					titleProps={{
+						numberOfLines: 1,
+					}}
 				/>
 			</ThemedView>
 		</ThemedView>
@@ -235,15 +238,11 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		borderWidth: 1,
 		padding: 12,
-		// shadowColor: "rgba(13,18,28,0.06)",
-		// shadowOffset: { width: 0, height: 0 },
-		// shadowOpacity: 1,
-		// shadowRadius: 40 / 2,
-		// ...Platform.select({
-		//   android: {
-		//     elevation: 12,
-		//   },
-		// }),
+		shadowColor: 'rgba(13,18,28,0.06)',
+		shadowOffset: { width: 0, height: 0 },
+		shadowOpacity: 1,
+		shadowRadius: 20,
+		elevation: 12,
 	},
 
 	inputContainer: {

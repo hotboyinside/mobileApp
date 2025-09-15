@@ -28,14 +28,10 @@ $marketDraft.on(removeMarketFromDraft, (state, payload) =>
 	state.filter(value => value !== payload)
 );
 
+$marketDraft.on(resetMarketDraft, _ => []);
+
 sample({
 	clock: filtersApplyClick,
 	source: $marketDraft,
 	target: $market,
-});
-
-sample({
-	clock: resetMarketDraft,
-	source: $market,
-	target: $marketDraft,
 });

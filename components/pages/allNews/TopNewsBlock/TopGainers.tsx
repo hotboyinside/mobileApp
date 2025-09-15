@@ -6,6 +6,8 @@ import { StyleSheet } from 'react-native';
 import { News } from './TopNewsCard';
 import { Cards } from './TopNews';
 import { Tab } from '@/components/ui/Tabs/Tab';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 export const topGainersMocks: News[] = [
 	{
@@ -28,8 +30,13 @@ export const topGainersMocks: News[] = [
 export default function TopGainers() {
 	const [index, setIndex] = useState(0);
 
+	const backgroundColor = useThemeColor(
+		{},
+		appTokens.background.secondarySubtle
+	);
+
 	return (
-		<ThemedView>
+		<ThemedView style={{ backgroundColor: backgroundColor }}>
 			<ThemedText type='textLg' style={styles.title}>
 				Top Gainers
 			</ThemedText>

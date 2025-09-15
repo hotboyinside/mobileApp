@@ -30,15 +30,10 @@ $newsTypeDraft.on(toggleNewsTypeDraft, (state, payload) => {
 $newsTypeDraft.on(removeNewsTypeFromDraft, (state, payload) =>
 	state.filter(value => value !== payload)
 );
+$newsTypeDraft.on(resetNewsTypeDraft, _ => []);
 
 sample({
 	clock: filtersApplyClick,
 	source: $newsTypeDraft,
 	target: $newsType,
-});
-
-sample({
-	clock: resetNewsTypeDraft,
-	source: $newsType,
-	target: $newsTypeDraft,
 });

@@ -7,7 +7,11 @@ import { Switch } from '@/components/ui/Switch/Switch';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { useUnit } from 'effector-react';
-import { $draftStarRatingKeywords } from '@/stores/starRating/model';
+import {
+	$draftStarRatingKeywords,
+	$starRatingKeywords,
+	openEditStarRating,
+} from '@/stores/starRating/model';
 import { StarNumber, StarNumberStateKey } from '@/types/starRating';
 import { Badge } from '@/components/ui/Badge/Badge';
 import EditIcon from '@/assets/icons/edit-icon.svg';
@@ -35,7 +39,7 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 	const { openSheetModal, closeSheetModal } = useGlobalSheet();
 
 	const draftStarRatingEnabledState = useUnit($draftStarRatingEnabledState);
-	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
+	const starRatingKeywords = useUnit($starRatingKeywords);
 
 	const onOpenFilterSubTab = useUnit(openFilterSubTab);
 	const onCloseFilterSubTab = useUnit(closeFilterSubTab);
@@ -49,6 +53,7 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 	const openEditRatingSheet = useCallback(() => {
 		onClose();
 		onOpenFilterSubTab(FilterSubTabVariant.editRating);
+		openEditStarRating();
 		openSheetModal(
 			'secondary',
 			<EditStarRating
@@ -60,6 +65,7 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 			props => (
 				<BottomSheetApplyFooter
 					{...props}
+					applyButtonTitle='Save'
 					onClose={() => {
 						onCloseFilterSubTab();
 						closeSheetModal('secondary');
@@ -101,21 +107,19 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 								}
 							/>
 						</ThemedView>
-						{draftStarRatingKeywords[star as StarNumber] && (
+						{starRatingKeywords[star as StarNumber] && (
 							<ThemedView
 								style={[styles.starKeywords, { backgroundColor: bgColor }]}
 							>
-								{draftStarRatingKeywords[star as StarNumber]?.map(
-									ratingWord => (
-										<Badge
-											size='sm'
-											variant='pillColor'
-											color='gray'
-											key={ratingWord}
-											value={ratingWord}
-										/>
-									)
-								)}
+								{starRatingKeywords[star as StarNumber]?.map(ratingWord => (
+									<Badge
+										size='sm'
+										variant='pillColor'
+										color='gray'
+										key={ratingWord}
+										value={ratingWord}
+									/>
+								))}
 							</ThemedView>
 						)}
 					</ThemedView>
