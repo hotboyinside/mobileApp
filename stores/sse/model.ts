@@ -1,7 +1,7 @@
-import { config } from '@/config/vars';
-import { SSE_NEWS } from '@/constants/apiSse';
-import { createEvent, createStore, sample } from 'effector';
-import EventSource, { EventType } from 'react-native-sse';
+import { config } from "@/config/vars";
+import { SSE_NEWS } from "@/constants/apiSse";
+import { createEvent, createStore, sample } from "effector";
+import EventSource, { EventType } from "react-native-sse";
 
 export const SseEvents = {
   Error: "error",
@@ -10,12 +10,12 @@ export const SseEvents = {
 } as const;
 
 export type sseEventData = {
-  data: any
+  data: any;
 };
 
 export const $sseNewsEventSource = createStore<EventSource | null>(null);
 export const $isSseConnected = createStore(false);
-export const $reconnectAttempts = createStore(0)
+export const $reconnectAttempts = createStore(0);
 
 export const subscribeToSseEventNews = createEvent();
 export const closeToSseEventNews = createEvent();
@@ -33,11 +33,11 @@ export const removeListener = createEvent<{
 export const incrementReconnectAttempts = createEvent();
 export const resetReconnectAttempts = createEvent();
 
-$isSseConnected.on(sseConnected, () => true)
+$isSseConnected.on(sseConnected, () => true);
 $isSseConnected.on(sseDisconnected, () => false);
 
-$reconnectAttempts.on(incrementReconnectAttempts, (state) => state + 1)
-$reconnectAttempts.reset(resetReconnectAttempts)
+$reconnectAttempts.on(incrementReconnectAttempts, state => state + 1);
+$reconnectAttempts.reset(resetReconnectAttempts);
 
 $sseNewsEventSource
   .on(addListener, (es, { eventName, listener }) => {
@@ -49,23 +49,27 @@ $sseNewsEventSource
     return es;
   });
 
-
 sample({
   clock: subscribeToSseEventNews,
   source: $reconnectAttempts,
   fn(attempts) {
-      const es = new EventSource(config.apiUrl + SSE_NEWS, {
+    const es = new EventSource(config.apiUrl + SSE_NEWS, {
       withCredentials: true,
     });
 
-    es.addEventListener('open', () => {
-      console.log('✅ SSE connected');
+    es.addEventListener("open", () => {
+      console.log("✅ SSE connected");
       sseConnected();
       resetReconnectAttempts();
     });
 
-    es.addEventListener(SseEvents.Error, (error) => {
-      console.error('❌ SSE error', error);
+    es.addEventListener("close", () => {
+      console.warn("⚠️ SSE closed");
+      sseDisconnected();
+    });
+
+    es.addEventListener(SseEvents.Error, error => {
+      console.error("❌ SSE error", error);
       sseDisconnected();
       es.close();
 

@@ -4,30 +4,17 @@ import { Tab } from '@/components/ui/Tabs/Tab';
 import { TabView } from '@rneui/base';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { News } from './TopNewsCard';
 import { Cards } from './TopNews';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-
-export const topLosersMocks: News[] = [
-	{
-		symbol: 'NFLX',
-		title: 'Netflix теряет подписчиков на фоне роста конкуренции',
-		change: '-4.21',
-	},
-	{
-		symbol: 'AMZN',
-		title: 'Amazon сообщает о снижении прибыли во втором квартале',
-		change: '-2.89',
-	},
-	{
-		symbol: 'NVDA',
-		title: 'NVIDIA столкнулась с падением спроса на чипы в Китае',
-		change: '-3.45',
-	},
-];
+import { $dataTopBannersSymbolLosersStore, $dataTopBannersSymbolGapLosersStore } from '@/stores/allNews/topBannersData/model';
+import { useUnit } from 'effector-react';
 
 export default function TopLosers() {
+	const dataTopBannersSymbolLosersStore = useUnit(
+			$dataTopBannersSymbolLosersStore
+		);
+	const dataTopBannersSymbolGapLosersStore = useUnit($dataTopBannersSymbolGapLosersStore);
 	const [index, setIndex] = useState(0);
 
 	const backgroundColor = useThemeColor(
@@ -57,10 +44,10 @@ export default function TopLosers() {
 				}}
 			>
 				<TabView.Item>
-					<Cards topNews={topLosersMocks} />
+					<Cards topSymbols={dataTopBannersSymbolGapLosersStore.topThreeLosersSymbols} />
 				</TabView.Item>
 				<TabView.Item>
-					<Cards topNews={topLosersMocks} />
+					<Cards topSymbols={dataTopBannersSymbolLosersStore.topThreeLosersSymbols} />
 				</TabView.Item>
 			</TabView>
 		</ThemedView>

@@ -3,31 +3,19 @@ import { ThemedView } from '@/components/ThemedView';
 import { TabView } from '@rneui/base';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { News } from './TopNewsCard';
 import { Cards } from './TopNews';
 import { Tab } from '@/components/ui/Tabs/Tab';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { $dataTopBannersSymbolGainersStore, $dataTopBannersSymbolGapGainersStore } from '@/stores/allNews/topBannersData/model';
+import { useUnit } from 'effector-react';
 
-export const topGainersMocks: News[] = [
-	{
-		symbol: 'AAPL',
-		title: 'Apple акции растут',
-		change: '5.67',
-	},
-	{
-		symbol: 'TSLA',
-		title: 'Акции Tesla упала на фоне проблем с поставками титана из России',
-		change: '3.12',
-	},
-	{
-		symbol: 'BTC',
-		title: 'Биткоин продолжает уверенный рост',
-		change: '2.34',
-	},
-];
 
 export default function TopGainers() {
+	const dataTopBannersSymbolGainersStore = useUnit(
+		$dataTopBannersSymbolGainersStore
+	);
+	const dataTopBannersSymbolGapGainersStore = useUnit($dataTopBannersSymbolGapGainersStore);
 	const [index, setIndex] = useState(0);
 
 	const backgroundColor = useThemeColor(
@@ -54,10 +42,10 @@ export default function TopGainers() {
 				containerStyle={styles.tabViewContainer}
 			>
 				<TabView.Item>
-					<Cards topNews={topGainersMocks} />
+					<Cards topSymbols={dataTopBannersSymbolGapGainersStore.topThreeGainersSymbols} />
 				</TabView.Item>
 				<TabView.Item>
-					<Cards topNews={topGainersMocks} />
+					<Cards topSymbols={dataTopBannersSymbolGainersStore.topThreeGainersSymbols} />
 				</TabView.Item>
 			</TabView>
 		</ThemedView>

@@ -7,12 +7,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-
-export type News = {
-	symbol: string;
-	change: string;
-	title?: string;
-};
+import { News } from './TopNews';
 
 export const TopNewsCard = ({ symbol, title, change }: News) => {
 	const isPositiveChange = parseFloat(change) > 0;

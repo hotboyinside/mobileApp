@@ -1,24 +1,36 @@
 import React from 'react';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { TopNewsCard, News } from './TopNewsCard';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
+import { TopNewsCard } from './TopNewsCard';
+import { ISymbol } from '@/types/symbols';
 
-type CardsProps = {
-	topNews: News[];
+export type News = {
+	symbol: string;
+	change: string;
+	title?: string;
 };
 
-export const Cards = ({ topNews }: CardsProps) => {
+type CardsProps = {
+	topSymbols?: (ISymbol & { title?: string })[];
+};
+
+export const Cards = ({ topSymbols }: CardsProps) => {
+
+	if (!topSymbols || topSymbols?.length === 0) {
+		return null
+	}
+
 	return (
 		<ScrollView
 			horizontal
 			showsHorizontalScrollIndicator={false}
 			contentContainerStyle={styles.container}
 		>
-			{topNews.map(news => (
+			{topSymbols.map(symbol => (
 				<TopNewsCard
-					key={news.symbol}
-					symbol={news.symbol}
-					change={news.change}
-					title={news.title}
+					key={symbol.symbol}
+					symbol={symbol.symbol}
+					change={symbol.absoluteChange?.toString() ?? ''}
+					title={symbol.title}
 				/>
 			))}
 		</ScrollView>
