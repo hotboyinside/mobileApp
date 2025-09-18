@@ -3,11 +3,12 @@ import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import { Button } from '@/components/ui/Button';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet } from 'react-native';
-import { MOCK_NEWS } from '@/mocks/allNews';
 import ArrowIcon from '@/assets/icons/arrow-left-soft-icon.svg';
 import { NewsInformation } from './NewsInformation';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { useUnit } from 'effector-react';
+import { $filteredNews } from '@/stores/allNews/news/model';
 
 const goBack = () => {
 	router.back();
@@ -15,7 +16,8 @@ const goBack = () => {
 
 export const NewsDetails = () => {
 	const { id } = useLocalSearchParams();
-	const MOCK_NEWS_ITEM = MOCK_NEWS.find(news => news.id === Number(id));
+	const allNews = useUnit($filteredNews);
+	const news = allNews.find(news => news._id === id);
 
 	const backButtonColor = useThemeColor(
 		{},
@@ -37,7 +39,7 @@ export const NewsDetails = () => {
 					containerStyle={styles.buttonContainerExtra}
 				/>
 
-				<NewsInformation news={MOCK_NEWS_ITEM} />
+				<NewsInformation news={news} />
 			</ThemedView>
 
 			<ThemedView style={[styles.buttonWrapper, { borderColor: borderColor }]}>

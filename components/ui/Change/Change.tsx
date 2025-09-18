@@ -1,102 +1,95 @@
-import { ThemedText, ThemedTextType } from "@/components/ThemedText";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import ArrowDownIcon from "@/assets/icons/alt-arrow-down-icon.svg";
-import ArrowUpIcon from "@/assets/icons/alt-arrow-up-icon.svg";
-import { appTokens } from "@/constants/tokens";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { ThemedText, ThemedTextType } from '@/components/ThemedText';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ArrowDownIcon from '@/assets/icons/alt-arrow-down-icon.svg';
+import ArrowUpIcon from '@/assets/icons/alt-arrow-up-icon.svg';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 type ChangeProps = {
-  value: string;
-  size?: "xs" | "sm";
-  showPercent?: boolean;
+	value?: number;
+	size?: 'xs' | 'sm';
+	showPercent?: boolean;
 };
 
 type ChangeSizeStyles = {
-  iconSize: number;
-  fontType: ThemedTextType;
+	iconSize: number;
+	fontType: ThemedTextType;
 };
 
 export const Change = ({
-  value,
-  size = "sm",
-  showPercent = true,
+	value,
+	size = 'sm',
+	showPercent = true,
 }: ChangeProps) => {
-  const valueIsNumber = !isNaN(Number(value));
-  const formattedValue = Number(value);
-  const isPositiveValue = formattedValue >= 0;
+	const hasValue = value !== undefined && value !== null;
 
-  let displayValue;
-  if (valueIsNumber) {
-    displayValue = showPercent ? `${formattedValue}%` : `${formattedValue}`;
-  }
+	let displayValue = '-';
+	let isPositive: boolean | undefined;
 
-  let changeSizeStyles: ChangeSizeStyles = {
-    iconSize: 12,
-    fontType: "textXs",
-  };
+	if (hasValue) {
+		displayValue = showPercent ? `${value}%` : String(value);
+		isPositive = value! >= 0;
+	}
 
-  switch (size) {
-    case "xs":
-      changeSizeStyles["iconSize"] = 12;
-      changeSizeStyles["fontType"] = "textXs";
-      break;
-    case "sm":
-      changeSizeStyles["iconSize"] = 16;
-      changeSizeStyles["fontType"] = "textSm";
-      break;
-  }
+	let changeSizeStyles: ChangeSizeStyles;
+	if (size === 'xs') {
+		changeSizeStyles = { iconSize: 12, fontType: 'textXs' };
+	} else {
+		changeSizeStyles = { iconSize: 16, fontType: 'textSm' };
+	}
 
-  const textColor = useThemeColor(
-    {},
-    isPositiveValue
-      ? appTokens.text.successPrimary
-      : appTokens.text.errorPrimary
-  );
-  const iconColor = useThemeColor(
-    {},
-    isPositiveValue
-      ? appTokens.foreground.successPrimary
-      : appTokens.foreground.errorPrimary
-  );
+	const successText = useThemeColor({}, appTokens.text.successPrimary);
+	const errorText = useThemeColor({}, appTokens.text.errorPrimary);
+	const successIcon = useThemeColor({}, appTokens.foreground.successPrimary);
+	const errorIcon = useThemeColor({}, appTokens.foreground.errorPrimary);
 
-  return (
-    <View style={styles.changeContainer}>
-      <View>
-        {valueIsNumber && isPositiveValue && (
-          <ArrowUpIcon
-            width={changeSizeStyles.iconSize}
-            height={changeSizeStyles.iconSize}
-            color={iconColor}
-          />
-        )}
-        {valueIsNumber && !isPositiveValue && (
-          <ArrowDownIcon
-            width={changeSizeStyles.iconSize}
-            height={changeSizeStyles.iconSize}
-            color={iconColor}
-          />
-        )}
-      </View>
-      <ThemedText
-        style={[styles.change, { color: textColor }]}
-        type={changeSizeStyles.fontType}
-      >
-        {displayValue}
-      </ThemedText>
-    </View>
-  );
+	let textColor: string | undefined;
+	let iconColor: string | undefined;
+
+	if (isPositive === true) {
+		textColor = successText;
+		iconColor = successIcon;
+	} else if (isPositive === false) {
+		textColor = errorText;
+		iconColor = errorIcon;
+	}
+
+	return (
+		<View style={styles.changeContainer}>
+			{isPositive === true && (
+				<ArrowUpIcon
+					width={changeSizeStyles.iconSize}
+					height={changeSizeStyles.iconSize}
+					color={iconColor}
+				/>
+			)}
+			{isPositive === false && (
+				<ArrowDownIcon
+					width={changeSizeStyles.iconSize}
+					height={changeSizeStyles.iconSize}
+					color={iconColor}
+				/>
+			)}
+			<ThemedText
+				style={[styles.change, textColor ? { color: textColor } : null]}
+				type={changeSizeStyles.fontType}
+			>
+				{displayValue}
+			</ThemedText>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-  changeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 2,
-  },
+	changeContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 2,
+	},
 
-  change: {
-    fontFamily: "MontserratSemiBold",
-    fontWeight: 600,
-  },
+	change: {
+		fontFamily: 'MontserratSemiBold',
+		fontWeight: '600',
+	},
 });

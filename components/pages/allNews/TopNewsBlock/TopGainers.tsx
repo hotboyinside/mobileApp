@@ -7,15 +7,19 @@ import { Cards } from './TopNews';
 import { Tab } from '@/components/ui/Tabs/Tab';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { $dataTopBannersSymbolGainersStore, $dataTopBannersSymbolGapGainersStore } from '@/stores/allNews/topBannersData/model';
+import {
+	$dataTopBannersSymbolGainersStore,
+	$dataTopBannersSymbolGapGainersStore,
+} from '@/stores/allNews/topBannersData/model';
 import { useUnit } from 'effector-react';
-
 
 export default function TopGainers() {
 	const dataTopBannersSymbolGainersStore = useUnit(
 		$dataTopBannersSymbolGainersStore
 	);
-	const dataTopBannersSymbolGapGainersStore = useUnit($dataTopBannersSymbolGapGainersStore);
+	const dataTopBannersSymbolGapGainersStore = useUnit(
+		$dataTopBannersSymbolGapGainersStore
+	);
 	const [index, setIndex] = useState(0);
 
 	const backgroundColor = useThemeColor(
@@ -41,11 +45,19 @@ export default function TopGainers() {
 				disableSwipe
 				containerStyle={styles.tabViewContainer}
 			>
-				<TabView.Item>
-					<Cards topSymbols={dataTopBannersSymbolGapGainersStore.topThreeGainersSymbols} />
+				<TabView.Item style={{ flex: 1 }}>
+					<Cards
+						isTopGainers
+						topSymbols={
+							dataTopBannersSymbolGapGainersStore.topThreeGainersSymbols
+						}
+					/>
 				</TabView.Item>
-				<TabView.Item>
-					<Cards topSymbols={dataTopBannersSymbolGainersStore.topThreeGainersSymbols} />
+				<TabView.Item style={{ flex: 1 }}>
+					<Cards
+						isTopGainers
+						topSymbols={dataTopBannersSymbolGainersStore.topThreeGainersSymbols}
+					/>
 				</TabView.Item>
 			</TabView>
 		</ThemedView>
