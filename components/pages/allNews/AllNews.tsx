@@ -20,7 +20,7 @@ import { addListener, removeListener, SseEvents } from '@/stores/sse/model';
 import { getStarRatingFx } from '@/stores/starRating/handlers';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-import { symbolsSubscribeAndUnsubscribeEvent } from '@/stores/symbols/model';
+import { $dataSymbolsData, symbolsSubscribeAndUnsubscribeEvent } from '@/stores/symbols/model';
 import { WindowsNames } from '@/constants/socket/clientEvents';
 
 const renderItem = ({ item }: { item: any }) => {
@@ -49,6 +49,7 @@ export default function AllNews() {
 	const allNews = useUnit($filteredNews);
 	const allNewsLoadStatus = useUnit($allNewsLoadStatus);
 	const lastAllNewsNewsDate = useUnit($lastAllNewsNewsDate);
+	const dataSymbolsData = useUnit($dataSymbolsData);
 	const isLoading = allNewsLoadStatus === NewsLoadStatus.Loading;
 	const handlePageMount = useUnit(pageMounted);
 
@@ -136,6 +137,7 @@ export default function AllNews() {
 	}, [handlePageMount]);
 
 	useEffect(() => {
+		console.log('heppend')
 		getStarRatingFx();
 		getAllNewsKeywordsFx();
 		fetchNewsFx({
@@ -162,6 +164,7 @@ export default function AllNews() {
 			<Header isShowBottomBorder={isShowBottomHeader} />
 			<FlatList
 				data={combinedData}
+				extraData={dataSymbolsData}
 				keyExtractor={keyExtractor}
 				renderItem={renderItem}
 				stickyHeaderIndices={[1]}

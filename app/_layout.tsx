@@ -12,9 +12,12 @@ import {
 	subscribeToSseEventNews,
 	closeToSseEventNews,
 } from '@/stores/sse/model';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { tick } from '@/stores/allNews/globalTick/model';
 import { connectSocketEvent } from '@/stores/socket/model';
+import { AppState } from 'react-native';
+import { useUnit } from 'effector-react';
+import { $appState, appStateChanged } from '@/stores/appState/model';
 
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
@@ -24,10 +27,36 @@ export default function RootLayout() {
 		MontserratSemiBold: require('../assets/fonts/Montserrat-SemiBold.ttf'),
 		MontserratBold: require('../assets/fonts/Montserrat-Bold.ttf'),
 	});
+	const appStateRef = useRef(AppState.currentState);
+	const appState = useUnit($appState)
+	const onAppStateChanged = useUnit(appStateChanged);
 
-	if (!loaded) {
-		return null;
-	}
+	useEffect(() => {
+		if (appState === "active") {
+    	subscribeToSseEventNews();
+    	connectSocketEvent();
+  	}
+
+		return () => {
+			closeToSseEventNews();
+		};
+	}, [appState]);
+
+	useEffect(() => {
+		const interval = setInterval(() => tick(), 60000);
+		return () => clearInterval(interval);
+	}, []);
+
+	useEffect(() => {
+		const subscription = AppState.addEventListener("change", nextState => {
+			onAppStateChanged(nextState);
+			appStateRef.current = nextState;
+    });
+
+		return () => subscription.remove()
+	}, [])
+
+	if (!loaded) return null;
 
 	return (
 		<AppProvider theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -40,21 +69,6 @@ export default function RootLayout() {
 function RootNavigator() {
 	const { session } = useSession();
 	const isEmptySession = Object.keys(session ?? {}).length === 0;
-
-	useEffect(() => {
-		if (!session) return;
-		subscribeToSseEventNews();
-		connectSocketEvent();
-
-		return () => {
-			closeToSseEventNews();
-		};
-	}, [session]);
-
-	useEffect(() => {
-		const interval = setInterval(() => tick(), 60000);
-		return () => clearInterval(interval);
-	}, []);
 
 	return (
 		<Stack

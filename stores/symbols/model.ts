@@ -52,7 +52,9 @@ sample({
     }
     const newState = { ...state };
     Object.keys(symbol).forEach(key => {
-      newState[key] = { ...newState[key], ...symbol[key] };
+      const prevSymbol = state[key] ?? {};
+      const updatedSymbol = { ...prevSymbol, ...symbol[key] };
+      newState[key] = updatedSymbol;
     });
 
     return newState;
@@ -113,4 +115,19 @@ sample({
   target: $dataSymbolsSubscriptions,
 });
 
+sample({
+    clock: $dataSymbolsSubscriptions,
+    source: $dataSymbolsData,
+    fn: (dataSymbols, subscribedSymbols) => {
+        const newState: Record<string, ISymbol> = {};
+        subscribedSymbols?.forEach(symbol => {
+            if (!dataSymbols[symbol]) {
+                return;
+            }
+            newState[symbol] = dataSymbols[symbol];
+        });
 
+        return newState;
+    },
+    target: $dataSymbolsData,
+});

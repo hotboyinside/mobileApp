@@ -13,7 +13,8 @@
 			}
 		},
 		"preview": {
-			"distribution": "internal",
+			"autoIncrement": true,
+			"distribution": "store",
 			"env": {
 				"EXPO_PUBLIC_API_URL": "https://test-news-scan-app.staging.forasoft.com",
 				"FEATURE_FLAG_EXPERIMENTAL": "true"
