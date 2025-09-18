@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "mobile-app",
+    "name": "Foxrunner",
     "slug": "mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fora.r.foxrunner",
+      "bundleIdentifier": "com.fora.r.foxrunner.test",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -21,7 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.fora.r.foxrunner"
+      "package": "com.fora.r.foxrunner.test"
     },
     "web": {
       "bundler": "metro",
@@ -50,6 +50,7 @@
       "eas": {
         "projectId": "2eb0c265-e6bb-404f-9834-83758368912c"
       }
-    }
+    },
+    "owner": "pavel.r"
   }
 }
