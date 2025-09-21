@@ -1,25 +1,15 @@
-import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
-
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import { useSession } from '@/components/appProvider/session/SessionContext';
 
-export default function HomeScreen() {
+export default function NewsAlertsScreen() {
 	const { signOut } = useSession();
+
 	return (
-		<ParallaxScrollView
-			headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-			headerImage={
-				<Image
-					source={require('@/assets/images/partial-react-logo.png')}
-					style={styles.reactLogo}
-				/>
-			}
-		>
+		<ThemedView>
 			<ThemedView style={styles.titleContainer}>
 				<ThemedText type='textMd'>Welcome!</ThemedText>
 				<HelloWave />
@@ -56,7 +46,7 @@ export default function HomeScreen() {
 				</ThemedText>
 				<Button title='Log out' onPress={() => signOut()} />
 			</ThemedView>
-		</ParallaxScrollView>
+		</ThemedView>
 	);
 }
 

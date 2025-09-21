@@ -8,7 +8,6 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { useUnit } from 'effector-react';
 import {
-	$draftStarRatingKeywords,
 	$starRatingKeywords,
 	openEditStarRating,
 } from '@/stores/starRating/model';

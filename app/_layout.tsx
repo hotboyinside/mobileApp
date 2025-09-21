@@ -1,7 +1,7 @@
 // import '@/i18n';
 import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import 'react-native-reanimated';
 
 import { AppProvider } from '@/components/appProvider/AppProvider';
@@ -19,6 +19,8 @@ import { AppState } from 'react-native';
 import { useUnit } from 'effector-react';
 import { $appState, appStateChanged } from '@/stores/appState/model';
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
 	const [loaded] = useFonts({
@@ -28,14 +30,14 @@ export default function RootLayout() {
 		MontserratBold: require('../assets/fonts/Montserrat-Bold.ttf'),
 	});
 	const appStateRef = useRef(AppState.currentState);
-	const appState = useUnit($appState)
+	const appState = useUnit($appState);
 	const onAppStateChanged = useUnit(appStateChanged);
 
 	useEffect(() => {
-		if (appState === "active") {
-    	subscribeToSseEventNews();
-    	connectSocketEvent();
-  	}
+		if (appState === 'active') {
+			subscribeToSseEventNews();
+			connectSocketEvent();
+		}
 
 		return () => {
 			closeToSseEventNews();
@@ -48,13 +50,19 @@ export default function RootLayout() {
 	}, []);
 
 	useEffect(() => {
-		const subscription = AppState.addEventListener("change", nextState => {
+		const subscription = AppState.addEventListener('change', nextState => {
 			onAppStateChanged(nextState);
 			appStateRef.current = nextState;
-    });
+		});
 
-		return () => subscription.remove()
-	}, [])
+		return () => subscription.remove();
+	}, []);
+
+	useEffect(() => {
+		if (loaded) {
+			SplashScreen.hideAsync();
+		}
+	}, [loaded]);
 
 	if (!loaded) return null;
 
@@ -83,10 +91,6 @@ function RootNavigator() {
 			<Stack.Protected guard={isEmptySession}>
 				<Stack.Screen name='sign-in' options={{ headerShown: false }} />
 			</Stack.Protected>
-
-			{/* <Stack.Protected guard={true}>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-      </Stack.Protected> */}
 		</Stack>
 	);
 }

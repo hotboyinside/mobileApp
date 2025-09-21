@@ -25,11 +25,15 @@ export function Collapsible({
 					name='chevron.right'
 					size={18}
 					weight='medium'
-					color={theme === 'light' ? appTheme.light.border.primary: appTheme.dark.border.primary}
+					color={
+						theme === 'light'
+							? appTheme.light.border.primary
+							: appTheme.dark.border.primary
+					}
 					style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
 				/>
 
-				<ThemedText type='defaultSemiBold'>{title}</ThemedText>
+				<ThemedText type='textSm'>{title}</ThemedText>
 			</TouchableOpacity>
 			{isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
 		</ThemedView>

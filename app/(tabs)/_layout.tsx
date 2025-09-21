@@ -1,7 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-
 import PlanetIcon from '@/assets/icons/planet-icon.svg';
 import PlanetGradientIcon from '@/assets/icons/planet-icon-gradient.svg';
 import CongressIcon from '@/assets/icons/congress-icon.svg';
@@ -12,9 +11,7 @@ import FireIcon from '@/assets/icons/fire-icon.svg';
 import FireGradientIcon from '@/assets/icons/fire-icon-gradient.svg';
 import MagnifierIcon from '@/assets/icons/magnifier-icon.svg';
 import MagnifierGradientIcon from '@/assets/icons/magnifier-icon-gradient.svg';
-
 import { HapticTab } from '@/components/HapticTab';
-import TabBarBackground from '@/components/ui/TabBarBackground';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 
@@ -30,7 +27,6 @@ export default function TabLayout() {
 				headerShown: false,
 				animation: 'shift',
 				tabBarButton: HapticTab,
-				tabBarBackground: TabBarBackground,
 				tabBarInactiveTintColor: iconInactiveColor,
 				tabBarActiveTintColor: labelActiveColor,
 				tabBarStyle: {

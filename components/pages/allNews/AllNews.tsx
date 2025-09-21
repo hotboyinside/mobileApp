@@ -20,28 +20,11 @@ import { addListener, removeListener, SseEvents } from '@/stores/sse/model';
 import { getStarRatingFx } from '@/stores/starRating/handlers';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-import { $dataSymbolsData, symbolsSubscribeAndUnsubscribeEvent } from '@/stores/symbols/model';
+import {
+	$dataSymbolsData,
+	symbolsSubscribeAndUnsubscribeEvent,
+} from '@/stores/symbols/model';
 import { WindowsNames } from '@/constants/socket/clientEvents';
-
-const renderItem = ({ item }: { item: any }) => {
-	switch (item.type) {
-		case 'topNews':
-			return <TopNewsBlock />;
-		case 'filters':
-			return <NewsFilterPanel />;
-		case 'news':
-			return <ListItem item={item.item} />;
-		default:
-			return null;
-	}
-};
-
-const keyExtractor = (item: any, index: number) => {
-	if (item.type === 'news') {
-		return item.id.toString() + index;
-	}
-	return item.id;
-};
 
 const NEWS_OVERSCAN_OFFSET = 10;
 
@@ -61,6 +44,13 @@ export default function AllNews() {
 		setIsShowBottomHeader(offsetY > 0);
 	};
 
+	const keyExtractor = useCallback((item: any, index: number) => {
+		if (item.type === 'news') {
+			return item.id.toString() + index;
+		}
+		return item.id;
+	}, []);
+
 	const combinedData = useMemo(() => {
 		return [
 			{ id: 'topNews', type: 'topNews' },
@@ -77,6 +67,19 @@ export default function AllNews() {
 		{},
 		appTokens.background.secondarySubtle
 	);
+
+	const renderItem = useCallback(({ item }: { item: any }) => {
+		switch (item.type) {
+			case 'topNews':
+				return <TopNewsBlock />;
+			case 'filters':
+				return <NewsFilterPanel />;
+			case 'news':
+				return <ListItem item={item.item} />;
+			default:
+				return null;
+		}
+	}, []);
 
 	const subscribeToTickersOnScreen = useCallback(
 		(start: number, end: number) => {
@@ -137,7 +140,6 @@ export default function AllNews() {
 	}, [handlePageMount]);
 
 	useEffect(() => {
-		console.log('heppend')
 		getStarRatingFx();
 		getAllNewsKeywordsFx();
 		fetchNewsFx({

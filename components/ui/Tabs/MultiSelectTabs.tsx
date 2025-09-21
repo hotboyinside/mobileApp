@@ -9,7 +9,7 @@ export type MultiSelectTabsProps<T> = RNTabProps & {
 	selectedValues: T[];
 	getLabel: (
 		value: T
-	) => string | ReactElement<{}, string | JSXElementConstructor<any>>;
+	) => string | ReactElement<object, string | JSXElementConstructor<any>>;
 	onSelectionChange: (value: T) => void;
 	isScroll?: boolean;
 	extraStyle?: StyleProp<ViewStyle>;

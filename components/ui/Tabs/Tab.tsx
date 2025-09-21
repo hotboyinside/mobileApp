@@ -5,7 +5,7 @@ import { TabItem } from './TabItem/TabItem';
 
 type tabElement =
 	| string
-	| ReactElement<{}, string | JSXElementConstructor<any>>
+	| ReactElement<object, string | JSXElementConstructor<any>>
 	| undefined;
 
 export type TabProps = RNTabProps & {

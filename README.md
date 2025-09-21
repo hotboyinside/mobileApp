@@ -61,3 +61,13 @@ Join our community of developers creating universal apps.
 - react-native: 0.79.2 - 0.79.5:  
   Sticky header not working on Android devices when scrolling.  
   **Solution:** Replace `onPress` with `onPressIn`.
+
+# Android build (test)
+
+> npx expo prebuild
+> ./gradlew clean
+> EXPO_PUBLIC_API_URL=https://test-news-scan-app.staging.forasoft.com ./gradlew assembleRelease
+
+# Checks logs on emulator
+
+> adb logcat \*:S ReactNative:V ReactNativeJS:V

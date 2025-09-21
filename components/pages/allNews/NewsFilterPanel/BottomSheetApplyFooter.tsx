@@ -1,4 +1,3 @@
-import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';

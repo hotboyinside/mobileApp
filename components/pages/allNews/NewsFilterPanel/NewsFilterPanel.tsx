@@ -1,8 +1,6 @@
 import SortIcon from '@/assets/icons/sort-icon.svg';
 import { StyleSheet } from 'react-native';
 import { SortList } from './SortList';
-import { resetNewsTypeDraft } from '@/stores/allNews/filtersPanel/filters/newsType/model';
-import { resetStockTypeDraft } from '@/stores/allNews/filtersPanel/filters/stockType/model';
 import { useUnit } from 'effector-react';
 import { $activeFiltersCount } from '@/stores/allNews/filtersPanel/filters/selectableFIlters/model';
 import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
