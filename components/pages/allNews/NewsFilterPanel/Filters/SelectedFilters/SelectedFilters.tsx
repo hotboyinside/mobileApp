@@ -18,7 +18,7 @@ import {
 import {
 	$activeFiltersCount,
 	$selectableFilters,
-} from '@/stores/allNews/filtersPanel/filters/selectableFIlters/model';
+} from '@/stores/allNews/filtersPanel/filters/selectableFilters/model';
 import {
 	removeStockTypeFromDraft,
 	StockTypesNames,

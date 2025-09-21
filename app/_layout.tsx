@@ -1,7 +1,7 @@
 // import '@/i18n';
 import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 
 import { AppProvider } from '@/components/appProvider/AppProvider';
@@ -19,8 +19,6 @@ import { AppState } from 'react-native';
 import { useUnit } from 'effector-react';
 import { $appState, appStateChanged } from '@/stores/appState/model';
 
-SplashScreen.preventAutoHideAsync();
-
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
 	const [loaded] = useFonts({
@@ -31,16 +29,20 @@ export default function RootLayout() {
 	});
 	const appStateRef = useRef(AppState.currentState);
 	const appState = useUnit($appState);
+
 	const onAppStateChanged = useUnit(appStateChanged);
+	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);
+	const onConnectSocketEvent = useUnit(connectSocketEvent);
+	const onCloseToSseEventNews = useUnit(closeToSseEventNews);
 
 	useEffect(() => {
 		if (appState === 'active') {
-			subscribeToSseEventNews();
-			connectSocketEvent();
+			onSubscribeToSseEventNews();
+			onConnectSocketEvent();
 		}
 
 		return () => {
-			closeToSseEventNews();
+			onCloseToSseEventNews();
 		};
 	}, [appState]);
 
@@ -57,12 +59,6 @@ export default function RootLayout() {
 
 		return () => subscription.remove();
 	}, []);
-
-	useEffect(() => {
-		if (loaded) {
-			SplashScreen.hideAsync();
-		}
-	}, [loaded]);
 
 	if (!loaded) return null;
 

@@ -25,7 +25,6 @@ export default function TabLayout() {
 		<Tabs
 			screenOptions={{
 				headerShown: false,
-				animation: 'shift',
 				tabBarButton: HapticTab,
 				tabBarInactiveTintColor: iconInactiveColor,
 				tabBarActiveTintColor: labelActiveColor,

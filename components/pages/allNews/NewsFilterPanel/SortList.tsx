@@ -42,7 +42,7 @@ export const SortList = ({ onClose }: SortListProps) => {
 				}}
 			/>
 			<ThemedView style={styles.list}>
-				{Object.values(SortLabels).map((filter, _) => (
+				{Object.values(SortLabels).map(filter => (
 					<Checkbox
 						key={filter}
 						checked={filter === currentSortValue}

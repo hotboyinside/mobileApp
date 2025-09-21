@@ -2,7 +2,7 @@ import SortIcon from '@/assets/icons/sort-icon.svg';
 import { StyleSheet } from 'react-native';
 import { SortList } from './SortList';
 import { useUnit } from 'effector-react';
-import { $activeFiltersCount } from '@/stores/allNews/filtersPanel/filters/selectableFIlters/model';
+import { $activeFiltersCount } from '@/stores/allNews/filtersPanel/filters/selectableFilters/model';
 import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
 import {
 	FilterTabVariant,

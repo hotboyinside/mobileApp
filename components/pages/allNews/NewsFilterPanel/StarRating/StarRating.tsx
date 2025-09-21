@@ -36,7 +36,6 @@ const STARS = [4, 3, 2, 1, 0];
 
 export const StarRating = ({ onClose }: StarRatingProps) => {
 	const { openSheetModal, closeSheetModal } = useGlobalSheet();
-
 	const draftStarRatingEnabledState = useUnit($draftStarRatingEnabledState);
 	const starRatingKeywords = useUnit($starRatingKeywords);
 
@@ -45,9 +44,6 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 	const onToggleDraftStarRatingEnabledState = useUnit(
 		toggleDraftStarRatingEnabledState
 	);
-
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
 
 	const openEditRatingSheet = useCallback(() => {
 		onClose();
@@ -73,6 +69,9 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 			)
 		);
 	}, []);
+
+	const borderColor = useThemeColor({}, appTokens.border.tertiary);
+	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
 
 	return (
 		<BottomSheetScrollView

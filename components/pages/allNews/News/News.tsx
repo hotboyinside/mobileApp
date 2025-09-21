@@ -1,5 +1,4 @@
 import { Badge } from '@/components/ui/Badge/Badge';
-import { Change } from '@/components/ui/Change/Change';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { useThemeColor } from '@/hooks/useThemeColor';

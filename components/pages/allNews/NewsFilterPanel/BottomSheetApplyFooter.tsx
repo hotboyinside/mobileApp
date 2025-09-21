@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { $hasChangesInFilters } from '@/stores/allNews/filtersPanel/filters/selectableFIlters/model';
+import { $hasChangesInFilters } from '@/stores/allNews/filtersPanel/filters/selectableFilters/model';
 import {
 	$hasChangesInSelectedColor,
 	applySelectedColorClick,
@@ -91,7 +91,14 @@ export const BottomSheetApplyFooter = ({
 
 	const isVoiceOverEnabled = useUnit($isVoiceOverEnabled);
 
-	let applyAction: () => void;
+	const animatedPadding = useAnimatedStyle(() => {
+		return {
+			paddingTop: withSpring(padding.value.top),
+			paddingBottom: withSpring(padding.value.bottom),
+		};
+	});
+
+	let applyAction: () => void = () => {};
 	let hasChanges = false;
 
 	switch (openedFilterTab) {
@@ -153,13 +160,6 @@ export const BottomSheetApplyFooter = ({
 			padding.value = { top: 16, bottom: 16 + bottomSafeArea };
 		}
 	}, [keyboardVisible, bottomSafeArea, padding]);
-
-	const animatedPadding = useAnimatedStyle(() => {
-		return {
-			paddingTop: withSpring(padding.value.top),
-			paddingBottom: withSpring(padding.value.bottom),
-		};
-	});
 
 	return (
 		<BottomSheetFooter animatedFooterPosition={animatedFooterPosition}>
