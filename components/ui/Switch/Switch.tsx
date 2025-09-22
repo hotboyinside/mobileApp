@@ -23,14 +23,6 @@ export const Switch = ({ value, onChange, disabled }: SwitchProps) => {
 	const brandColor = appColors.brand[400];
 	const tertiaryColor = useThemeColor({}, appTokens.background.tertiary);
 
-	useEffect(() => {
-		translateX.value = withSpring(value ? 20 : 0, {
-			damping: 15,
-			stiffness: 150,
-		});
-		progress.value = withSpring(value ? 1 : 0, { damping: 15, stiffness: 150 });
-	}, [value, progress, translateX]);
-
 	const handleToggle = () => {
 		if (!disabled) {
 			onChange(!value);
@@ -49,6 +41,14 @@ export const Switch = ({ value, onChange, disabled }: SwitchProps) => {
 		);
 		return { backgroundColor };
 	});
+
+	useEffect(() => {
+		translateX.value = withSpring(value ? 20 : 0, {
+			damping: 15,
+			stiffness: 150,
+		});
+		progress.value = withSpring(value ? 1 : 0, { damping: 15, stiffness: 150 });
+	}, [value, progress, translateX]);
 
 	return (
 		<Pressable onPress={handleToggle} disabled={disabled}>

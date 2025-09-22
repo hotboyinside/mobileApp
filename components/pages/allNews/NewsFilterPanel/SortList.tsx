@@ -20,9 +20,9 @@ type SortListProps = {
 export const SortList = ({ onClose }: SortListProps) => {
 	const currentSortValue = useUnit($sortByDraft);
 
-	const updateSortValueFx = useUnit(updateSortingDraft);
+	const onUpdateSortValue = useUnit(updateSortingDraft);
 	const onResetSorting = useUnit(resetSortingDraft);
-	const closeSortByClickFx = useUnit(closeSortByClick);
+	const onCloseSortByClick = useUnit(closeSortByClick);
 
 	return (
 		<BottomSheetScrollView
@@ -38,7 +38,7 @@ export const SortList = ({ onClose }: SortListProps) => {
 				}}
 				onCloseFilters={() => {
 					onClose();
-					closeSortByClickFx();
+					onCloseSortByClick();
 				}}
 			/>
 			<ThemedView style={styles.list}>
@@ -47,7 +47,7 @@ export const SortList = ({ onClose }: SortListProps) => {
 						key={filter}
 						checked={filter === currentSortValue}
 						title={filter}
-						onPress={() => updateSortValueFx(filter)}
+						onPress={() => onUpdateSortValue(filter)}
 					/>
 				))}
 			</ThemedView>

@@ -14,8 +14,8 @@ import {
 
 export const AdditionalFilters = () => {
 	const additionalFiltersDraft = useUnit($additionalFiltersDraft);
-	const toggleFilterFn = useUnit(toggleFilterEnabled);
-	const updateFilterRangeFn = useUnit(updateFilterRange);
+	const onToggleFilter = useUnit(toggleFilterEnabled);
+	const onUpdateFilterRange = useUnit(updateFilterRange);
 
 	if (!additionalFiltersDraft) return null;
 
@@ -42,14 +42,14 @@ export const AdditionalFilters = () => {
 								from={filter.range.from}
 								to={filter.range.to}
 								onChange={(from, to) =>
-									updateFilterRangeFn({
+									onUpdateFilterRange({
 										key: key as AdditionalFilterKey,
 										range: { from, to },
 									})
 								}
 							/>
 						}
-						onPress={() => toggleFilterFn(key as AdditionalFilterKey)}
+						onPress={() => onToggleFilter(key as AdditionalFilterKey)}
 					/>
 				))}
 			</ThemedView>

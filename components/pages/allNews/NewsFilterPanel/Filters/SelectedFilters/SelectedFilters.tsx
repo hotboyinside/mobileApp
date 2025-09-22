@@ -27,20 +27,25 @@ import {
 export const SelectedFilters = () => {
 	const selectableFilters = useUnit($selectableFilters);
 	const selectedFiltersCount = useUnit($activeFiltersCount);
+	const onRemoveMarketFromDraft = useUnit(removeMarketFromDraft);
+	const onRemoveStockTypeFromDraft = useUnit(removeStockTypeFromDraft);
+	const onRemoveNewsTypeFromDraft = useUnit(removeNewsTypeFromDraft);
+	const onToggleFilterEnabled = useUnit(toggleFilterEnabled);
 
 	const handleRemoveFilter = (type: string, value: string) => {
 		switch (type) {
 			case 'market':
-				removeMarketFromDraft(value as MarketNames);
+				onRemoveMarketFromDraft(value as MarketNames);
 				break;
 			case 'stockType':
-				removeStockTypeFromDraft(value as StockTypesNames);
+				onRemoveStockTypeFromDraft(value as StockTypesNames);
 				break;
 			case 'newsType':
-				removeNewsTypeFromDraft(value as NewsTypesNames);
+				onRemoveNewsTypeFromDraft(value as NewsTypesNames);
 				break;
 			case 'additionalFilter':
-				toggleFilterEnabled(value as AdditionalFilterKey);
+				onToggleFilterEnabled(value as AdditionalFilterKey);
+				break;
 		}
 	};
 

@@ -13,7 +13,7 @@ import { StyleSheet } from 'react-native';
 
 export const MarketFilter = () => {
 	const marketDraft = useUnit($marketDraft);
-	const toggleMarketDraftFx = useUnit(toggleMarketDraft);
+	const onToggleMarketDraft = useUnit(toggleMarketDraft);
 
 	return (
 		<ThemedView>
@@ -25,7 +25,7 @@ export const MarketFilter = () => {
 				tabsTitles={Object.values(MarketNames)}
 				selectedValues={marketDraft}
 				getLabel={getMarketLabel}
-				onSelectionChange={toggleMarketDraftFx}
+				onSelectionChange={onToggleMarketDraft}
 			/>
 		</ThemedView>
 	);

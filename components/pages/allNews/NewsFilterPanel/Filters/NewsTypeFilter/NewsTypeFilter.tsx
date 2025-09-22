@@ -13,7 +13,7 @@ import { StyleSheet } from 'react-native';
 
 export const NewsTypeFilter = () => {
 	const newsTypeDraft = useUnit($newsTypeDraft);
-	const toggleNewsTypeDraftFx = useUnit(toggleNewsTypeDraft);
+	const onToggleNewsTypeDraft = useUnit(toggleNewsTypeDraft);
 
 	return (
 		<ThemedView>
@@ -24,7 +24,7 @@ export const NewsTypeFilter = () => {
 			<MultiSelectTabs<NewsTypesNames>
 				tabsTitles={Object.values(NewsTypesNames)}
 				selectedValues={newsTypeDraft}
-				onSelectionChange={toggleNewsTypeDraftFx}
+				onSelectionChange={onToggleNewsTypeDraft}
 				getLabel={getNewsTypeLabel}
 			/>
 		</ThemedView>

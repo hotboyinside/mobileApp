@@ -41,23 +41,23 @@ export default function TopGainers() {
 			<TabView
 				value={index}
 				onChange={setIndex}
-				animationType='spring'
+				// animationType='spring'
 				disableSwipe
 				containerStyle={styles.tabViewContainer}
 			>
 				<TabView.Item style={{ flex: 1 }}>
-					<Cards
+					{/* <Cards
 						isTopGainers
 						topSymbols={
 							dataTopBannersSymbolGapGainersStore.topThreeGainersSymbols
 						}
-					/>
+					/> */}
 				</TabView.Item>
 				<TabView.Item style={{ flex: 1 }}>
-					<Cards
+					{/* <Cards
 						isTopGainers
 						topSymbols={dataTopBannersSymbolGainersStore.topThreeGainersSymbols}
-					/>
+					/> */}
 				</TabView.Item>
 			</TabView>
 		</ThemedView>

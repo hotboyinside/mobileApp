@@ -25,6 +25,8 @@ export const NewsDetails = () => {
 	);
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
 
+	if (!news) return null;
+
 	return (
 		<ThemedViewWithSafeArea
 			safeEdges={['top', 'right', 'bottom', 'left']}

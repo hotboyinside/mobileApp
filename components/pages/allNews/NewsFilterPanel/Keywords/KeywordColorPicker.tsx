@@ -19,7 +19,7 @@ type KeywordColorPickerProps = {
 
 export const KeywordColorPicker = ({ onClose }: KeywordColorPickerProps) => {
 	const selectedColorDraft = useUnit($selectedColorDraft);
-	const changeSelectedColorFx = useUnit(changeDraftSelectedColor);
+	const onChangeSelectedColor = useUnit(changeDraftSelectedColor);
 
 	const borderInactiveColor = useThemeColor({}, appTokens.border.tertiary);
 	const borderActiveColor = useThemeColor({}, appTokens.border.brand);
@@ -44,7 +44,7 @@ export const KeywordColorPicker = ({ onClose }: KeywordColorPickerProps) => {
 						<Pressable
 							key={color}
 							onPress={() => {
-								changeSelectedColorFx(color);
+								onChangeSelectedColor(color);
 							}}
 							style={({ pressed }) => [
 								styles.colorWrapper,
