@@ -1,136 +1,144 @@
-import { Badge } from '@/components/ui/Badge/Badge';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
-import { useRouter } from 'expo-router';
-import { NEWS_DETAILS } from '@/constants/routes';
-import { Stars } from '@/components/ui/Stars';
-import { IFilteredNews } from '@/stores/allNews/news/model';
-import { ReadOnlyKeyword } from './ReadOnlyKeyword';
-import { $now } from '@/stores/allNews/globalTick/model';
-import { useUnit } from 'effector-react';
-import { $dataSymbolsData } from '@/stores/symbols/model';
-import { formatNewsTime } from '@/helpers/time/formatNewsTime';
-import { SymbolWithChange } from './SymbolWithChange';
+import { Badge } from "@/components/ui/Badge/Badge";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { appTokens } from "@/constants/tokens";
+import { useRouter } from "expo-router";
+import { NEWS_DETAILS } from "@/constants/routes";
+import { Stars } from "@/components/ui/Stars";
+import { IFilteredNews } from "@/stores/allNews/news/model";
+import { ReadOnlyKeyword } from "./ReadOnlyKeyword";
+import { $now } from "@/stores/allNews/globalTick/model";
+import { useUnit } from "effector-react";
+import { $dataSymbolsData } from "@/stores/symbols/model";
+import { formatNewsTime } from "@/helpers/time/formatNewsTime";
+import { SymbolWithChange } from "./SymbolWithChange";
+import { useMemo } from "react";
 
 type ListItemProps = {
-	item: IFilteredNews;
+  item: IFilteredNews;
 };
 
 export const ListItem = ({ item }: ListItemProps) => {
-	const { _id, title, createdAt, keywords, symbols, rating } = item;
-	const dataSymbolsData = useUnit($dataSymbolsData);
-	const now = useUnit($now);
-	const router = useRouter();
+  const { _id, title, createdAt, keywords, symbols, rating } = item;
+  const dataSymbolsData = useUnit($dataSymbolsData);
+  const now = useUnit($now);
+  const router = useRouter();
 
-	const handlePress = () => {
-		router.push(NEWS_DETAILS(_id.toString()));
-	};
+  const handlePress = () => {
+    router.push(NEWS_DETAILS(_id.toString()));
+  };
 
-	const timeColor = useThemeColor({}, appTokens.text.quaternary);
-	const backgroundColor = useThemeColor({}, appTokens.background.primary);
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
+  const formattedTime = useMemo(
+    () => formatNewsTime(createdAt, now),
+    [createdAt, now]
+  );
 
-	return (
-		<TouchableOpacity
-			style={[
-				styles.container,
-				{ backgroundColor: backgroundColor, borderColor: borderColor },
-			]}
-			activeOpacity={0.6}
-			onPress={handlePress}
-		>
-			<View style={styles.top}>
-				<View style={styles.symbols}>
-					{symbols.map(symbol => (
-						<View style={styles.symbolWithChange} key={symbol.symbol}>
-							<Badge
-								variant='pillColor'
-								size='sm'
-								color='gray'
-								value={symbol.symbol}
-							/>
-							<SymbolWithChange
-								symbol={symbol}
-								dataSymbolsData={dataSymbolsData}
-							/>
-						</View>
-					))}
-				</View>
-				<Stars rating={rating.score} />
-			</View>
-			<ThemedText type='textSm' style={styles.title}>
-				{title}
-			</ThemedText>
-			<View style={styles.keywords}>
-				{keywords.map(keyword => (
-					<ReadOnlyKeyword key={keyword._id} keyword={keyword} />
-				))}
-			</View>
-			<ThemedText type='textXs' style={[styles.time, { color: timeColor }]}>
-				{formatNewsTime(createdAt, now)}
-			</ThemedText>
-		</TouchableOpacity>
-	);
+  const timeColor = useThemeColor({}, appTokens.text.quaternary);
+  const backgroundColor = useThemeColor({}, appTokens.background.primary);
+  const borderColor = useThemeColor({}, appTokens.border.tertiary);
+
+  return (
+    <TouchableOpacity
+      style={[
+        styles.container,
+        { backgroundColor: backgroundColor, borderColor: borderColor },
+      ]}
+      activeOpacity={0.6}
+      onPress={handlePress}
+    >
+      <View style={styles.top}>
+        <View style={styles.symbols}>
+          {symbols &&
+            symbols.map(symbol => (
+              <View style={styles.symbolWithChange} key={symbol.symbol}>
+                <Badge
+                  variant='pillColor'
+                  size='sm'
+                  color='gray'
+                  value={symbol.symbol}
+                />
+                <SymbolWithChange
+                  symbol={symbol}
+                  dataSymbolsData={dataSymbolsData}
+                />
+              </View>
+            ))}
+        </View>
+        {rating?.score && <Stars rating={rating.score} />}
+      </View>
+      <ThemedText type='textSm' style={styles.title}>
+        {title}
+      </ThemedText>
+      <View style={styles.keywords}>
+        {keywords &&
+          keywords.map(keyword => (
+            <ReadOnlyKeyword key={keyword._id} keyword={keyword} />
+          ))}
+      </View>
+      <ThemedText type='textXs' style={[styles.time, { color: timeColor }]}>
+        {formattedTime}
+      </ThemedText>
+    </TouchableOpacity>
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		borderRadius: 12,
-		marginVertical: 4,
-		marginHorizontal: 16,
-		padding: 12,
-		borderWidth: 1,
-		borderColor: '#eee',
-		backgroundColor: '#fff',
-	},
+  container: {
+    borderRadius: 12,
+    marginVertical: 4,
+    marginHorizontal: 16,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: "#eee",
+    backgroundColor: "#fff",
+  },
 
-	top: {
-		flex: 1,
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-	},
+  top: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 
-	symbols: {
-		maxWidth: '75%',
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		gap: 8,
-	},
+  symbols: {
+    maxWidth: "75%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 8,
+  },
 
-	symbolWithChange: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 4,
-	},
+  symbolWithChange: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
 
-	title: {
-		marginTop: 12,
-		fontWeight: 600,
-		fontFamily: 'MontserratSemiBold',
-	},
+  title: {
+    marginTop: 12,
+    fontWeight: 600,
+    fontFamily: "MontserratSemiBold",
+  },
 
-	keywords: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		gap: 4,
-		marginTop: 12,
-	},
+  keywords: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 4,
+    marginTop: 12,
+  },
 
-	keyword: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 2,
-	},
+  keyword: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+  },
 
-	time: {
-		marginTop: 12,
-		fontWeight: 500,
-		fontFamily: 'MontserratMedium',
-	},
+  time: {
+    marginTop: 12,
+    fontWeight: 500,
+    fontFamily: "MontserratMedium",
+  },
 });
