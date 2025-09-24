@@ -1,4 +1,4 @@
-import { AdditionalFilterKey, FiltersStore, Range } from '@/types/filters';
+import { AdditionalFilterKey, FiltersStore, AdditionalFilterRange } from '@/types/filters';
 import { createEvent, createStore, sample } from 'effector';
 import { getFiltersSnapshotFx, saveFilterFx } from './handlers';
 import { pageMounted, filtersApplyClick } from '@/stores/allNews/model';
@@ -10,7 +10,7 @@ export const $additionalFiltersDraft = createStore<FiltersStore | null>(null);
 export const toggleFilterEnabled = createEvent<AdditionalFilterKey>();
 export const updateFilterRange = createEvent<{
 	key: AdditionalFilterKey;
-	range: Range;
+	range: AdditionalFilterRange;
 }>();
 export const resetAdditionalFiltersDraft = createEvent();
 

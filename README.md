@@ -49,4 +49,6 @@ In the output, you'll find options to open the app in a
 
 # Checks logs on emulator
 
+npx expo run:android --no-build-cache --device
+
 > adb logcat \*:S ReactNative:V ReactNativeJS:V

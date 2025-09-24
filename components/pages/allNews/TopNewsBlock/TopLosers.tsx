@@ -4,7 +4,7 @@ import { Tab } from '@/components/ui/Tabs/Tab';
 import { TabView } from '@rneui/base';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-// import { Cards } from './TopNews';
+import { Cards } from './TopNews';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
@@ -49,18 +49,18 @@ export default function TopLosers() {
 				}}
 			>
 				<TabView.Item style={{ flex: 1 }}>
-					{/* <Cards
+					<Cards
 						isTopGainers={false}
 						topSymbols={
 							dataTopBannersSymbolGapLosersStore.topThreeLosersSymbols
 						}
-					/> */}
+					/>
 				</TabView.Item>
 				<TabView.Item style={{ flex: 1 }}>
-					{/* <Cards
+					<Cards
 						isTopGainers={false}
 						topSymbols={dataTopBannersSymbolLosersStore.topThreeLosersSymbols}
-					/> */}
+					/>
 				</TabView.Item>
 			</TabView>
 		</ThemedView>

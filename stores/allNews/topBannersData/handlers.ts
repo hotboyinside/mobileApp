@@ -34,7 +34,6 @@ export const handleTopBannersGetNews = async () => {
 	});
 
 	const gettingNews = news?.data.success.docs;
-	console.log('gettingNews', gettingNews);
 
 	if (gettingNews) {
 		handleTopBannersAddDocs({ docs: gettingNews });

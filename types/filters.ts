@@ -15,8 +15,8 @@ export const additionalFiltersLabels: Record<AdditionalFilterKey, string> = {
 	dayRange: 'Day Range',
 };
 
-export type Range = { from: string; to: string };
+export type AdditionalFilterRange = { from: string; to: string };
 
-type AdditionalFilterValue = { enabled: boolean; range: Range };
+type AdditionalFilterValue = { enabled: boolean; range: AdditionalFilterRange };
 
 export type FiltersStore = Record<AdditionalFilterKey, AdditionalFilterValue>;
