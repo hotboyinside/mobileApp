@@ -1,4 +1,9 @@
-import { IParamsGetNews, IParamsGetSortedNews, getNewsRequest, getSortedNewsRequest } from "@/config/api/newsApi";
+import {
+  IParamsGetNews,
+  IParamsGetSortedNews,
+  getNewsRequest,
+  getSortedNewsRequest,
+} from "@/config/api/newsApi";
 import { createEffect } from "effector";
 import { INews } from "./model";
 

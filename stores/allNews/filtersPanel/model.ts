@@ -1,15 +1,4 @@
-import { combine, createEvent, createStore, sample } from 'effector';
-import { $sortBy, applySortingClick } from './sortBy/model';
-import { filtersApplyClick } from '../model';
-import { $market, MarketNames } from './filters/market/model';
-import { $stockType, StockTypesNames } from './filters/stockType/model';
-import { $newsType, NewsTypesNames } from './filters/newsType/model';
-import { $additionalFilters } from './filters/additionalFilters/model';
-import { SortByStore, SortLabels } from '@/types/sortBy';
-import { NewsTypesOrigins } from '../news/model';
-import { FiltersStore } from '@/types/filters';
-import { getTimestampOfStartOfTheDay } from '@/helpers/date/getTimestampOfStartOfTheDay';
-import { fetchSortedNewsFx } from '../news/handlers';
+import { createEvent, createStore } from 'effector';
 
 export enum FilterTabVariant {
 	sort = 'Sort',
@@ -55,36 +44,3 @@ $openedFilterTab.on(closeFilterTab, () => null);
 
 $openedFilterSubTab.on(openFilterSubTab, (_, payload) => payload);
 $openedFilterSubTab.on(closeFilterSubTab, () => null);
-
-type FiltersData = {
-	sortBy: SortByStore;
-	market: MarketNames[];
-	stockType: StockTypesNames[];
-	newsType: NewsTypesNames[];
-	additionalFilters: FiltersStore | null;
-};
-
-const filtersStore = combine({
-	sortBy: $sortBy,
-	market: $market,
-	stockType: $stockType,
-	newsType: $newsType,
-	additionalFilters: $additionalFilters,
-});
-
-sample({
-	clock: [applySortingClick, filtersApplyClick],
-	source: filtersStore,
-	filter: (filtersStore: FiltersData) =>
-		filtersStore.sortBy.currentLabel !== SortLabels.NewestFirst,
-	fn: (filters: FiltersData) => {
-		return ({
-			typeOrigin: NewsTypesOrigins.News,
-			limit: 0,
-			start: getTimestampOfStartOfTheDay(),
-			signal: new AbortController().signal,
-			filters: filters,
-		})
-	},
-	target: fetchSortedNewsFx,
-});

@@ -36,7 +36,7 @@ export const NewsInformation = ({ news }: NewsInformationProps) => {
 			price: symbolData?.price ?? 0,
 			absoluteChange: symbolData?.absoluteChange ?? 0,
 			priceChange: symbolData?.priceChange ?? 0,
-			volume: symbolData?.volume ?? 0,
+			volume: symbolData?.dayVolume ?? 0,
 			float: symbolData?.float ?? 0,
 			daysRange: symbolData?.daysRange ?? 0,
 		};
