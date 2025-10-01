@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import PlanetIcon from '@/assets/icons/planet-icon.svg';
 import PlanetGradientIcon from '@/assets/icons/planet-icon-gradient.svg';
 import CongressIcon from '@/assets/icons/congress-icon.svg';
@@ -10,6 +10,7 @@ import DashboardGradientIcon from '@/assets/icons/dashboard-icon-gradient.svg';
 import FireIcon from '@/assets/icons/fire-icon.svg';
 import FireGradientIcon from '@/assets/icons/fire-icon-gradient.svg';
 import MagnifierIcon from '@/assets/icons/magnifier-icon.svg';
+import LockIcon from '@/assets/icons/lock-closed-icon.svg';
 import MagnifierGradientIcon from '@/assets/icons/magnifier-icon-gradient.svg';
 import { HapticTab } from '@/components/HapticTab';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -20,6 +21,10 @@ export default function TabLayout() {
 	const iconInactiveColor = useThemeColor({}, appTokens.foreground.quinary);
 	const labelActiveColor = useThemeColor({}, appTokens.text.brandSecondary);
 	const backgroundColor = useThemeColor({}, appTokens.background.primary);
+
+	const lockIconColor = useThemeColor({}, appTokens.foreground.secondary);
+	const lockBorderColor = useThemeColor({}, appTokens.border.secondary);
+	const lockBgColor = useThemeColor({}, appTokens.background.primary);
 
 	return (
 		<Tabs
@@ -32,9 +37,9 @@ export default function TabLayout() {
 					borderTopWidth: 1,
 					borderTopColor: borderColor,
 					backgroundColor: backgroundColor,
+					paddingBottom: 4,
 					...Platform.select({
 						ios: {
-							position: 'absolute',
 							shadowColor: 'rgba(13, 18, 28, 0.05)',
 							shadowOffset: { width: 0, height: 0 },
 							shadowOpacity: 1,
@@ -45,6 +50,9 @@ export default function TabLayout() {
 							shadowColor: 'rgba(13, 18, 28, 0.05)',
 						},
 					}),
+				},
+				tabBarLabelStyle: {
+					marginTop: 2,
 				},
 			}}
 		>
@@ -67,10 +75,46 @@ export default function TabLayout() {
 					title: 'Search',
 					tabBarIcon: ({ focused, color }) => {
 						return focused ? (
-							<MagnifierGradientIcon width={28} height={28} />
+							<View style={styles.disabledIconContainer}>
+								<View
+									style={[
+										styles.lockIcon,
+										{
+											borderColor: lockBorderColor,
+											backgroundColor: lockBgColor,
+										},
+									]}
+								>
+									<LockIcon width={12} height={12} fill={lockIconColor} />
+								</View>
+								<MagnifierGradientIcon width={28} height={28} />
+							</View>
 						) : (
-							<MagnifierIcon width={28} height={28} color={color} />
+							<View style={styles.disabledIconContainer}>
+								<View
+									style={[
+										styles.lockIcon,
+										{
+											borderColor: lockBorderColor,
+											backgroundColor: lockBgColor,
+										},
+									]}
+								>
+									<LockIcon width={12} height={12} fill={lockIconColor} />
+								</View>
+								<MagnifierIcon
+									width={28}
+									height={28}
+									color={color}
+									style={{ opacity: 0.5 }}
+								/>
+							</View>
 						);
+					},
+					//TODO: delete when the component is ready (and the wrapper of the inactive icon above)
+					tabBarLabelStyle: {
+						marginTop: 2,
+						opacity: 0.5,
 					},
 				}}
 			/>
@@ -80,10 +124,46 @@ export default function TabLayout() {
 					title: 'Congress',
 					tabBarIcon: ({ color, focused }) => {
 						return focused ? (
-							<CongressGradientIcon width={28} height={28} />
+							<View style={styles.disabledIconContainer}>
+								<View
+									style={[
+										styles.lockIcon,
+										{
+											borderColor: lockBorderColor,
+											backgroundColor: lockBgColor,
+										},
+									]}
+								>
+									<LockIcon width={12} height={12} fill={lockIconColor} />
+								</View>
+								<CongressGradientIcon width={28} height={28} />
+							</View>
 						) : (
-							<CongressIcon width={28} height={28} color={color} />
+							<View style={styles.disabledIconContainer}>
+								<View
+									style={[
+										styles.lockIcon,
+										{
+											borderColor: lockBorderColor,
+											backgroundColor: lockBgColor,
+										},
+									]}
+								>
+									<LockIcon width={12} height={12} fill={lockIconColor} />
+								</View>
+								<CongressIcon
+									width={28}
+									height={28}
+									color={color}
+									style={{ opacity: 0.5 }}
+								/>
+							</View>
 						);
+					},
+					//TODO: delete when the component is ready (and the wrapper of the inactive icon above)
+					tabBarLabelStyle: {
+						marginTop: 2,
+						opacity: 0.5,
 					},
 				}}
 			/>
@@ -93,15 +173,51 @@ export default function TabLayout() {
 					title: 'News Alerts',
 					tabBarIcon: ({ color, focused }) => {
 						return focused ? (
-							<FireGradientIcon width={28} height={28} />
+							<View style={styles.disabledIconContainer}>
+								<View
+									style={[
+										styles.lockIcon,
+										{
+											borderColor: lockBorderColor,
+											backgroundColor: lockBgColor,
+										},
+									]}
+								>
+									<LockIcon width={12} height={12} fill={lockIconColor} />
+								</View>
+								<FireGradientIcon width={28} height={28} />
+							</View>
 						) : (
-							<FireIcon width={28} height={28} color={color} />
+							<View style={styles.disabledIconContainer}>
+								<View
+									style={[
+										styles.lockIcon,
+										{
+											borderColor: lockBorderColor,
+											backgroundColor: lockBgColor,
+										},
+									]}
+								>
+									<LockIcon width={12} height={12} fill={lockIconColor} />
+								</View>
+								<FireIcon
+									width={28}
+									height={28}
+									color={color}
+									style={{ opacity: 0.5 }}
+								/>
+							</View>
 						);
+					},
+					//TODO: delete when the component is ready (and the wrapper of the inactive icon above)
+					tabBarLabelStyle: {
+						marginTop: 2,
+						opacity: 0.5,
 					},
 				}}
 			/>
 			<Tabs.Screen
-				name='explore'
+				name='more'
 				options={{
 					title: 'More',
 					tabBarIcon: ({ color, focused }) => {
@@ -116,3 +232,19 @@ export default function TabLayout() {
 		</Tabs>
 	);
 }
+
+const styles = StyleSheet.create({
+	disabledIconContainer: {
+		position: 'relative',
+	},
+
+	lockIcon: {
+		zIndex: 1,
+		position: 'absolute',
+		right: -6,
+		top: -3,
+		borderRadius: 100,
+		borderWidth: 1,
+		padding: 2,
+	},
+});

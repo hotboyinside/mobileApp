@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Stars } from '@/components/ui/Stars';
 import { ThemedText } from '@/components/ThemedText';
@@ -10,8 +10,7 @@ import { IFilteredNews } from '@/stores/allNews/news/model';
 import { $dataSymbolsData } from '@/stores/symbols/model';
 import { useUnit } from 'effector-react';
 import { ReadOnlyKeyword } from '../News/ReadOnlyKeyword';
-import { $now } from '@/stores/allNews/globalTick/model';
-import { formatNewsTime } from '@/helpers/time/formatNewsTime';
+import { formatNewsTimeFull } from '@/helpers/time/formatNewsTimeFull';
 
 type NewsInformationProps = {
 	news: IFilteredNews;
@@ -19,14 +18,10 @@ type NewsInformationProps = {
 
 export const NewsInformation = ({ news }: NewsInformationProps) => {
 	const dataSymbolsData = useUnit($dataSymbolsData);
-	const now = useUnit($now);
 
 	const { title, description, createdAt, rating, keywords, symbols } = news;
 
-	const formattedData = useMemo(
-		() => formatNewsTime(createdAt, now),
-		[now, createdAt]
-	);
+	const formattedData = formatNewsTimeFull(createdAt);
 
 	const safeSymbolsData = symbols.map(symbol => {
 		const symbolData = dataSymbolsData[symbol.symbol];

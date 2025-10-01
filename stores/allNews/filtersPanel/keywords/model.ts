@@ -2,7 +2,6 @@ import { KeywordsMode, UserKeyword } from '@/types/keywords';
 import { createEvent, createStore } from 'effector';
 
 export const $keywordMode = createStore<KeywordsMode>(KeywordsMode.InsertMode);
-
 export const $keywords = createStore<UserKeyword[]>([]);
 export const $onlyVisualKeywords = $keywords.map(state =>
 	state.filter(keyword => !keyword.isVoiceoverEnabled)

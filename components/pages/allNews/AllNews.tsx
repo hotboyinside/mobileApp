@@ -7,12 +7,12 @@ import { ListItem } from './News/News';
 import { useUnit } from 'effector-react';
 import { pageMounted } from '@/stores/allNews/model';
 import { NewsFilterPanel } from './NewsFilterPanel/NewsFilterPanel';
-import { fetchNewsFx, loadMoreNewsFx } from '@/stores/allNews/news/handlers';
 import {
 	$allNewsLoadStatus,
 	$filteredNews,
-	$lastAllNewsNewsDate,
+	$hasMoreNews,
 	addNewsFromSseEvent,
+	getNews,
 	NewsLoadStatus,
 } from '@/stores/allNews/news/model';
 import { getAllNewsKeywordsFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
@@ -25,7 +25,6 @@ import {
 import { getStarRatingFx } from '@/stores/starRating/handlers';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-
 import {
 	handleTopBannersGetNews,
 	handleFetchedNewsFromSse,
@@ -36,12 +35,8 @@ import {
 	subscribeTopBanners,
 	unsubscribeTopBanners,
 } from '@/stores/socket/model';
-
 import { WindowsNames } from '@/constants/socket/clientEvents';
-import {
-	$dataSymbolsData,
-	symbolsSubscribeAndUnsubscribeEvent,
-} from '@/stores/symbols/model';
+import { symbolsSubscribeAndUnsubscribeEvent } from '@/stores/symbols/model';
 
 const NEWS_OVERSCAN_OFFSET = 10;
 
@@ -49,23 +44,22 @@ export default function AllNews() {
 	const [isShowBottomHeader, setIsShowBottomHeader] = useState(false);
 	const allNews = useUnit($filteredNews);
 	const allNewsLoadStatus = useUnit($allNewsLoadStatus);
-	const lastAllNewsNewsDate = useUnit($lastAllNewsNewsDate);
-	const dataSymbolsData = useUnit($dataSymbolsData);
+	const hasMoreNews = useUnit($hasMoreNews);
 	const socketSource = useUnit($socketSource);
 	const sseNewsEventSource = useUnit($sseNewsEventSource);
+	const isLoading = allNewsLoadStatus === NewsLoadStatus.Loading;
 	const onPageMounted = useUnit(pageMounted);
 	const onSubscribeTopBanners = useUnit(subscribeTopBanners);
 	const onUnsubscribeTopBanners = useUnit(unsubscribeTopBanners);
-	const isLoading = allNewsLoadStatus === NewsLoadStatus.Loading;
 
 	const currentRows = useRef<{ start: number; end: number } | null>(null);
 
-	const keyExtractor = (item: any, index: number) => {
+	const keyExtractor = useCallback((item: any, index: number) => {
 		if (item.type === 'news') {
 			return item.id.toString() + index;
 		}
 		return item.id ?? index;
-	};
+	}, []);
 
 	const renderItem = ({ item }: { item: any }) => {
 		switch (item.type) {
@@ -80,9 +74,9 @@ export default function AllNews() {
 		}
 	};
 
-	const handleScroll = (offsetY: number) => {
+	const handleScroll = useCallback((offsetY: number) => {
 		setIsShowBottomHeader(offsetY > 0);
-	};
+	}, []);
 
 	const subscribeToTickersOnScreen = useCallback(
 		(start: number, end: number) => {
@@ -190,9 +184,7 @@ export default function AllNews() {
 	useEffect(() => {
 		getStarRatingFx();
 		getAllNewsKeywordsFx();
-		fetchNewsFx({
-			start: new Date().getTime(),
-		});
+		getNews({ isInitialNews: true });
 	}, []);
 
 	useEffect(() => {
@@ -211,14 +203,17 @@ export default function AllNews() {
 			style={[styles.container, { backgroundColor: backgroundColor }]}
 			safeEdges={['right', 'left']}
 		>
-			<Header isShowBottomBorder={isShowBottomHeader} />
+			<Header title='All News' isShowBottomBorder={isShowBottomHeader} />
 			<FlatList
 				data={combinedData}
-				extraData={dataSymbolsData}
 				keyExtractor={keyExtractor}
 				renderItem={renderItem}
 				stickyHeaderIndices={[1]}
-				onEndReached={() => loadMoreNewsFx({ start: lastAllNewsNewsDate! })}
+				onEndReached={() => {
+					if (hasMoreNews && !isLoading) {
+						getNews({ isInitialNews: false });
+					}
+				}}
 				onEndReachedThreshold={0.5}
 				onScroll={event => handleScroll(event.nativeEvent.contentOffset.y)}
 				scrollEventThrottle={16}

@@ -7,7 +7,7 @@ type Props = Omit<ComponentProps<typeof Link>, 'href'> & {
 	href: Href & string;
 };
 
-export function ExternalLink({ href, ...rest }: Props) {
+export function ExternalLink({ href, children, ...rest }: Props) {
 	return (
 		<Link
 			target='_blank'
@@ -21,6 +21,8 @@ export function ExternalLink({ href, ...rest }: Props) {
 					await openBrowserAsync(href);
 				}
 			}}
-		/>
+		>
+			{children}
+		</Link>
 	);
 }

@@ -7,11 +7,12 @@ import { ThemedText } from '../ThemedText';
 import { NavNotification } from './NavNotification';
 
 export interface HeaderProps extends RNHeaderProps {
+	title: string;
 	isShowBottomBorder?: boolean;
 }
 
 export default function Header(props: HeaderProps) {
-	const isShowBottomBorder = props.isShowBottomBorder;
+	const { title, isShowBottomBorder } = props;
 
 	const bgColor = useThemeColor({}, appTokens.background.primary);
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);
@@ -23,7 +24,7 @@ export default function Header(props: HeaderProps) {
 			leftComponent={<LogoIcon width={32} height={32} />}
 			centerComponent={
 				<ThemedText type='textMd' style={styles.title}>
-					All News
+					{title}
 				</ThemedText>
 			}
 			rightComponent={<NavNotification />}

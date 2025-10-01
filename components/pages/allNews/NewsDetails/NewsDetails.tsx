@@ -2,7 +2,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import { Button } from '@/components/ui/Button';
 import { router, useLocalSearchParams } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import ArrowIcon from '@/assets/icons/arrow-left-soft-icon.svg';
 import { NewsInformation } from './NewsInformation';
 import { appTokens } from '@/constants/tokens';
@@ -18,6 +18,7 @@ export const NewsDetails = () => {
 	const { id } = useLocalSearchParams();
 	const allNews = useUnit($filteredNews);
 	const news = allNews.find(news => news._id === id);
+	const newsUrl = news?.url ?? '';
 
 	const backButtonColor = useThemeColor(
 		{},
@@ -43,7 +44,12 @@ export const NewsDetails = () => {
 			</ThemedView>
 
 			<ThemedView style={[styles.buttonWrapper, { borderColor: borderColor }]}>
-				<Button variant='secondary' size='lg' title='Open full article' />
+				<Button
+					variant='secondary'
+					size='lg'
+					title='Open full article'
+					onPress={() => Linking.openURL(newsUrl)}
+				/>
 			</ThemedView>
 		</ThemedViewWithSafeArea>
 	);

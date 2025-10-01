@@ -28,7 +28,7 @@ export const SymbolStats = ({ symbol }: SymbolStatsProps) => {
 		},
 		{ title: 'Volume', value: volume },
 		{ title: 'Float', value: float },
-		{ title: 'Day Range', value: daysRange },
+		{ title: 'Day Range', value: daysRange.toPrecision(3) },
 	];
 
 	const borderColor = useThemeColor({}, appTokens.border.tertiary);

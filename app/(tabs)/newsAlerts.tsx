@@ -1,70 +1,69 @@
-import { Platform, StyleSheet } from 'react-native';
-import { HelloWave } from '@/components/HelloWave';
-import { ThemedText } from '@/components/ThemedText';
+import { Image, StyleSheet } from 'react-native';
+import Header from '@/components/ui/Header';
+import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
+import React from 'react';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { ThemedView } from '@/components/ThemedView';
-import { Button } from '@/components/ui/Button';
-import { useSession } from '@/components/appProvider/session/SessionContext';
+import { ThemedText } from '@/components/ThemedText';
+import FutureDevelopmentImage from '@/assets/images/FutureDevelopment.png';
+import Social from '@/components/ui/Social';
 
 export default function NewsAlertsScreen() {
-	const { signOut } = useSession();
+	const backgroundColor = useThemeColor(
+		{},
+		appTokens.background.secondarySubtle
+	);
 
 	return (
-		<ThemedView>
-			<ThemedView style={styles.titleContainer}>
-				<ThemedText type='textMd'>Welcome!</ThemedText>
-				<HelloWave />
-			</ThemedView>
-			<ThemedView style={styles.stepContainer}>
-				<ThemedText type='textSm'>Step 1: Try it</ThemedText>
-				<ThemedText>
-					Edit <ThemedText type='textSm'>app/(tabs)/index.tsx</ThemedText> to
-					see changes. Press{' '}
-					<ThemedText type='textSm'>
-						{Platform.select({
-							ios: 'cmd + d',
-							android: 'cmd + m',
-							web: 'F12',
-						})}
-					</ThemedText>{' '}
-					to open developer tools.
+		<ThemedViewWithSafeArea
+			style={[styles.container, { backgroundColor: backgroundColor }]}
+			safeEdges={['right', 'left']}
+		>
+			<Header title='News Alerts' />
+			<ThemedView style={styles.content}>
+				<Image source={FutureDevelopmentImage} style={styles.image} />
+				<ThemedText type='textXl' style={styles.title}>
+					Coming Soon
 				</ThemedText>
-			</ThemedView>
-			<ThemedView style={styles.stepContainer}>
-				<ThemedText type='textSm'>Step 2: Explore</ThemedText>
-				<ThemedText>
-					{`Tap the Explore tab to learn more about what's included in this starter app.`}
+				<ThemedText type='textMd' style={styles.description}>
+					We’re building this feature. Follow us on socials for updates!
 				</ThemedText>
+				<Social />
 			</ThemedView>
-			<ThemedView style={styles.stepContainer}>
-				<ThemedText type='textSm'>Step 3: Get a fresh start</ThemedText>
-				<ThemedText>
-					{`When you're ready, run `}
-					<ThemedText type='textSm'>npm run reset-project</ThemedText> to get a
-					fresh <ThemedText type='textSm'>app</ThemedText> directory. This will
-					move the current <ThemedText type='textSm'>app</ThemedText> to{' '}
-					<ThemedText type='textSm'>app-example</ThemedText>.
-				</ThemedText>
-				<Button title='Log out' onPress={() => signOut()} />
-			</ThemedView>
-		</ThemedView>
+		</ThemedViewWithSafeArea>
 	);
 }
 
 const styles = StyleSheet.create({
-	titleContainer: {
-		flexDirection: 'row',
+	container: {
+		flex: 1,
+	},
+
+	image: {
+		width: 60,
+		height: 60,
+		marginBottom: 16,
+	},
+
+	content: {
+		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center',
-		gap: 8,
+		paddingHorizontal: 16,
 	},
-	stepContainer: {
-		gap: 8,
-		marginBottom: 8,
+
+	title: {
+		textAlign: 'center',
+		marginBottom: 4,
+		fontWeight: 600,
+		fontFamily: 'MontserratSemiBold',
 	},
-	reactLogo: {
-		height: 178,
-		width: 290,
-		bottom: 0,
-		left: 0,
-		position: 'absolute',
+
+	description: {
+		textAlign: 'center',
+		marginBottom: 16,
+		fontWeight: 400,
+		fontFamily: 'MontserratRegular',
 	},
 });

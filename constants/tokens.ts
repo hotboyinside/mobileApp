@@ -129,6 +129,11 @@ export const appTokens = {
 			light: appColors.error['300'],
 			dark: appColors.error['400'],
 		},
+
+		alt: {
+			light: appColors.base.white,
+			dark: appColors.gray['700'],
+		},
 	},
 
 	background: {
@@ -182,7 +187,7 @@ export const appTokens = {
 		},
 		overlay: {
 			light: appColors.gray['950'],
-			dark: appColors.gray['800'],
+			dark: appColors.gray['950'],
 		},
 		brandPrimary: {
 			light: appColors.brand['50'],

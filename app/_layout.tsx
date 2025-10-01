@@ -3,7 +3,6 @@ import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
-
 import { AppProvider } from '@/components/appProvider/AppProvider';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SplashScreenController } from '@/components/splash/SplashScreenController';
@@ -26,8 +25,8 @@ export default function RootLayout() {
 	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);
 	const onConnectSocketEvent = useUnit(connectSocketEvent);
 	const onCloseToSseEventNews = useUnit(closeToSseEventNews);
-
 	const colorScheme = useColorScheme();
+
 	const [loaded] = useFonts({
 		MontserratRegular: require('../assets/fonts/Montserrat-Regular.ttf'),
 		MontserratMedium: require('../assets/fonts/Montserrat-Medium.ttf'),
@@ -78,6 +77,7 @@ function RootNavigator() {
 		<Stack
 			screenOptions={{
 				headerShown: false,
+				animation: 'none',
 			}}
 		>
 			<Stack.Protected guard={!isEmptySession}>

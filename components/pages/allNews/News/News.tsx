@@ -66,7 +66,7 @@ export const ListItem = ({ item }: ListItemProps) => {
 				</View>
 				<Stars rating={rating.score} />
 			</View>
-			<ThemedText type='textSm' style={styles.title}>
+			<ThemedText type='textSm' numberOfLines={2} style={styles.title}>
 				{title}
 			</ThemedText>
 			<View style={styles.keywords}>

@@ -120,6 +120,7 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 			break;
 		case 'link':
 			buttonColorStyles['color'] = linkFontColor;
+			buttonColorStyles['backgroundColor'] = 'transparent';
 			break;
 	}
 

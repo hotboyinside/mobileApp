@@ -1,11 +1,8 @@
-import {
-	NEWS_GET_NEWS,
-	NEWS_GET_SORTED_NEWS,
-} from '@/constants/apiRoutes';
+import { NEWS_GET_NEWS, NEWS_GET_SORTED_NEWS } from '@/constants/apiRoutes';
 import { api } from './axios';
 import { INews } from '@/stores/allNews/news/model';
 import { PaginationDefaults } from '@/constants/paginationDefaultLimit';
-import { NewsSortValues, OrderValues } from '@/types/sortBy';
+import { NewsSortValues, OrderValues, SortLabels } from '@/types/sortBy';
 import { WindowsNames } from '@/constants/socket/clientEvents';
 import { MarketNames } from '@/stores/allNews/filtersPanel/filters/market/model';
 import { NewsTypesNames } from '@/stores/allNews/filtersPanel/filters/newsType/model';
@@ -24,15 +21,16 @@ export enum NewsTypesCategories {
 }
 
 export interface IParamsGetNews {
-	typeOrigin?: NewsTypesOrigins.News;
+	typeOrigin?: NewsTypesOrigins;
 	typeCategory?: NewsTypesCategories;
 	limit?: number;
 	amountOfPagesToInclude?: number;
 	start: number;
 	startFromOppositeSide?: boolean;
-	// todo type
-	filters?: any;
+	filters?: FiltersData;
 	signal?: AbortSignal;
+	page?: number;
+	isMobile?: boolean;
 }
 
 export interface IParamsGetSortedNews {
@@ -41,11 +39,12 @@ export interface IParamsGetSortedNews {
 	limit?: number;
 	amountOfPagesToInclude?: number;
 	start?: number;
+	startFromOppositeSide?: boolean;
 	filters?: FiltersData;
 	signal?: AbortSignal;
 }
 
-type BackendFilter = { from: number; to: number };
+type BackendFilter = { from: number | string; to: number | string };
 type BackendFilters = Record<string, BackendFilter>;
 
 export interface GetNewsResponse {
@@ -57,107 +56,31 @@ export interface GetNewsResponse {
 	};
 }
 
-export const getNewsRequest = async (data: IParamsGetNews) => {
-	const {
-		typeOrigin,
-		typeCategory,
-		limit = 20,
-		amountOfPagesToInclude = PaginationDefaults.DefaultAmountOfPagesToInclude,
-		start,
-		startFromOppositeSide = true,
-		filters = {},
-		signal,
-	} = data;
-	const { sort, order, windowName, ...preparedFilters } = filters;
-
-	for (const [key, value] of Object.entries(preparedFilters)) {
-		if (key === 'additionalFilters') {
-			continue;
-		}
-
-		if (typeof value === 'object') {
-			// @ts-ignore
-			preparedFilters[key] = Object.values(value).map(val => val?.value);
-			continue;
-		}
-
-		preparedFilters[key] = value;
-	}
-
-	let preparedParams: {
-		limit?: number;
-		amountOfPagesToInclude?: number;
-		start: number;
-		startFromOppositeSide: boolean;
-		typeOrigin?: NewsTypesOrigins;
-		typeCategory?: NewsTypesCategories;
-		sort?: NewsSortValues;
-		order?: OrderValues;
-	} = {
-		limit,
-		sort,
-		start,
-		startFromOppositeSide,
-		order,
-		amountOfPagesToInclude,
-	};
-
-	if (typeOrigin) {
-		preparedParams.typeOrigin = typeOrigin;
-	}
-
-	return api.post(
-		NEWS_GET_NEWS,
-		{ filters: preparedFilters },
-		{ params: preparedParams, signal }
-	);
-};
-
-interface PreparedParameters {
-	isMobile: boolean;
-	windowName: WindowsNames;
-  order: OrderValues;
-  limit?: number;
-  amountOfPagesToInclude?: number;
-  start?: number;
-  typeOrigin?: NewsTypesOrigins;
-  typeCategory?: NewsTypesCategories;
-  sort?: NewsSortValues;
-}
-
-interface PreparedFilters {
-	market?: MarketNames[];
-  stockType?: StockTypesNames[];
-  rating?: StarNumberStateKey[];
-  newsType?: NewsTypesNames;
-  additionalFilters?: BackendFilters;
-}
-
-export const getSortedNewsRequest = async ({
+export const getNewsRequest = async ({
 	typeOrigin,
 	limit = PaginationDefaults.DefaultLimit,
 	amountOfPagesToInclude = PaginationDefaults.DefaultAmountOfPagesToInclude,
 	start,
-	filters={},
+	startFromOppositeSide = true,
+	filters = {},
 	signal,
-}: IParamsGetSortedNews = {}) => {
-  const {
-    sortBy,
-		windowName,
-    ...otherFilters
-  } = filters;
+	page,
+	isMobile,
+}: IParamsGetNews) => {
+	const { sortBy, windowName, ...otherFilters } = filters;
 
-	const {market, stockType, newsType, additionalFilters} = otherFilters;
+	const { market, stockType, newsType, additionalFilters } = otherFilters;
 
 	const prepareAdditionalFilters: BackendFilters = {};
 	if (additionalFilters) {
 		Object.entries(additionalFilters).forEach(([key, value]) => {
-		if (value && value.enabled) {
-			prepareAdditionalFilters[key] = {
-				from: Number(value.range.from),
-				to: Number(value.range.to),
+			if (value && value.enabled) {
+				prepareAdditionalFilters[key] = {
+					from: value.range.from ? Number(value.range.from) : '',
+					to: value.range.to ? Number(value.range.to) : '',
+				};
 			}
-		}})
+		});
 	}
 
 	const preparedFilters: PreparedFilters = {
@@ -171,19 +94,95 @@ export const getSortedNewsRequest = async ({
 		preparedFilters['newsType'] = newsType[0];
 	}
 
-  const preparedParams: PreparedParameters = {
-		isMobile: true,
-		windowName: windowName ?? WindowsNames.MainWindow,
-		order: sortBy?.order ?? OrderValues.Ascending, 
+	const preparedParams: PreparedParameters = {
+		typeOrigin: typeOrigin,
 		limit,
 		amountOfPagesToInclude,
-		sort: sortBy?.sortValue,
 		start: start,
-		typeOrigin: typeOrigin,
+		sort: sortBy?.sortValue,
+		order: sortBy?.order ?? OrderValues.Ascending,
+		page,
+		isMobile,
 	};
 
-	console.log('preparedFilters', preparedFilters);
-	console.log('preparedParams', preparedParams);
+	if (sortBy?.currentLabel === SortLabels.NewestFirst) {
+		preparedParams['startFromOppositeSide'] = startFromOppositeSide;
+	}
+
+	return api.post(
+		NEWS_GET_NEWS,
+		{ filters: preparedFilters },
+		{ params: preparedParams, signal }
+	);
+};
+
+interface PreparedParameters {
+	isMobile?: boolean;
+	windowName?: WindowsNames;
+	order: OrderValues;
+	limit?: number;
+	startFromOppositeSide?: boolean;
+	amountOfPagesToInclude?: number;
+	start?: number;
+	typeOrigin?: NewsTypesOrigins;
+	typeCategory?: NewsTypesCategories;
+	sort?: NewsSortValues;
+	page?: number;
+}
+
+interface PreparedFilters {
+	market?: MarketNames[];
+	stockType?: StockTypesNames[];
+	rating?: StarNumberStateKey[];
+	newsType?: NewsTypesNames;
+	additionalFilters?: BackendFilters;
+}
+
+export const getSortedNewsRequest = async ({
+	typeOrigin,
+	limit = PaginationDefaults.DefaultLimit,
+	amountOfPagesToInclude = PaginationDefaults.DefaultAmountOfPagesToInclude,
+	start,
+	filters = {},
+	signal,
+}: IParamsGetSortedNews = {}) => {
+	const { sortBy, windowName, ...otherFilters } = filters;
+
+	const { market, stockType, newsType, additionalFilters } = otherFilters;
+
+	const prepareAdditionalFilters: BackendFilters = {};
+	if (additionalFilters) {
+		Object.entries(additionalFilters).forEach(([key, value]) => {
+			if (value && value.enabled) {
+				prepareAdditionalFilters[key] = {
+					from: value.range.from ? Number(value.range.from) : '',
+					to: value.range.to ? Number(value.range.to) : '',
+				};
+			}
+		});
+	}
+
+	const preparedFilters: PreparedFilters = {
+		market: market ? [...market] : [],
+		stockType: stockType ? [...stockType] : [],
+		additionalFilters: prepareAdditionalFilters,
+		rating: [0, 1, 2, 3, 4],
+	};
+
+	if (newsType && newsType.length === 1) {
+		preparedFilters['newsType'] = newsType[0];
+	}
+
+	const preparedParams: PreparedParameters = {
+		typeOrigin: typeOrigin,
+		windowName: windowName ?? WindowsNames.MainWindow,
+		amountOfPagesToInclude,
+		sort: sortBy?.sortValue,
+		order: sortBy?.order ?? OrderValues.Ascending,
+		start: start,
+		isMobile: true,
+		limit,
+	};
 
 	return api.post(
 		NEWS_GET_SORTED_NEWS,

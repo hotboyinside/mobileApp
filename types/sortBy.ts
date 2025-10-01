@@ -5,7 +5,7 @@ export enum OrderValues {
 
 export enum SortLabels {
 	NewestFirst = 'Newest First',
-	HighestRating = 'Highest Rating',
+	// HighestRating = 'Highest Rating',
 	BiggestGain = 'Biggest % Gain (Price Up)',
 	BiggestDrop = 'Biggest % Drop (Price Down)',
 	BiggestVolume = 'Biggest Volume',
@@ -36,11 +36,11 @@ export const sortByStoreDefault = {
 
 export const sortMapping: Record<SortLabels, SortByStore> = {
 	[SortLabels.NewestFirst]: sortByStoreDefault,
-	[SortLabels.HighestRating]: {
-		currentLabel: SortLabels.HighestRating,
-		order: OrderValues.Descending,
-		sortValue: NewsSortValues.Rating,
-	},
+	// [SortLabels.HighestRating]: {
+	// 	currentLabel: SortLabels.HighestRating,
+	// 	order: OrderValues.Descending,
+	// 	sortValue: NewsSortValues.Rating,
+	// },
 	[SortLabels.BiggestGain]: {
 		currentLabel: SortLabels.BiggestGain,
 		order: OrderValues.Descending,
