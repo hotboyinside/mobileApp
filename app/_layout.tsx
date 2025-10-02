@@ -17,6 +17,7 @@ import { connectSocketEvent } from '@/stores/socket/model';
 import { AppState } from 'react-native';
 import { useUnit } from 'effector-react';
 import { $appState, appStateChanged } from '@/stores/appState/model';
+import { useNotificationObserver } from '@/hooks/useNotifications';
 
 export default function RootLayout() {
 	const appStateRef = useRef(AppState.currentState);
@@ -72,6 +73,8 @@ export default function RootLayout() {
 function RootNavigator() {
 	const { session } = useSession();
 	const isEmptySession = Object.keys(session ?? {}).length === 0;
+
+	useNotificationObserver();
 
 	return (
 		<Stack

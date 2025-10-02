@@ -1,7 +1,7 @@
 import { use, createContext, type PropsWithChildren, useEffect } from 'react';
 import { useStorageState } from '../authentication/useStorageState';
 import { User } from '@/types/user';
-import { getExpoPushTokenAsync } from 'expo-notifications';
+import { getDevicePushTokenAsync } from 'expo-notifications';
 import {
 	sendNotificationsTokenRequest,
 	Platform,
@@ -37,7 +37,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 			if (!session) return;
 
 			try {
-				const deviceToken = await getExpoPushTokenAsync();
+				const deviceToken = await getDevicePushTokenAsync();
 
 				if (deviceToken) {
 					await sendNotificationsTokenRequest({
