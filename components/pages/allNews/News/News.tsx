@@ -34,9 +34,9 @@ export const ListItem = ({ item }: ListItemProps) => {
 		[createdAt, now]
 	);
 
-	const timeColor = useThemeColor({}, appTokens.text.quaternary);
-	const backgroundColor = useThemeColor({}, appTokens.background.primary);
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
+	const timeColor = useThemeColor(appTokens.text.quaternary);
+	const backgroundColor = useThemeColor(appTokens.background.primary);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
 
 	return (
 		<TouchableOpacity

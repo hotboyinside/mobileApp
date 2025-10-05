@@ -338,13 +338,6 @@ export const appTokens = {
 		},
 	},
 
-	button: {
-		primaryBg: appColors.brand['500'],
-		primaryBgHover: appColors.brand['700'],
-		primaryFg: appColors.base.white,
-		primaryFgHover: appColors.base.white,
-	},
-
 	component: {
 		logoPrimary: appColors.brand['600'],
 		logoSecondary: appColors.brand['400'],
@@ -361,21 +354,17 @@ export const appTokens = {
 					light: appColors.gray['50'],
 					dark: appColors.gray['700'],
 				},
-				bgHover: appColors.gray['100'],
 				fg: {
 					light: appColors.gray['700'],
 					dark: appColors.gray['300'],
 				},
-				fgHover: appColors.gray['800'],
 			},
 			tertiaryGray: {
 				bg: appColors.base.transparent,
-				bgHover: appColors.gray['100'],
 				fg: {
 					light: appColors.gray['700'],
 					dark: appColors.gray['300'],
 				},
-				fgHover: appColors.gray['800'],
 			},
 			link: {
 				fg: {

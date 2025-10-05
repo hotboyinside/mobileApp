@@ -15,8 +15,8 @@ export const ActiveTabWithCount = ({
 	label,
 	count,
 }: ActiveTabWithCountProps) => {
-	const tabBgColorActive = useThemeColor({}, appTokens.background.tertiary);
-	const tabTextColorActive = useThemeColor({}, appTokens.text.secondary);
+	const tabBgColorActive = useThemeColor(appTokens.background.tertiary);
+	const tabTextColorActive = useThemeColor(appTokens.text.secondary);
 
 	return (
 		<ThemedView

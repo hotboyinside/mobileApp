@@ -21,3 +21,7 @@ export interface SendNotificationsTokenResponse {
 export const sendNotificationsTokenRequest = (data: SendNotificationsTokenRequestData) => {
 	return api.post(API_NOTIFICATIONS_MOBILE_TOKEN, data);
 };
+
+export const deleteNotificationsTokenRequest = () => {
+	return api.delete(API_NOTIFICATIONS_MOBILE_TOKEN);
+};

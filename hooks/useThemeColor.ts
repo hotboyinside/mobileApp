@@ -5,11 +5,16 @@ export type ColorVariant = {
 	dark: string;
 };
 
+type OverridableColor = {
+	light?: string;
+	dark?: string;
+};
+
 export function useThemeColor(
-	props: { light?: string; dark?: string },
-	tokenColor: ColorVariant
+	tokenColor: ColorVariant,
+	props: Partial<OverridableColor> = {}
 ) {
-	const theme = 'dark';
+	const theme = useColorScheme() || 'light';
 	const override = props[theme];
 
 	return override ?? tokenColor[theme];

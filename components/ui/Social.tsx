@@ -10,11 +10,8 @@ import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
 export default function Social() {
-	const borderTertiaryColor = useThemeColor({}, appTokens.border.tertiary);
-	const iconQuaternaryColor = useThemeColor(
-		{},
-		appTokens.foreground.quaternary
-	);
+	const borderTertiaryColor = useThemeColor(appTokens.border.tertiary);
+	const iconQuaternaryColor = useThemeColor(appTokens.foreground.quaternary);
 
 	return (
 		<ThemedView style={styles.social}>

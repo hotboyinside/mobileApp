@@ -14,8 +14,8 @@ export interface HeaderProps extends RNHeaderProps {
 export default function Header(props: HeaderProps) {
 	const { title, isShowBottomBorder } = props;
 
-	const bgColor = useThemeColor({}, appTokens.background.primary);
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
+	const bgColor = useThemeColor(appTokens.background.primary);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
 
 	return (
 		<RNHeader

@@ -63,9 +63,6 @@ export const BottomSheetApplyFooter = ({
 	const { bottom: bottomSafeArea } = useSafeAreaInsets();
 	const padding = useSharedValue({ top: 8, bottom: 8 });
 
-	const bgColor = useThemeColor({}, appTokens.background.primary);
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-
 	const applySortingClickFx = useUnit(applySortingClick);
 	const hasChangesInSortingFilters = useUnit($isSortByChanged);
 
@@ -138,6 +135,9 @@ export const BottomSheetApplyFooter = ({
 			applyAction = () => updateStarRating(draftStarRatingKeywords);
 			hasChanges = isStarRatingChanged;
 	}
+
+	const bgColor = useThemeColor(appTokens.background.primary);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
 
 	useEffect(() => {
 		const showKeyboard = Keyboard.addListener('keyboardDidShow', () => {

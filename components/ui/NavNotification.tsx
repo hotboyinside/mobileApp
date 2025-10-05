@@ -8,7 +8,6 @@ import { StyleSheet } from 'react-native';
 
 export const NavNotification = () => {
 	const buttonColor = useThemeColor(
-		{},
 		appTokens.component.buttons.secondaryGray.fg
 	);
 

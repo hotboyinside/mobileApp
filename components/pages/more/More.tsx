@@ -6,7 +6,6 @@ import {
 	TouchableOpacity,
 	Image,
 } from 'react-native';
-import ImagePattern from '@/assets/images/patternImage.svg';
 import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
 import { ThemedView } from '@/components/ThemedView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -27,6 +26,7 @@ import MoreBackgroundImage from '@/assets/images/MoreBackgroundImage.png';
 import { useRouter } from 'expo-router';
 import { useSession } from '@/components/appProvider/session/SessionContext';
 import Social from '@/components/ui/Social';
+import { MODAL, NOTIFICATIONS } from '@/constants/routes';
 
 const OFFSET = 28;
 const HEADER_HEIGHT = 160 + OFFSET;
@@ -36,30 +36,21 @@ export default function More() {
 	const { signOut } = useSession();
 	const { top: topSafeArea } = useSafeAreaInsets();
 
-	const textErrorColor = useThemeColor({}, appTokens.text.errorPrimary);
-	const textPrimaryColor = useThemeColor({}, appTokens.text.primary);
-	const textSecondaryColor = useThemeColor({}, appTokens.text.secondary);
-	const textQuaternaryColor = useThemeColor({}, appTokens.text.quaternary);
-	const iconFgColor = useThemeColor({}, appTokens.foreground.white);
-	const iconErrorColor = useThemeColor({}, appTokens.foreground.errorPrimary);
-	const iconBrandColor = useThemeColor({}, appTokens.foreground.brandPrimary);
-	const iconGrayColor = useThemeColor({}, appTokens.utilityGray[400]);
-	const iconLinkGray = useThemeColor(
-		{},
-		appTokens.component.buttons.linkGray.fg
-	);
-	const backgroundErrorColor = useThemeColor(
-		{},
-		appTokens.background.errorPrimary
-	);
-	const backgroundColor = useThemeColor({}, appTokens.background.primary);
-	const borderAltColor = useThemeColor({}, appTokens.border.alt);
-	const borderTertiaryColor = useThemeColor({}, appTokens.border.tertiary);
-	const bgOverlayColor = useThemeColor({}, appTokens.background.overlay);
-	const bgSecondaryColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
+	const textErrorColor = useThemeColor(appTokens.text.errorPrimary);
+	const textPrimaryColor = useThemeColor(appTokens.text.primary);
+	const textSecondaryColor = useThemeColor(appTokens.text.secondary);
+	const textQuaternaryColor = useThemeColor(appTokens.text.quaternary);
+	const iconFgColor = useThemeColor(appTokens.foreground.white);
+	const iconErrorColor = useThemeColor(appTokens.foreground.errorPrimary);
+	const iconBrandColor = useThemeColor(appTokens.foreground.brandPrimary);
+	const iconGrayColor = useThemeColor(appTokens.utilityGray[400]);
+	const iconLinkGray = useThemeColor(appTokens.component.buttons.linkGray.fg);
+	const backgroundErrorColor = useThemeColor(appTokens.background.errorPrimary);
+	const backgroundColor = useThemeColor(appTokens.background.primary);
+	const borderAltColor = useThemeColor(appTokens.border.alt);
+	const borderTertiaryColor = useThemeColor(appTokens.border.tertiary);
+	const bgOverlayColor = useThemeColor(appTokens.background.overlay);
+	const bgSecondaryColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<ScrollView
@@ -129,7 +120,7 @@ export default function More() {
 					</ThemedView>
 				</ThemedView>
 
-				<TouchableOpacity onPress={() => router.push('/modal')}>
+				<TouchableOpacity onPress={() => router.push(MODAL)}>
 					<ThemedView
 						style={[styles.promo, { backgroundColor: bgOverlayColor }]}
 					>
@@ -161,6 +152,7 @@ export default function More() {
 					]}
 				>
 					<TouchableOpacity
+						onPress={() => router.push(NOTIFICATIONS)}
 						style={[
 							styles.settingsButton,
 							{ borderColor: borderTertiaryColor },

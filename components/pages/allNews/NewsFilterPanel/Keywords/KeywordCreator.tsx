@@ -13,7 +13,7 @@ import { KeywordColorPicker } from './KeywordColorPicker';
 import { BottomSheetApplyFooter } from '../BottomSheetApplyFooter';
 import { useUnit } from 'effector-react';
 import { $selectedColor } from '@/stores/allNews/filtersPanel/keywords/selectedColor/model';
-import { keywordsColors, KeywordsMode } from '@/types/keywords';
+import { KeywordsMode } from '@/types/keywords';
 import { KeywordIconPicker } from './KeywordIconPicker';
 import {
 	openFilterSubTab,
@@ -44,6 +44,7 @@ import {
 	$editingKeyword,
 	$hasChangesInEditingKeyword,
 } from '@/stores/allNews/filtersPanel/keywords/editingKeyword/model';
+import { useKeywordsColors } from '@/hooks/useKeywordsColors';
 
 export const KeywordCreator = () => {
 	const { openSheetModal, closeSheetModal } = useGlobalSheet();
@@ -69,17 +70,17 @@ export const KeywordCreator = () => {
 	const currentKeyIcon = selectedKeyIcon || 'smile';
 	const CurrentIcon = keywordsIcons[currentKeyIcon];
 
-	const disabledColor = useThemeColor({}, appTokens.foreground.disabled);
+	const disabledColor = useThemeColor(appTokens.foreground.disabled);
 	const secondaryColor = useThemeColor(
-		{},
 		appTokens.component.buttons.secondaryGray.fg
 	);
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-	const utilityGray = useThemeColor({}, appTokens.utilityGray[400]);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const utilityGray = useThemeColor(appTokens.utilityGray[400]);
 	const tertiaryGray = useThemeColor(
-		{},
 		appTokens.component.buttons.tertiaryGray.fg
 	);
+
+	const keywordsColors = useKeywordsColors();
 
 	const openKeywordColorPickerSheet = () => {
 		onOpenFilterSubTab(FilterSubTabVariant.keywordsColor);

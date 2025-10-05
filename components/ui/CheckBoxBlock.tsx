@@ -14,12 +14,9 @@ export const CheckboxBlock = ({
 	bottomComponent,
 	...props
 }: CheckboxBlockProps) => {
-	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
-	const containerInActiveBorderColor = useThemeColor(
-		{},
-		appTokens.border.tertiary
-	);
-	const containerActiveBorderColor = useThemeColor({}, appTokens.border.brand);
+	const bgColor = useThemeColor(appTokens.background.secondarySubtle);
+	const containerInActiveBorderColor = useThemeColor(appTokens.border.tertiary);
+	const containerActiveBorderColor = useThemeColor(appTokens.border.brand);
 
 	return (
 		<ThemedView

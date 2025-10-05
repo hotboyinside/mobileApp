@@ -18,17 +18,17 @@ export type ThemedTextType =
 	| 'textXss';
 
 export type ThemedTextProps = TextProps & {
-	color?: ColorVariant;
+	tokenColor?: ColorVariant;
 	type?: ThemedTextType;
 };
 
 export function ThemedText({
 	style,
-	color = appTokens.text.primary,
+	tokenColor = appTokens.text.primary,
 	type = 'default',
 	...rest
 }: ThemedTextProps) {
-	const textColor = useThemeColor({}, color);
+	const textColor = useThemeColor(tokenColor);
 
 	return (
 		<Text

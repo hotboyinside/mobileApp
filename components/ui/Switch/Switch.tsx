@@ -20,14 +20,14 @@ export const Switch = ({ value, onChange, disabled }: SwitchProps) => {
 	const translateX = useSharedValue<number>(0);
 	const progress = useSharedValue<number>(0);
 
-	const brandColor = appColors.brand[400];
-	const tertiaryColor = useThemeColor({}, appTokens.background.tertiary);
-
 	const handleToggle = () => {
 		if (!disabled) {
 			onChange(!value);
 		}
 	};
+
+	const brandColor = appColors.brand[400];
+	const tertiaryColor = useThemeColor(appTokens.background.tertiary);
 
 	const animatedCircle = useAnimatedStyle(() => ({
 		transform: [{ translateX: translateX.value }],

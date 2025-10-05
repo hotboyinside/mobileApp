@@ -24,11 +24,8 @@ export const HeaderBottomSheet = ({
 }: HeaderBottomSheetProps) => {
 	const Icon = leftIcon;
 
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-	const iconColor = useThemeColor(
-		{},
-		appTokens.component.buttons.secondaryGray.fg
-	);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const iconColor = useThemeColor(appTokens.component.buttons.secondaryGray.fg);
 
 	return (
 		<ThemedView style={[styles.container, { borderColor: borderColor }]}>

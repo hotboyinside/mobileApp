@@ -47,9 +47,9 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 	);
 	const onClearInputError = useUnit(clearInputError);
 
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
-	const iconColor = useThemeColor({}, appTokens.foreground.quinary);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const bgColor = useThemeColor(appTokens.background.secondarySubtle);
+	const iconColor = useThemeColor(appTokens.foreground.quinary);
 
 	return (
 		<BottomSheetScrollView

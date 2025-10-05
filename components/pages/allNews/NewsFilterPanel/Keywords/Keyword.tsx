@@ -1,17 +1,19 @@
 import { keywordsIcons } from '@/assets/icons/keywordsIcons';
 import { ThemedText } from '@/components/ThemedText';
-import { keywordsColors, UserKeyword } from '@/types/keywords';
+import { UserKeyword } from '@/types/keywords';
 import { Pressable, StyleSheet } from 'react-native';
 import CloseIcon from '@/assets/icons/close-icon.svg';
 import { useUnit } from 'effector-react';
 import { deleteKeywordFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
 import { startEditKeyword } from '@/stores/allNews/filtersPanel/keywords/model';
+import { useKeywordsColors } from '@/hooks/useKeywordsColors';
 
 export const Keyword = ({ keyword }: { keyword: UserKeyword }) => {
 	const deleteKeyword = useUnit(deleteKeywordFx);
 	const onStartEditKeyword = useUnit(startEditKeyword);
 
 	const Icon = keywordsIcons[keyword.iconKey || ''];
+	const keywordsColors = useKeywordsColors();
 	const bgColor = keywordsColors[keyword.color].background;
 	const textColor = keywordsColors[keyword.color].text;
 	const iconColor = keywordsColors[keyword.color].icon;

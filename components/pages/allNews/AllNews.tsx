@@ -144,10 +144,7 @@ export default function AllNews() {
 		];
 	}, [allNews]);
 
-	const backgroundColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
+	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	useEffect(() => {
 		handleTopBannersGetNews();

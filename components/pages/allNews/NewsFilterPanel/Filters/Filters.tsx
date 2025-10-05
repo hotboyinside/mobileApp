@@ -26,7 +26,7 @@ export const Filters = ({ onCloseFilters }: FiltersProps) => {
 	const onResetStockTypeDraft = useUnit(resetStockTypeDraft);
 	const onResetNewsTypeDraft = useUnit(resetNewsTypeDraft);
 
-	const backgroundColor = useThemeColor({}, appTokens.background.primary);
+	const backgroundColor = useThemeColor(appTokens.background.primary);
 
 	return (
 		<BottomSheetScrollView

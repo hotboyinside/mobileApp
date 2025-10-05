@@ -6,12 +6,13 @@ import { ThemedText } from '@/components/ThemedText';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import CircleIcon from '@/assets/icons/circle-icon.svg';
-import { keywordsColors, KeywordsColorVariants } from '@/types/keywords';
+import { KeywordsColorVariants } from '@/types/keywords';
 import { useUnit } from 'effector-react';
 import {
 	$selectedColorDraft,
 	changeDraftSelectedColor,
 } from '@/stores/allNews/filtersPanel/keywords/selectedColor/model';
+import { useKeywordsColors } from '@/hooks/useKeywordsColors';
 
 type KeywordColorPickerProps = {
 	onClose: () => void;
@@ -21,9 +22,11 @@ export const KeywordColorPicker = ({ onClose }: KeywordColorPickerProps) => {
 	const selectedColorDraft = useUnit($selectedColorDraft);
 	const onChangeSelectedColor = useUnit(changeDraftSelectedColor);
 
-	const borderInactiveColor = useThemeColor({}, appTokens.border.tertiary);
-	const borderActiveColor = useThemeColor({}, appTokens.border.brand);
-	const fontColor = useThemeColor({}, appTokens.text.secondary);
+	const borderInactiveColor = useThemeColor(appTokens.border.tertiary);
+	const borderActiveColor = useThemeColor(appTokens.border.brand);
+	const fontColor = useThemeColor(appTokens.text.secondary);
+
+	const keywordsColors = useKeywordsColors();
 
 	return (
 		<BottomSheetScrollView

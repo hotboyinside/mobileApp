@@ -24,19 +24,18 @@ export const Input = ({
 	const isPasswordType = type === 'password';
 	const isNumberType = type === 'number';
 
-	const labelColor = useThemeColor({}, appTokens.text.secondary);
+	const labelColor = useThemeColor(appTokens.text.secondary);
 	const inputContainerBackgroundColor = useThemeColor(
-		{},
 		appTokens.background.secondary
 	);
-	const inputBorderColor = useThemeColor({}, appTokens.border.tertiary);
-	const inputBorderFocusColor = useThemeColor({}, appTokens.border.brand);
-	const inputBorderErrorColor = useThemeColor({}, appTokens.border.errorSubtle);
-	const placeholderColor = useThemeColor({}, appTokens.text.placeholder);
-	const inputTextColor = useThemeColor({}, appTokens.text.primary);
-	const iconColor = useThemeColor({}, appTokens.foreground.quinary);
-	const iconErrorColor = useThemeColor({}, appTokens.foreground.errorSecondary);
-	const errorTextColor = useThemeColor({}, appTokens.text.errorPrimary);
+	const inputBorderColor = useThemeColor(appTokens.border.tertiary);
+	const inputBorderFocusColor = useThemeColor(appTokens.border.brand);
+	const inputBorderErrorColor = useThemeColor(appTokens.border.errorSubtle);
+	const placeholderColor = useThemeColor(appTokens.text.placeholder);
+	const inputTextColor = useThemeColor(appTokens.text.primary);
+	const iconColor = useThemeColor(appTokens.foreground.quinary);
+	const iconErrorColor = useThemeColor(appTokens.foreground.errorSecondary);
+	const errorTextColor = useThemeColor(appTokens.text.errorPrimary);
 
 	const renderRightIcon = () => {
 		if (!isPasswordType) return props.rightIcon || undefined;

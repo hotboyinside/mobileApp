@@ -19,17 +19,15 @@ export const KeywordIconPicker = ({ onClose }: KeywordIconPickerProps) => {
 	const selectedKeyIconDraft = useUnit($selectedKeyIconDraft);
 	const onChangeSelectedKeyIconDraft = useUnit(changeSelectedKeyIconDraft);
 
-	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
+	const bgColor = useThemeColor(appTokens.background.secondarySubtle);
 	const iconInactiveColor = useThemeColor(
-		{},
 		appTokens.component.buttons.linkGray.fg
 	);
 	const iconActiveColor = useThemeColor(
-		{},
 		appTokens.component.buttons.secondaryGray.fg
 	);
-	const borderInactiveColor = useThemeColor({}, appTokens.border.tertiary);
-	const borderActiveColor = useThemeColor({}, appTokens.border.brand);
+	const borderInactiveColor = useThemeColor(appTokens.border.tertiary);
+	const borderActiveColor = useThemeColor(appTokens.border.brand);
 
 	return (
 		<BottomSheetScrollView

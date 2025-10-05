@@ -45,10 +45,10 @@ export const Change = ({
 		changeSizeStyles = { iconSize: 16, fontType: 'textSm' };
 	}
 
-	const successText = useThemeColor({}, appTokens.text.successPrimary);
-	const errorText = useThemeColor({}, appTokens.text.errorPrimary);
-	const successIcon = useThemeColor({}, appTokens.foreground.successPrimary);
-	const errorIcon = useThemeColor({}, appTokens.foreground.errorPrimary);
+	const successText = useThemeColor(appTokens.text.successPrimary);
+	const errorText = useThemeColor(appTokens.text.errorPrimary);
+	const successIcon = useThemeColor(appTokens.foreground.successPrimary);
+	const errorIcon = useThemeColor(appTokens.foreground.errorPrimary);
 
 	let textColor: string | undefined;
 	let iconColor: string | undefined;

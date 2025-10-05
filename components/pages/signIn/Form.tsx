@@ -38,12 +38,9 @@ export default function Form({
 		resolver: yupResolver(formSchema),
 	});
 
-	const linkColor = useThemeColor({}, appTokens.text.brandSecondary);
-	const descriptionColor = useThemeColor({}, appTokens.text.quaternary);
-	const iconColor = useThemeColor(
-		{},
-		appTokens.component.buttons.secondaryGray.fg
-	);
+	const linkColor = useThemeColor(appTokens.text.brandSecondary);
+	const descriptionColor = useThemeColor(appTokens.text.quaternary);
+	const iconColor = useThemeColor(appTokens.component.buttons.secondaryGray.fg);
 
 	return (
 		<View style={styles.formContainer}>

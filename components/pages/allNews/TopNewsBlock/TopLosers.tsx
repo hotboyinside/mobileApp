@@ -22,10 +22,7 @@ export default function TopLosers() {
 	);
 	const [index, setIndex] = useState(0);
 
-	const backgroundColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
+	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<ThemedView style={{ backgroundColor: backgroundColor }}>

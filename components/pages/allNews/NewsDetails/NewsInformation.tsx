@@ -52,7 +52,7 @@ export const NewsInformation = ({ news }: NewsInformationProps) => {
 				{title}
 			</ThemedText>
 
-			<ThemedText type='textXs' color={timeColor} style={styles.time}>
+			<ThemedText type='textXs' tokenColor={timeColor} style={styles.time}>
 				{formattedData}
 			</ThemedText>
 

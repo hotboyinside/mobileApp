@@ -21,10 +21,9 @@ export const NewsDetails = () => {
 	const newsUrl = news?.url ?? '';
 
 	const backButtonColor = useThemeColor(
-		{},
 		appTokens.component.buttons.secondaryGray.fg
 	);
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
 
 	return (
 		<ThemedViewWithSafeArea

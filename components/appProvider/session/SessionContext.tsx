@@ -5,6 +5,7 @@ import { getDevicePushTokenAsync } from 'expo-notifications';
 import {
 	sendNotificationsTokenRequest,
 	Platform,
+	deleteNotificationsTokenRequest,
 } from '@/config/api/sendNotificationsToken';
 import { Platform as RNPlatform } from 'react-native';
 
@@ -59,7 +60,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
 				signIn: (user: User) => {
 					setSession(JSON.stringify(user));
 				},
-				signOut: () => {
+				signOut: async () => {
+					await deleteNotificationsTokenRequest();
 					setSession(null);
 				},
 				session,

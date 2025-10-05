@@ -7,12 +7,12 @@ import { StyleSheet } from 'react-native';
 type TabItemProps = Omit<React.ComponentProps<typeof RNTab.Item>, 'children'>;
 
 export const TabItem = ({ title, ...props }: TabItemProps) => {
-	const tabBgColorActive = useThemeColor({}, appTokens.background.tertiary);
-	const tabTextColor = useThemeColor({}, appTokens.text.tertiary);
-	const tabTextColorActive = useThemeColor({}, appTokens.text.secondary);
-	const tabBorderColor = useThemeColor({}, appTokens.border.tertiary);
-	const iconColor = useThemeColor({}, appTokens.foreground.quinary);
-	const iconColorActive = useThemeColor({}, appTokens.foreground.secondary);
+	const tabBgColorActive = useThemeColor(appTokens.background.tertiary);
+	const tabTextColor = useThemeColor(appTokens.text.tertiary);
+	const tabTextColorActive = useThemeColor(appTokens.text.secondary);
+	const tabBorderColor = useThemeColor(appTokens.border.tertiary);
+	const iconColor = useThemeColor(appTokens.foreground.quinary);
+	const iconColorActive = useThemeColor(appTokens.foreground.secondary);
 
 	const renderTitle = () => {
 		if (typeof title === 'string') {

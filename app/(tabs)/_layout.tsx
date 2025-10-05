@@ -17,14 +17,14 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 
 export default function TabLayout() {
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-	const iconInactiveColor = useThemeColor({}, appTokens.foreground.quinary);
-	const labelActiveColor = useThemeColor({}, appTokens.text.brandSecondary);
-	const backgroundColor = useThemeColor({}, appTokens.background.primary);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const iconInactiveColor = useThemeColor(appTokens.foreground.quinary);
+	const labelActiveColor = useThemeColor(appTokens.text.brandSecondary);
+	const backgroundColor = useThemeColor(appTokens.background.primary);
 
-	const lockIconColor = useThemeColor({}, appTokens.foreground.secondary);
-	const lockBorderColor = useThemeColor({}, appTokens.border.secondary);
-	const lockBgColor = useThemeColor({}, appTokens.background.primary);
+	const lockIconColor = useThemeColor(appTokens.foreground.secondary);
+	const lockBorderColor = useThemeColor(appTokens.border.secondary);
+	const lockBgColor = useThemeColor(appTokens.background.primary);
 
 	return (
 		<Tabs

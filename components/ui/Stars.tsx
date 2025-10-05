@@ -18,7 +18,7 @@ export const Stars = ({
 	starWidth = 16,
 	containerStyle,
 }: StarRatingProps) => {
-	const unfilledIconColor = useThemeColor({}, appTokens.background.quaternary);
+	const unfilledIconColor = useThemeColor(appTokens.background.quaternary);
 
 	return (
 		<View style={[styles.container, containerStyle]}>

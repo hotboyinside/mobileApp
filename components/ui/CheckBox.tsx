@@ -10,16 +10,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 type CheckboxProps = Omit<RNCheckBoxProps, 'children'> & {};
 
 export const Checkbox = ({ ...props }: CheckboxProps) => {
-	const textColor = useThemeColor({}, appTokens.text.tertiary);
-	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
-	const containerInActiveBorderColor = useThemeColor(
-		{},
-		appTokens.border.tertiary
-	);
-	const containerActiveBorderColor = useThemeColor({}, appTokens.border.brand);
-	const inactiveIconBorderColor = useThemeColor({}, appTokens.border.primary);
-	const inactiveIconBgColor = useThemeColor({}, appTokens.background.secondary);
-	const activeInnerCircleColor = useThemeColor({}, appTokens.foreground.white);
+	const textColor = useThemeColor(appTokens.text.tertiary);
+	const bgColor = useThemeColor(appTokens.background.secondarySubtle);
+	const containerInActiveBorderColor = useThemeColor(appTokens.border.tertiary);
+	const containerActiveBorderColor = useThemeColor(appTokens.border.brand);
+	const inactiveIconBorderColor = useThemeColor(appTokens.border.primary);
+	const inactiveIconBgColor = useThemeColor(appTokens.background.secondary);
+	const activeInnerCircleColor = useThemeColor(appTokens.foreground.white);
 
 	return (
 		<RNCheckBox

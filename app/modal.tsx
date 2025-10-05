@@ -131,24 +131,20 @@ export default function ModalScreen() {
 	const scrollRef = useRef<ScrollView>(null);
 	const { top: topSafeArea, bottom: bottomSafeArea } = useSafeAreaInsets();
 
-	const borderTertiaryColor = useThemeColor({}, appTokens.border.tertiary);
-	const borderAltColor = useThemeColor({}, appTokens.border.alt);
-	const borderBrandColor = useThemeColor({}, appTokens.border.brand);
-	const backgroundPrimaryColor = useThemeColor(
-		{},
-		appTokens.background.primary
-	);
+	const borderTertiaryColor = useThemeColor(appTokens.border.tertiary);
+	const borderAltColor = useThemeColor(appTokens.border.alt);
+	const borderBrandColor = useThemeColor(appTokens.border.brand);
+	const backgroundPrimaryColor = useThemeColor(appTokens.background.primary);
 	const backgroundSecondaryColor = useThemeColor(
-		{},
 		appTokens.background.secondary
 	);
-	const backgroundColor = useThemeColor({}, appTokens.background.overlay);
-	const iconWhiteColor = useThemeColor({}, appTokens.foreground.white);
-	const iconColor = useThemeColor({}, appTokens.component.buttons.primary.fg);
-	const iconBrandColor = useThemeColor({}, appTokens.foreground.brandPrimary);
-	const textPrimaryColor = useThemeColor({}, appTokens.text.primary);
-	const textQuaternaryColor = useThemeColor({}, appTokens.text.quaternary);
-	const textBrandColor = useThemeColor({}, appTokens.text.brandSecondary);
+	const backgroundColor = useThemeColor(appTokens.background.overlay);
+	const iconWhiteColor = useThemeColor(appTokens.foreground.white);
+	const iconColor = useThemeColor(appTokens.component.buttons.primary.fg);
+	const iconBrandColor = useThemeColor(appTokens.foreground.brandPrimary);
+	const textPrimaryColor = useThemeColor(appTokens.text.primary);
+	const textQuaternaryColor = useThemeColor(appTokens.text.quaternary);
+	const textBrandColor = useThemeColor(appTokens.text.brandSecondary);
 	const bgButtonColor = appTokens.alpha.white[10];
 
 	return (

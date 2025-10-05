@@ -31,8 +31,8 @@ export const SymbolStats = ({ symbol }: SymbolStatsProps) => {
 		{ title: 'Day Range', value: daysRange.toPrecision(3) },
 	];
 
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const bgColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<View
@@ -42,7 +42,10 @@ export const SymbolStats = ({ symbol }: SymbolStatsProps) => {
 			]}
 		>
 			<View style={[{ borderBottomColor: borderColor }, styles.header]}>
-				<ThemedText color={appTokens.text.secondary} style={styles.symbolName}>
+				<ThemedText
+					tokenColor={appTokens.text.secondary}
+					style={styles.symbolName}
+				>
 					{symbol.symbol}
 				</ThemedText>
 				<View style={styles.change}>
@@ -56,14 +59,14 @@ export const SymbolStats = ({ symbol }: SymbolStatsProps) => {
 				{symbolMap.map(row => (
 					<View style={styles.row} key={row.title}>
 						<ThemedText
-							color={appTokens.text.quaternary}
+							tokenColor={appTokens.text.quaternary}
 							type='textSm'
 							style={styles.title}
 						>
 							{row.title}
 						</ThemedText>
 						<ThemedText
-							color={appTokens.text.secondary}
+							tokenColor={appTokens.text.secondary}
 							type='textSm'
 							style={styles.value}
 						>

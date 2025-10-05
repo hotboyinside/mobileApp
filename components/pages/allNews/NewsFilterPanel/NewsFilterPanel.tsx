@@ -139,10 +139,7 @@ export const NewsFilterPanel = () => {
 		}
 	};
 
-	const backgroundColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
+	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<ThemedView style={[styles.wrapper, { backgroundColor: backgroundColor }]}>

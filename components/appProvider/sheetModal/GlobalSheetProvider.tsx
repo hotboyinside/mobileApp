@@ -77,7 +77,7 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 		[openSheetModal, closeSheetModal]
 	);
 
-	const backgroundColor = useThemeColor({}, appTokens.background.primary);
+	const backgroundColor = useThemeColor(appTokens.background.primary);
 
 	return (
 		<SheetContext value={contextValue}>

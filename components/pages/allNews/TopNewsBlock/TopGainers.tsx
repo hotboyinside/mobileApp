@@ -22,10 +22,7 @@ export default function TopGainers() {
 	);
 	const [index, setIndex] = useState(0);
 
-	const backgroundColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
+	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<ThemedView style={{ backgroundColor: backgroundColor }}>
@@ -41,7 +38,6 @@ export default function TopGainers() {
 			<TabView
 				value={index}
 				onChange={setIndex}
-				// animationType='spring'
 				disableSwipe
 				containerStyle={styles.tabViewContainer}
 			>

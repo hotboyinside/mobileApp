@@ -51,31 +51,25 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 	}
 
 	const primaryFontColor = useThemeColor(
-		{},
 		appTokens.component.buttons.primary.fg
 	);
 	const secondaryBgColor = useThemeColor(
-		{},
 		appTokens.component.buttons.secondaryGray.bg
 	);
-	const secondaryBorderColor = useThemeColor({}, appTokens.border.tertiary);
+	const secondaryBorderColor = useThemeColor(appTokens.border.tertiary);
 	const secondaryFontColor = useThemeColor(
-		{},
 		appTokens.component.buttons.secondaryGray.fg
 	);
 	const tertiaryFontColor = useThemeColor(
-		{},
 		appTokens.component.buttons.tertiaryGray.fg
 	);
 	const linkGrayFontColor = useThemeColor(
-		{},
 		appTokens.component.buttons.linkGray.fg
 	);
 	const linkGrayBackgroundColor = useThemeColor(
-		{},
 		appTokens.component.buttons.linkGray.bg
 	);
-	const linkFontColor = useThemeColor({}, appTokens.component.buttons.link.fg);
+	const linkFontColor = useThemeColor(appTokens.component.buttons.link.fg);
 
 	switch (variant) {
 		case 'primary':

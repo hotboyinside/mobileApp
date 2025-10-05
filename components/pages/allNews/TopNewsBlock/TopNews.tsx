@@ -17,17 +17,11 @@ type CardsProps = {
 export const Cards = ({ topSymbols, isTopGainers }: CardsProps) => {
 	const hasSymbols = topSymbols && topSymbols.length > 0;
 
-	const backgroundColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
-	const successBgColor = useThemeColor({}, appTokens.background.successPrimary);
-	const errorBgColor = useThemeColor({}, appTokens.background.errorPrimary);
-	const successIconColor = useThemeColor(
-		{},
-		appTokens.foreground.successPrimary
-	);
-	const errorIconColor = useThemeColor({}, appTokens.foreground.errorPrimary);
+	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
+	const successBgColor = useThemeColor(appTokens.background.successPrimary);
+	const errorBgColor = useThemeColor(appTokens.background.errorPrimary);
+	const successIconColor = useThemeColor(appTokens.foreground.successPrimary);
+	const errorIconColor = useThemeColor(appTokens.foreground.errorPrimary);
 
 	return (
 		<>

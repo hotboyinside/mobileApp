@@ -7,10 +7,7 @@ import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
 export const TopNewsBlock = () => {
-	const backgroundColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
+	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<ThemedView

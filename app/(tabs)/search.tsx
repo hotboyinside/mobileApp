@@ -10,10 +10,7 @@ import FutureDevelopmentImage from '@/assets/images/FutureDevelopment.png';
 import Social from '@/components/ui/Social';
 
 export default function SearchScreen() {
-	const backgroundColor = useThemeColor(
-		{},
-		appTokens.background.secondarySubtle
-	);
+	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<ThemedViewWithSafeArea

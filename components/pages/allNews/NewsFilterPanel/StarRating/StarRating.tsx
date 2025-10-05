@@ -70,8 +70,8 @@ export const StarRating = ({ onClose }: StarRatingProps) => {
 		);
 	}, []);
 
-	const borderColor = useThemeColor({}, appTokens.border.tertiary);
-	const bgColor = useThemeColor({}, appTokens.background.secondarySubtle);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const bgColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
 		<BottomSheetScrollView
