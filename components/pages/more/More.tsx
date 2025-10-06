@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-	View,
 	StyleSheet,
 	ScrollView,
 	TouchableOpacity,
-	Image,
+	Pressable,
 } from 'react-native';
 import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
 import { ThemedView } from '@/components/ThemedView';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { ThemedText } from '@/components/ThemedText';
@@ -21,26 +19,28 @@ import DollarIcon from '@/assets/icons/dollar.svg';
 import QuestionIcon from '@/assets/icons/question.svg';
 import LogOutIcon from '@/assets/icons/log-out-icon.svg';
 import { Button } from '@/components/ui/Button';
-import gradientImg from '@/assets/images/Glow.png';
-import MoreBackgroundImage from '@/assets/images/MoreBackgroundImage.png';
 import { useRouter } from 'expo-router';
 import { useSession } from '@/components/appProvider/session/SessionContext';
 import Social from '@/components/ui/Social';
 import { MODAL, NOTIFICATIONS } from '@/constants/routes';
+import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
+import { PromoButton } from './PromoButton';
+import { Header } from './Header';
 
 const OFFSET = 28;
-const HEADER_HEIGHT = 160 + OFFSET;
 
 export default function More() {
 	const router = useRouter();
-	const { signOut } = useSession();
-	const { top: topSafeArea } = useSafeAreaInsets();
+	const { session, signOut } = useSession();
+
+	const isPremiumUser = isUserPremium(session);
+	const isFreeTrialUsed = session?.currentSubscription?.isFreeTrialUsed;
+	const userFullName = `${session?.firstName} ${session?.lastName}`;
 
 	const textErrorColor = useThemeColor(appTokens.text.errorPrimary);
 	const textPrimaryColor = useThemeColor(appTokens.text.primary);
 	const textSecondaryColor = useThemeColor(appTokens.text.secondary);
 	const textQuaternaryColor = useThemeColor(appTokens.text.quaternary);
-	const iconFgColor = useThemeColor(appTokens.foreground.white);
 	const iconErrorColor = useThemeColor(appTokens.foreground.errorPrimary);
 	const iconBrandColor = useThemeColor(appTokens.foreground.brandPrimary);
 	const iconGrayColor = useThemeColor(appTokens.utilityGray[400]);
@@ -49,7 +49,6 @@ export default function More() {
 	const backgroundColor = useThemeColor(appTokens.background.primary);
 	const borderAltColor = useThemeColor(appTokens.border.alt);
 	const borderTertiaryColor = useThemeColor(appTokens.border.tertiary);
-	const bgOverlayColor = useThemeColor(appTokens.background.overlay);
 	const bgSecondaryColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	return (
@@ -57,21 +56,7 @@ export default function More() {
 			showsVerticalScrollIndicator={false}
 			style={[styles.container, { backgroundColor: backgroundColor }]}
 		>
-			<ThemedView
-				style={[
-					styles.header,
-					{
-						height: HEADER_HEIGHT + topSafeArea,
-					},
-				]}
-			>
-				<Image source={MoreBackgroundImage} style={[styles.backgroundImage]} />
-				<ThemedText style={[styles.headerText, { paddingTop: topSafeArea }]}>
-					Sean Dekmar
-				</ThemedText>
-				<ThemedText>🔥 Premium</ThemedText>
-				<View style={{ height: OFFSET }} />
-			</ThemedView>
+			<Header userName={userFullName} isPremium={isPremiumUser} />
 
 			<ThemedView
 				style={[
@@ -80,7 +65,8 @@ export default function More() {
 				]}
 			>
 				<ThemedView style={styles.buttons}>
-					<ThemedView
+					<Pressable
+						onPress={() => router.push(MODAL)}
 						style={[styles.button, { borderColor: borderTertiaryColor }]}
 					>
 						<BoltDuoIcon
@@ -98,8 +84,8 @@ export default function More() {
 						<ThemedText type='textXs' style={{ color: textQuaternaryColor }}>
 							Start for free. Upgrade anytime.
 						</ThemedText>
-					</ThemedView>
-					<ThemedView
+					</Pressable>
+					<Pressable
 						style={[styles.button, { borderColor: borderTertiaryColor }]}
 					>
 						<PeopleDuoIcon
@@ -117,35 +103,15 @@ export default function More() {
 						<ThemedText type='textXs' style={{ color: textQuaternaryColor }}>
 							Invite a Friend — Earn Money.
 						</ThemedText>
-					</ThemedView>
+					</Pressable>
 				</ThemedView>
 
-				<TouchableOpacity onPress={() => router.push(MODAL)}>
-					<ThemedView
-						style={[styles.promo, { backgroundColor: bgOverlayColor }]}
-					>
-						<ThemedText type='textMd' style={styles.promoTitle}>
-							Upgrade to Premium
-						</ThemedText>
-						<ThemedText type='textSm' style={styles.promoDescription}>
-							30 days free — get full access now!
-						</ThemedText>
-						<BoltDuoIcon
-							width={60}
-							height={60}
-							fill={iconFgColor}
-							style={styles.promoIcon}
-						/>
-						<Image source={gradientImg} style={styles.gradientCircleLeft} />
-						<Image source={gradientImg} style={styles.gradientCircleRight} />
-					</ThemedView>
-				</TouchableOpacity>
+				{!isPremiumUser && !isFreeTrialUsed && <PromoButton />}
 
 				<ThemedView
 					style={[
 						styles.settings,
 						{
-							marginTop: 24,
 							backgroundColor: bgSecondaryColor,
 							borderColor: borderTertiaryColor,
 						},
@@ -287,12 +253,14 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
+
 	header: {
 		position: 'relative',
 		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
+
 	backgroundImage: {
 		position: 'absolute',
 		top: 0,
@@ -304,7 +272,18 @@ const styles = StyleSheet.create({
 		resizeMode: 'cover',
 	},
 
-	headerText: { color: '#fff', fontSize: 22, fontWeight: 'bold' },
+	headerText: {
+		marginBottom: 8,
+		fontWeight: 700,
+		fontFamily: 'MontserratBold',
+	},
+
+	iconContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 2,
+	},
+
 	content: {
 		marginTop: -OFFSET,
 		zIndex: 1,
@@ -336,53 +315,6 @@ const styles = StyleSheet.create({
 		marginBottom: 2,
 		fontWeight: 600,
 		fontFamily: 'MontserratSemiBold',
-	},
-
-	promo: {
-		position: 'relative',
-		borderRadius: 16,
-		padding: 16,
-		overflow: 'hidden',
-	},
-
-	promoIcon: {
-		zIndex: 1,
-		position: 'absolute',
-		top: 10,
-		right: 10,
-		transform: [{ rotate: '15deg' }],
-	},
-
-	promoTitle: {
-		zIndex: 1,
-		fontWeight: 600,
-		fontFamily: 'MontserratSemiBold',
-	},
-
-	promoDescription: {
-		zIndex: 1,
-		marginTop: 4,
-		fontWeight: 400,
-		fontFamily: 'MontserratRegular',
-	},
-
-	gradientCircleLeft: {
-		position: 'absolute',
-		top: -25,
-		left: -75,
-		borderRadius: 40,
-		width: 150,
-		height: 150,
-		transform: [{ rotate: '180deg' }],
-	},
-
-	gradientCircleRight: {
-		position: 'absolute',
-		top: -25,
-		right: -55,
-		borderRadius: 67,
-		width: 150,
-		height: 150,
 	},
 
 	settings: {

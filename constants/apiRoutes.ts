@@ -21,4 +21,14 @@ export const NEWS_GET_SORTED_NEWS = `${NEWS}/get-sorted-news`;
 // notifications
 export const API_NOTIFICATIONS = urlJoin(API_BASE_PATH, '/notification');
 export const API_NOTIFICATIONS_MOBILE = urlJoin(API_NOTIFICATIONS, '/mobile');
-export const API_NOTIFICATIONS_MOBILE_TOKEN = urlJoin(API_NOTIFICATIONS_MOBILE, '/device-token');
+export const API_NOTIFICATIONS_MOBILE_TOKEN = urlJoin(
+	API_NOTIFICATIONS_MOBILE,
+	'/device-token'
+);
+export const API_NOTIFICATIONS_MOBILE_SETTINGS = urlJoin(
+	API_NOTIFICATIONS_MOBILE,
+	'/settings'
+);
+
+// text to speech
+export const TEXT_TO_SPEECH = `${API_BASE_PATH}/textToSpeech`;

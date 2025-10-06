@@ -34,6 +34,8 @@ In the output, you'll find options to open the app in a
 - connect star rating with backend; reset errors/input stores after quit filter's page
 - finish work with symbol change
 - delete repeated news
+- work with imports
+- kick the user out if he logged out
 
 ## Bugs associated with version
 

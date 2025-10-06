@@ -29,6 +29,9 @@ import CallAvatar from '@/assets/images/CallAvatar.png';
 import React, { FC, useRef, useState } from 'react';
 import { SvgProps } from 'react-native-svg';
 import { Badge } from '@/components/ui/Badge/Badge';
+import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
+import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
+import { useSession } from '@/components/appProvider/session/SessionContext';
 
 const TERMS_OF_SERVICE_URL =
 	'https://foxrunner.com/termsAndConditions?utm_source=chatgpt.com';
@@ -124,12 +127,19 @@ const PLANS: Plan[] = [
 ];
 
 export default function ModalScreen() {
-	const { width: screenWidth } = Dimensions.get('window');
+	const scrollRef = useRef<ScrollView>(null);
+	const router = useRouter();
+	const { session } = useSession();
 	const [selectedPlan, setSelectedPlan] = useState<Plan>(PLANS[2]);
 	const [plansPosition, setPlansPosition] = useState(0);
-	const router = useRouter();
-	const scrollRef = useRef<ScrollView>(null);
 	const { top: topSafeArea, bottom: bottomSafeArea } = useSafeAreaInsets();
+	const { width: screenWidth } = Dimensions.get('window');
+
+	const isPremiumUser = isUserPremium(session);
+	const isFreeTrialUsed = session?.currentSubscription?.isFreeTrialUsed;
+
+	const isFreeUserWithTrialUsed = !isPremiumUser && isFreeTrialUsed;
+	const isFreeUserWithTrial = !isPremiumUser && !isFreeTrialUsed;
 
 	const borderTertiaryColor = useThemeColor(appTokens.border.tertiary);
 	const borderAltColor = useThemeColor(appTokens.border.alt);
@@ -141,6 +151,7 @@ export default function ModalScreen() {
 	const backgroundColor = useThemeColor(appTokens.background.overlay);
 	const iconWhiteColor = useThemeColor(appTokens.foreground.white);
 	const iconColor = useThemeColor(appTokens.component.buttons.primary.fg);
+	const iconFgColor = useThemeColor(appTokens.foreground.white);
 	const iconBrandColor = useThemeColor(appTokens.foreground.brandPrimary);
 	const textPrimaryColor = useThemeColor(appTokens.text.primary);
 	const textQuaternaryColor = useThemeColor(appTokens.text.quaternary);
@@ -171,10 +182,31 @@ export default function ModalScreen() {
 						}}
 						stroke={backgroundColor}
 					/>
-					<ThemedText type='displayXs' style={styles.headerText}>
-						Dominate the Market. Try&nbsp;Premium Free
+					<ThemedText
+						tokenColor={appTokens.text.primaryOnBrand}
+						type='displayXs'
+						style={styles.headerText}
+					>
+						{isFreeUserWithTrial && 'Dominate the Market.\nTry Premium Free'}
+						{isFreeUserWithTrialUsed && 'Reclaim Your Edge.\nUpgrade Now'}
+						{isPremiumUser && 'Lead the Market\nwith Premium'}
 					</ThemedText>
-					<ThemedText>🔥 FoxRunner Premium</ThemedText>
+					<Badge
+						value={
+							<View style={styles.iconContainer}>
+								<BoltDuoIcon width={16} height={16} fill={iconFgColor} />
+								<ThemedText
+									tokenColor={appTokens.text.primaryOnBrand}
+									type='textSm'
+								>
+									FoxRunner Premium
+								</ThemedText>
+							</View>
+						}
+						variant='filled'
+						color='primary'
+						size='md'
+					/>
 					<Button
 						size='sm'
 						icon={<CloseIcon width={20} height={20} fill={iconColor} />}
@@ -194,13 +226,13 @@ export default function ModalScreen() {
 				<ThemedView
 					style={[
 						styles.content,
-						{ backgroundColor: backgroundColor, borderColor: borderAltColor },
+						{
+							backgroundColor: backgroundPrimaryColor,
+							borderColor: borderAltColor,
+						},
 					]}
 				>
-					<ThemedText
-						type='textLg'
-						style={[styles.title, { color: textPrimaryColor }]}
-					>
+					<ThemedText type='textLg' style={styles.title}>
 						Why Pros Trade with Premium
 					</ThemedText>
 
@@ -297,6 +329,27 @@ export default function ModalScreen() {
 					>
 						Plans for Serious Traders
 					</ThemedText>
+					{isFreeUserWithTrial && (
+						<View style={styles.trial}>
+							<FireIcon width={24} height={24} color={iconBrandColor} />
+							<View>
+								<ThemedText
+									style={styles.trialTitle}
+									tokenColor={appTokens.text.secondary}
+									type='textSm'
+								>
+									1-month free trial.
+								</ThemedText>
+								<ThemedText
+									style={styles.trialDescription}
+									tokenColor={appTokens.text.quaternary}
+									type='textSm'
+								>
+									Pay only after your trial ends.
+								</ThemedText>
+							</View>
+						</View>
+					)}
 					<View
 						style={[styles.plans]}
 						onLayout={event => {
@@ -341,7 +394,9 @@ export default function ModalScreen() {
 												{ color: textQuaternaryColor },
 											]}
 										>
-											{plan.period}
+											{isFreeUserWithTrialUsed ||
+												(isPremiumUser && plan.period)}
+											{isFreeUserWithTrial && `1 month free →\n${plan.period}`}
 										</ThemedText>
 										<ThemedText
 											type='textSm'
@@ -368,7 +423,10 @@ export default function ModalScreen() {
 																height={16}
 																color={iconWhiteColor}
 															/>
-															<ThemedText type='textSm'>
+															<ThemedText
+																tokenColor={appTokens.text.primaryOnBrand}
+																type='textSm'
+															>
 																Most popular
 															</ThemedText>
 														</View>
@@ -442,6 +500,9 @@ export default function ModalScreen() {
 				]}
 			>
 				<ThemedText type='textXs' style={styles.bottomText}>
+					{isFreeUserWithTrial && (
+						<ThemedText type='textXs'>1 month free, then</ThemedText>
+					)}{' '}
 					<ThemedText type='textXs'>{`${selectedPlan.total} / year `}</ThemedText>
 					<ThemedText
 						type='textXs'
@@ -479,6 +540,12 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		overflow: 'hidden',
+	},
+
+	iconContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 2,
 	},
 
 	headerText: {
@@ -584,6 +651,23 @@ const styles = StyleSheet.create({
 		fontFamily: 'MontserratMedium',
 	},
 
+	trial: {
+		flexDirection: 'row',
+		gap: 8,
+		marginHorizontal: 20,
+		marginBottom: 16,
+	},
+
+	trialTitle: {
+		fontWeight: 500,
+		fontFamily: 'MontserratMedium',
+	},
+
+	trialDescription: {
+		fontWeight: 500,
+		fontFamily: 'MontserratMedium',
+	},
+
 	plans: {
 		gap: 8,
 		marginHorizontal: 20,
@@ -613,6 +697,7 @@ const styles = StyleSheet.create({
 	},
 
 	planPeriod: {
+		maxWidth: 211,
 		fontWeight: 500,
 		fontFamily: 'MontserratMedium',
 	},
@@ -680,7 +765,6 @@ const styles = StyleSheet.create({
 
 	bottom: {
 		borderRadius: 8,
-		borderWidth: 1,
 		padding: 16,
 	},
 

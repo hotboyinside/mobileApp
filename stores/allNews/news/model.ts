@@ -1,11 +1,18 @@
-import { combine, createEvent, createStore } from 'effector';
+import { combine, createEvent, createStore, sample } from 'effector';
 import { fetchNewsFx, fetchSortedNewsFx, loadMoreNewsFx } from './handlers';
-import { $keywords } from '../filtersPanel/keywords/model';
+import {
+	$isKeywordsEnabled,
+	$keywords,
+	$withVoiceOverKeywords,
+} from '../filtersPanel/keywords/model';
 import { UserKeyword } from '@/types/keywords';
 import { ISymbol } from '@/types/symbols';
 import { $starRatingKeywords } from '@/stores/starRating/model';
 import { $starRatingEnabledState } from '../filtersPanel/starRating/starRatingEnabledState/model';
 import { StarNumberStateKey } from '@/types/starRating';
+import { speakTextToSpeech } from '@/helpers/pushNotifications/speakTextToSpeech';
+import { $isVoiceOverEnabled } from '../userSettings/voiceOver/model';
+import { extractKeywordsInText } from '@/helpers/keywords/extractKeywordsInText';
 
 export enum NewsTypesOrigins {
 	News = 'news',
@@ -59,7 +66,6 @@ export const $allNewsLoadStatus = createStore<NewsLoadStatus>(
 export const $allNews = createStore<INews[]>([]);
 export const $hasMoreNews = createStore<boolean>(true);
 export const $allNewsPagination = createStore<{ page: number }>({ page: 1 });
-$allNewsPagination.watch(state => console.log('state', state));
 export const $lastAllNewsNewsDate = $allNews.map(docs => {
 	if (docs.length < 1) return null;
 
@@ -128,6 +134,37 @@ export const $filteredNews = combine(
 
 export const addNewsFromSseEvent = createEvent<MessageEvent>();
 export const getNews = createEvent<{ isInitialNews: boolean }>();
+
+sample({
+	clock: addNewsFromSseEvent,
+	source: {
+		withVoiceOverKeywords: $withVoiceOverKeywords,
+		isKeywordsEnabled: $isKeywordsEnabled,
+		keywordsAlertsSoundIsEnabled: $isVoiceOverEnabled,
+	},
+	fn(
+		{ withVoiceOverKeywords, isKeywordsEnabled, keywordsAlertsSoundIsEnabled },
+		newsFromSseJson
+	) {
+		if (!keywordsAlertsSoundIsEnabled || !isKeywordsEnabled) {
+			return;
+		}
+
+		const newsFromSse: INews[] = JSON.parse(newsFromSseJson.data);
+
+		newsFromSse.forEach(news => {
+			const text = [news.title, news.description].filter(Boolean).join(' ');
+			const matchedKeywords = extractKeywordsInText(
+				withVoiceOverKeywords,
+				text
+			);
+
+			if (matchedKeywords.length > 0) {
+				speakTextToSpeech(matchedKeywords[0].word);
+			}
+		});
+	},
+});
 
 $allNews.on(fetchNewsFx.doneData, (_, response) => response.docs);
 $allNewsPagination.on(fetchNewsFx.doneData, (_, response) => ({

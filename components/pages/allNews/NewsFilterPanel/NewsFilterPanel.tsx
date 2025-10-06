@@ -18,7 +18,7 @@ import { Filters } from './Filters/Filters';
 import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
 import { BottomSheetApplyFooter } from './BottomSheetApplyFooter';
 import { Keywords } from './Keywords/Keywords';
-import { toggleVoiceoverEnabled } from '@/stores/userSettings/voiceOver/model';
+import { toggleVoiceoverEnabled } from '@/stores/allNews/userSettings/voiceOver/model';
 import { StarRating } from './StarRating/StarRating';
 
 export const NewsFilterPanel = () => {

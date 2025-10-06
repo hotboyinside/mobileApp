@@ -1,18 +1,14 @@
 import { use, createContext, type PropsWithChildren, useEffect } from 'react';
 import { useStorageState } from '../authentication/useStorageState';
 import { User } from '@/types/user';
-import { getDevicePushTokenAsync } from 'expo-notifications';
-import {
-	sendNotificationsTokenRequest,
-	Platform,
-	deleteNotificationsTokenRequest,
-} from '@/config/api/sendNotificationsToken';
-import { Platform as RNPlatform } from 'react-native';
+import { deleteNotificationsTokenRequest } from '@/config/api/notifications/sendNotificationsToken';
+import { registerForPushNotificationsAsync } from '@/helpers/pushNotifications/registerForPushNotificationsAsync';
+import { postNotificationsSettingsFx } from '@/stores/allNews/userSettings/handlers';
 
 const AuthContext = createContext<{
 	signIn: (user: User) => void;
 	signOut: () => void;
-	session?: string | null;
+	session?: User | null;
 	isLoading: boolean;
 }>({
 	signIn: () => null,
@@ -31,27 +27,15 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-	const [[isLoading, session], setSession] = useStorageState('session');
+	const [[isLoading, sessionString], setSession] = useStorageState('session');
+
+	const session: User | null = sessionString ? JSON.parse(sessionString) : null;
 
 	useEffect(() => {
-		const syncDeviceToken = async () => {
-			if (!session) return;
+		if (!session) return;
 
-			try {
-				const deviceToken = await getDevicePushTokenAsync();
-
-				if (deviceToken) {
-					await sendNotificationsTokenRequest({
-						deviceToken: deviceToken.data,
-						platform: RNPlatform.OS as Platform,
-					});
-				}
-			} catch (err) {
-				console.warn('Something went wrong...', err);
-			}
-		};
-
-		syncDeviceToken();
+		postNotificationsSettingsFx();
+		registerForPushNotificationsAsync();
 	}, [session]);
 
 	return (
@@ -61,8 +45,12 @@ export function SessionProvider({ children }: PropsWithChildren) {
 					setSession(JSON.stringify(user));
 				},
 				signOut: async () => {
-					await deleteNotificationsTokenRequest();
-					setSession(null);
+					try {
+						await deleteNotificationsTokenRequest();
+					} catch {
+					} finally {
+						setSession(null);
+					}
 				},
 				session,
 				isLoading,

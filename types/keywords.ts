@@ -3,6 +3,7 @@ export interface UserKeyword {
 	word: string;
 	color: KeywordsColorVariants;
 	isVoiceoverEnabled: boolean;
+	isFrozen?: boolean;
 	iconKey?: string;
 }
 

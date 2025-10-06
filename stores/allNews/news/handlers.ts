@@ -17,7 +17,6 @@ interface FetchNewsResponse {
 export const fetchNewsFx = createEffect<IParamsGetNews, FetchNewsResponse>(
 	async params => {
 		const response = await getNewsRequest(params);
-		console.log('response.data.success', response.data.success)
 		return response.data.success;
 	}
 );
@@ -32,7 +31,6 @@ export const fetchSortedNewsFx = createEffect(
 export const loadMoreNewsFx = createEffect<IParamsGetNews, FetchNewsResponse>(
 	async params => {
 		const response = await getNewsRequest(params);
-		console.log('response.data.success', response.data.success)
 		return response.data.success;
 	}
 );

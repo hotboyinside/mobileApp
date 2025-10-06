@@ -1,17 +1,5 @@
-import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
-import { StyleSheet } from 'react-native';
+import { Notifications } from '@/components/pages/notifications/Notifications';
 
-export default function notifications() {
-	return (
-		<ThemedViewWithSafeArea
-			safeEdges={['top', 'right', 'bottom', 'left']}
-			style={styles.wrapper}
-		></ThemedViewWithSafeArea>
-	);
+export default function NotificationsScreen() {
+	return <Notifications />;
 }
-
-const styles = StyleSheet.create({
-	wrapper: {
-		flex: 1,
-	},
-});

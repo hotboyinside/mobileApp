@@ -4,7 +4,7 @@ import VoiceOverOff from '@/assets/icons/voiceover-off-icon.svg';
 import VoiceOverOn from '@/assets/icons/voiceover-on-icon.svg';
 import { StyleSheet } from 'react-native';
 import { useUnit } from 'effector-react';
-import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
+import { $isVoiceOverEnabled } from '@/stores/allNews/userSettings/voiceOver/model';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
 import { $withVoiceOverKeywords } from '@/stores/allNews/filtersPanel/keywords/model';

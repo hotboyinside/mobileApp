@@ -43,11 +43,8 @@ export const Switch = ({ value, onChange, disabled }: SwitchProps) => {
 	});
 
 	useEffect(() => {
-		translateX.value = withSpring(value ? 20 : 0, {
-			damping: 15,
-			stiffness: 150,
-		});
-		progress.value = withSpring(value ? 1 : 0, { damping: 15, stiffness: 150 });
+		translateX.value = withSpring(value ? 20 : 0);
+		progress.value = withSpring(value ? 1 : 0);
 	}, [value, progress, translateX]);
 
 	return (

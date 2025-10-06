@@ -2,6 +2,8 @@ export interface User {
 	_id: string;
 	email: string;
 	firstName: string;
-	isFreeTrialUsed: boolean;
+	lastName: string;
 	role: string;
+	currentSubscription: any;
+	isFreeTrialUsed: boolean;
 }

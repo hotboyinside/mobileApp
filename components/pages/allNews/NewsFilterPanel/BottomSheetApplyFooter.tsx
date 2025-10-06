@@ -30,7 +30,7 @@ import {
 	$draftStarRatingKeywords,
 	$isStarRatingChanged,
 } from '@/stores/starRating/model';
-import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
+import { $isVoiceOverEnabled } from '@/stores/allNews/userSettings/voiceOver/model';
 import {
 	BottomSheetFooterProps,
 	BottomSheetFooter,

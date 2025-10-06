@@ -1,10 +1,10 @@
 import { API_NOTIFICATIONS_MOBILE_TOKEN } from '@/constants/apiRoutes';
-import { api } from './axios';
+import { api } from '../axios';
 
 export enum Platform {
-    Ios = "ios",
-    Android = "android",
-    Web = "web",
+	Ios = 'ios',
+	Android = 'android',
+	Web = 'web',
 }
 
 export interface SendNotificationsTokenRequestData {
@@ -18,7 +18,9 @@ export interface SendNotificationsTokenResponse {
 	};
 }
 
-export const sendNotificationsTokenRequest = (data: SendNotificationsTokenRequestData) => {
+export const sendNotificationsTokenRequest = (
+	data: SendNotificationsTokenRequestData
+) => {
 	return api.post(API_NOTIFICATIONS_MOBILE_TOKEN, data);
 };
 

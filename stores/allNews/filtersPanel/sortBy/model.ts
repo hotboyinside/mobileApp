@@ -109,13 +109,12 @@ sample({
 		newsFromSseJson
 	) {
 		const newsFromSse: INews[] = JSON.parse(newsFromSseJson.data);
-		console.log('newsFromSse', newsFromSse);
+
 		const filteredNews = newsFromSse.filter(news => {
 			// Filter by market
 			if (market.length > 0) {
 				const symbolMarkets = news.symbols.map(s => s.exchange);
 				if (!symbolMarkets.some(m => market.includes(m as MarketNames))) {
-					console.log('exit');
 					return false;
 				}
 			}
@@ -126,7 +125,6 @@ sample({
 				if (
 					!symbolTypes.some(st => stockType.includes(st as StockTypesNames))
 				) {
-					console.log('exit');
 					return false;
 				}
 			}
@@ -134,7 +132,6 @@ sample({
 			// Filter by newsType
 			if (newsType.length > 0) {
 				if (!newsType.includes(news.types.type as NewsTypesNames)) {
-					console.log('exit');
 					return false;
 				}
 			}
@@ -174,14 +171,12 @@ sample({
 						const to = Number(filterValue.range.to);
 
 						if (symbolValue < from || symbolValue > to) {
-							console.log('exit');
 							return false;
 						}
 					}
 				}
 			}
 
-			console.log('ща придет');
 			return true;
 		});
 

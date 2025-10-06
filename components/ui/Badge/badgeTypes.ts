@@ -35,7 +35,7 @@ export type BadgeColor = 'gray' | 'primary' | 'red' | 'green';
 
 export type BadgeProps = RNBadgeProps & {
 	variant: keyof VariantColorMap;
-	color?: BadgeColor;
+	color: BadgeColor;
 	icon?: ReactNode;
 	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 	onlyIcon?: boolean;
