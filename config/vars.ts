@@ -1,7 +1,7 @@
 export const config = {
-	apiUrl:
-		process.env.EXPO_PUBLIC_API_URL ||
-		'https://test-news-scan-app.staging.forasoft.com',
+  apiUrl:
+    process.env.EXPO_PUBLIC_API_URL ||
+    "https://test-news-scan-app.staging.forasoft.com",
 };
 
 // test: https://test-news-scan-app.staging.forasoft.com

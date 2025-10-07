@@ -11,8 +11,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.fora.r.foxrunner.test",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
