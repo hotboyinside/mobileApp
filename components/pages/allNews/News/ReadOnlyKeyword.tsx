@@ -26,6 +26,7 @@ export const ReadOnlyKeyword = ({ keyword }: { keyword: UserKeyword }) => {
 					</ThemedText>
 				</ThemedView>
 			}
+			color='gray'
 			variant='keywords'
 			size='sm'
 			badgeStyle={{ backgroundColor: bgColor }}

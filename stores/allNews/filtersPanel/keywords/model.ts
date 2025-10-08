@@ -11,6 +11,8 @@ export const $withVoiceOverKeywords = $keywords.map(state =>
 	state.filter(keyword => keyword.isVoiceoverEnabled)
 );
 
+export const keywordsEnabledToggle = createEvent();
+
 export const startEditKeyword = createEvent<UserKeyword>();
 export const finishEditKeyword = createEvent();
 export const cancelEditKeyword = createEvent();
@@ -19,6 +21,8 @@ export const setKeywords = createEvent<UserKeyword[]>();
 export const addKeyword = createEvent<UserKeyword>();
 export const deleteKeyword = createEvent<string>();
 export const updateKeyword = createEvent<UserKeyword>();
+
+$isKeywordsEnabled.on(keywordsEnabledToggle, (state, _) => !state);
 
 $keywordMode.on(startEditKeyword, () => KeywordsMode.EditMode);
 $keywordMode.on(finishEditKeyword, () => KeywordsMode.InsertMode);

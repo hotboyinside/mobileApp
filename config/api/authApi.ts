@@ -15,5 +15,5 @@ export interface LoginResponse {
 }
 
 export const loginRequest = (data: LoginRequestData) => {
-	return api.post(API_AUTH_LOGIN, {...data, isMobile: true});
+	return api.post(API_AUTH_LOGIN, { ...data, isMobile: true });
 };

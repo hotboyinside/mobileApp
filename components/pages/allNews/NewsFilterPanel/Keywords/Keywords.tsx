@@ -22,7 +22,7 @@ export const Keywords = ({ onClose }: KeywordsProps) => {
 			<ThemedView style={styles.container}>
 				<KeywordCreator />
 				<VisualOnlyKeywords />
-				<WithVoiceOverKeywords />
+				<WithVoiceOverKeywords onCloseKeywords={onClose} />
 			</ThemedView>
 		</BottomSheetScrollView>
 	);

@@ -1,62 +1,86 @@
-import { use, createContext, type PropsWithChildren, useEffect } from "react";
-import { useStorageState } from "../authentication/useStorageState";
-import { User } from "@/types/user";
-import { deleteNotificationsTokenRequest } from "@/config/api/notifications/sendNotificationsToken";
-import { registerForPushNotificationsAsync } from "@/helpers/pushNotifications/registerForPushNotificationsAsync";
-import { postNotificationsSettingsFx } from "@/stores/userSettings/handlers";
+import {
+	use,
+	createContext,
+	type PropsWithChildren,
+	useEffect,
+	useCallback,
+} from 'react';
+import { useStorageState } from '../authentication/useStorageState';
+import { User } from '@/types/user';
+import { deleteNotificationsTokenRequest } from '@/config/api/notifications/sendNotificationsToken';
+import { registerForPushNotificationsAsync } from '@/helpers/pushNotifications/registerForPushNotificationsAsync';
+import { postNotificationsSettingsFx } from '@/stores/userSettings/handlers';
+import { api } from '@/config/api/axios';
 
 const AuthContext = createContext<{
-  signIn: (user: User) => void;
-  signOut: () => void;
-  session?: User | null;
-  isLoading: boolean;
+	signIn: (user: User) => void;
+	signOut: () => void;
+	session?: User | null;
+	isLoading: boolean;
 }>({
-  signIn: () => null,
-  signOut: () => null,
-  session: null,
-  isLoading: false,
+	signIn: () => null,
+	signOut: () => null,
+	session: null,
+	isLoading: false,
 });
 
 export function useSession() {
-  const value = use(AuthContext);
-  if (!value) {
-    throw new Error("useSession must be wrapped in a <SessionProvider />");
-  }
+	const value = use(AuthContext);
+	if (!value) {
+		throw new Error('useSession must be wrapped in a <SessionProvider />');
+	}
 
-  return value;
+	return value;
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-  const [[isLoading, sessionString], setSession] = useStorageState("session");
+	const [[isLoading, sessionString], setSession] = useStorageState('session');
 
-  const session: User | null = sessionString ? JSON.parse(sessionString) : null;
+	const session: User | null = sessionString ? JSON.parse(sessionString) : null;
 
-  useEffect(() => {
-    if (!session) return;
+	const signOut = useCallback(async () => {
+		try {
+			await deleteNotificationsTokenRequest();
+		} finally {
+			setSession(null);
+		}
+	}, [setSession]);
 
-    postNotificationsSettingsFx();
-    registerForPushNotificationsAsync();
-  }, [session]);
+	useEffect(() => {
+		if (!session) return;
 
-  return (
-    <AuthContext
-      value={{
-        signIn: (user: User) => {
-          setSession(JSON.stringify(user));
-        },
-        signOut: async () => {
-          try {
-            await deleteNotificationsTokenRequest();
-          } catch {
-          } finally {
-            setSession(null);
-          }
-        },
-        session,
-        isLoading,
-      }}
-    >
-      {children}
-    </AuthContext>
-  );
+		postNotificationsSettingsFx();
+		registerForPushNotificationsAsync();
+	}, [session]);
+
+	useEffect(() => {
+		const interceptor = api.interceptors.response.use(
+			response => response,
+			error => {
+				if (error.response?.status === 403) {
+					setSession(null);
+				}
+				return Promise.reject(error);
+			}
+		);
+
+		return () => {
+			api.interceptors.response.eject(interceptor);
+		};
+	}, []);
+
+	return (
+		<AuthContext
+			value={{
+				signIn: (user: User) => {
+					setSession(JSON.stringify(user));
+				},
+				signOut,
+				session,
+				isLoading,
+			}}
+		>
+			{children}
+		</AuthContext>
+	);
 }

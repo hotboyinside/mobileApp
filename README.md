@@ -26,16 +26,14 @@ In the output, you'll find options to open the app in a
 - Don't show correct number of enabled filters before press on the button
 - Add animated in KeywordColorPicker for colors buttons
 - Remake structure of stores (keywords relate to all pages, not only for all news)
-- rename effector's events functions names (fnFx -> handleFn or onFn)
-- check dark mode styles
-- check shadow
+- rename effector's events functions names (fnFx -> handleFn or onFn) - in progress
+- check shadow - in progress
 - close tab's stores when swipe modal sheet
 - delete sse events logs
-- connect star rating with backend; reset errors/input stores after quit filter's page
+- reset errors/input stores after quit filter's page
 - finish work with symbol change
 - delete repeated news
 - work with imports
-- kick the user out if he logged out
 
 ## Bugs associated with version
 

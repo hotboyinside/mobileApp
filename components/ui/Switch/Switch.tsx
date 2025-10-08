@@ -27,7 +27,12 @@ export const Switch = ({ value, onChange, disabled }: SwitchProps) => {
 	};
 
 	const brandColor = appColors.brand[400];
+	const backgroundDisableSubtleColor = useThemeColor(
+		appTokens.background.disabledSubtle
+	);
+	const backgroundBrandColor = useThemeColor(appTokens.background.brandPrimary);
 	const tertiaryColor = useThemeColor(appTokens.background.tertiary);
+	const borderTertiaryColor = useThemeColor(appTokens.border.tertiary);
 
 	const animatedCircle = useAnimatedStyle(() => ({
 		transform: [{ translateX: translateX.value }],
@@ -52,9 +57,18 @@ export const Switch = ({ value, onChange, disabled }: SwitchProps) => {
 			<Animated.View
 				style={[
 					styles.root,
-					animatedBackground,
-					!value && styles.boxShadow,
-					disabled && styles.disabled,
+					styles.boxShadow,
+					!disabled && animatedBackground,
+					disabled &&
+						value && {
+							backgroundColor: backgroundBrandColor,
+						},
+					disabled &&
+						!value && {
+							borderWidth: 1,
+							backgroundColor: backgroundDisableSubtleColor,
+							borderColor: borderTertiaryColor,
+						},
 				]}
 			>
 				<Animated.View style={[styles.circle, animatedCircle]} />
@@ -87,9 +101,5 @@ const styles = StyleSheet.create({
 
 		// Android
 		elevation: 3,
-	},
-
-	disabled: {
-		opacity: 0.5,
 	},
 });

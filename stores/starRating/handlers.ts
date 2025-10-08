@@ -9,7 +9,7 @@ import { StarRatingKeywords } from '@/types/starRating';
 
 export const getStarRatingFx = createEffect(async () => {
 	const result = await getUserStarRatingRequest();
-	if (result.data.success) {
+	if (result.data.success.userRating) {
 		return result.data.success;
 	}
 	return DefaultStarRatingSet;

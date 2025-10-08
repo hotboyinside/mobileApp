@@ -1,3 +1,5 @@
+import { Platform } from '@/config/api/notifications/sendNotificationsToken';
+
 export interface NotificationsSettings {
 	isKeywordsPushesEnabled: boolean;
 	isKeywordsPushesSoundEnabled: boolean;
@@ -16,4 +18,6 @@ export interface PutNotificationsSettingsRequestData {
 	isKeywordsPushesEnabled?: boolean;
 	isKeywordsPushesSoundEnabled?: boolean;
 	isKeywordsVoiceOverEnabled?: boolean;
+	deviceToken?: string;
+	platform?: Platform;
 }
