@@ -1,62 +1,16 @@
 import { combine, createEvent, createStore, sample } from "effector";
-import {
-  fetchNewsFx,
-  fetchSortedNewsFx,
-  loadMoreNewsFx,
-  speakTtsFx,
-} from "./handlers";
+import { fetchNewsFx, loadMoreNewsFx, speakTtsFx } from "./handlers";
 import {
   $isKeywordsEnabled,
   $keywords,
   $withVoiceOverKeywords,
 } from "../filtersPanel/keywords/model";
 import { UserKeyword } from "@/types/keywords";
-import { ISymbol } from "@/types/symbols";
 import { $starRatingKeywords } from "@/stores/starRating/model";
 import { $starRatingEnabledState } from "../filtersPanel/starRating/starRatingEnabledState/model";
-import { StarNumberStateKey } from "@/types/starRating";
-import { speakTextToSpeech } from "@/helpers/pushNotifications/speakTextToSpeech";
 import { $isVoiceOverEnabled } from "../../userSettings/voiceOver/model";
 import { extractKeywordsInText } from "@/helpers/keywords/extractKeywordsInText";
-
-export enum NewsTypesOrigins {
-  News = "news",
-  Article = "article",
-}
-
-export interface INews {
-  _id: string;
-  types: {
-    origin: NewsTypesOrigins;
-    type: string;
-  };
-  title: string;
-  description: string;
-  publishedAt: string;
-  symbols: ISymbol[];
-  url: string;
-  createdAt: string;
-  sourceId: string;
-  industries: string[];
-  content: string;
-  categories: string[];
-  sectors: string[];
-}
-
-export interface IFilteredNews extends INews {
-  keywords: UserKeyword[];
-  rating: {
-    score: StarNumberStateKey;
-    foundWords: string[];
-  };
-}
-
-export enum NewsSortValuesExtended {
-  Time = "time",
-  Float = "float",
-  Rating = "rating",
-  Change = "change",
-}
+import { INews, IFilteredNews } from "@/types/news";
 
 export enum NewsLoadStatus {
   Idle = "idle",
@@ -196,5 +150,3 @@ $allNewsLoadStatus
   )
   .on(fetchNewsFx.fail, () => NewsLoadStatus.Error)
   .on(fetchNewsFx.done, () => NewsLoadStatus.Idle);
-
-$allNews.on(fetchSortedNewsFx.doneData, (_, docs) => docs);

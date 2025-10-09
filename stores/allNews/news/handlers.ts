@@ -1,12 +1,7 @@
-import {
-  IParamsGetNews,
-  IParamsGetSortedNews,
-  getNewsRequest,
-  getSortedNewsRequest,
-} from "@/config/api/newsApi";
+import { IParamsGetNews, getNewsRequest } from "@/config/api/newsApi";
 import { createEffect } from "effector";
-import { INews } from "./model";
 import { speakTextToSpeech } from "@/helpers/pushNotifications/speakTextToSpeech";
+import { INews } from "@/types/news";
 
 interface FetchNewsResponse {
   docs: INews[];
@@ -19,13 +14,6 @@ export const fetchNewsFx = createEffect<IParamsGetNews, FetchNewsResponse>(
   async params => {
     const response = await getNewsRequest(params);
     return response.data.success;
-  }
-);
-
-export const fetchSortedNewsFx = createEffect(
-  async (params: IParamsGetSortedNews) => {
-    const response = await getSortedNewsRequest(params);
-    return response.data.success.docs;
   }
 );
 
