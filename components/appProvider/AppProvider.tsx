@@ -1,7 +1,7 @@
 'use client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
-import { DialogProvider } from './dialog/DialogProvider';
+import { ToastProvider } from './toast/ToastProvider';
 import { SessionProvider } from './session/SessionContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { GlobalSheetProvider } from './sheetModal/GlobalSheetProvider';
@@ -26,7 +26,7 @@ function AppProvider(props: AppProviderProps) {
 			<QueryClientProvider client={queryClient}>
 				<SessionProvider>
 					<GlobalSheetProvider>
-						<DialogProvider>{children}</DialogProvider>
+						<ToastProvider>{children}</ToastProvider>
 					</GlobalSheetProvider>
 				</SessionProvider>
 			</QueryClientProvider>

@@ -15,7 +15,7 @@ import { $isPushNotificationsEnabled } from '@/stores/userSettings/pushNotificat
 import { useUnit } from 'effector-react';
 import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
 import { $isPushNotificationsSound } from '@/stores/userSettings/pushNotificationsSound/model';
-import { putNotificationsSettingsFx } from '@/stores/userSettings/handlers';
+import { changePushNotificationsSettings } from '@/stores/userSettings/handlers';
 import * as Device from 'expo-device';
 import * as NotificationsExpo from 'expo-notifications';
 import { useEffect, useState } from 'react';
@@ -121,7 +121,7 @@ export const Notifications = () => {
 								value={isPushNotificationsEnabled}
 								disabled={!isPermissionStatusGranted}
 								onChange={newValue =>
-									putNotificationsSettingsFx({
+									changePushNotificationsSettings({
 										isKeywordsPushesEnabled: newValue,
 									})
 								}
@@ -158,7 +158,7 @@ export const Notifications = () => {
 								value={isPushNotificationsSound}
 								disabled={!isPermissionStatusGranted}
 								onChange={newValue =>
-									putNotificationsSettingsFx({
+									changePushNotificationsSettings({
 										isKeywordsPushesSoundEnabled: newValue,
 									})
 								}
@@ -192,7 +192,7 @@ export const Notifications = () => {
 							<Switch
 								value={isVoiceOverEnabled}
 								onChange={newValue =>
-									putNotificationsSettingsFx({
+									changePushNotificationsSettings({
 										isKeywordsVoiceOverEnabled: newValue,
 									})
 								}

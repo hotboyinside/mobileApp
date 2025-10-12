@@ -2,14 +2,15 @@ import {
 	postNotificationsSettingsRequest,
 	putNotificationsSettingsRequest,
 } from '@/config/api/notifications/getNotificationsSettings';
-import { createEffect } from 'effector';
+import { createEffect, createEvent, sample } from 'effector';
 import { setPushNotificationsEnabled } from './pushNotifications/model';
 import { setVoiceOverEnabled } from './voiceOver/model';
 import { setPushNotificationsSound } from './pushNotificationsSound/model';
 import { PutNotificationsSettingsRequestData } from '@/types/notificationSettings';
-import * as Notifications from 'expo-notifications';
+import messaging from '@react-native-firebase/messaging';
 import { Platform as PlatformRN } from 'react-native';
 import { Platform } from '@/config/api/notifications/sendNotificationsToken';
+import { debounce } from 'patronum';
 
 export const postNotificationsSettingsFx = createEffect(async () => {
 	const result = await postNotificationsSettingsRequest();
@@ -27,13 +28,13 @@ postNotificationsSettingsFx.fail.watch(() => {});
 export const putNotificationsSettingsFx = createEffect(
 	async (data: PutNotificationsSettingsRequestData) => {
 		if (data.isKeywordsPushesEnabled) {
-			const deviceToken = await Notifications.getDevicePushTokenAsync();
+			const deviceToken = await messaging().getToken();
 
 			if (!deviceToken) {
 				throw new Error('Device push token not found');
 			}
 
-			data.deviceToken = deviceToken.data;
+			data.deviceToken = deviceToken;
 			data.platform = PlatformRN.OS as Platform;
 		}
 
@@ -50,3 +51,16 @@ putNotificationsSettingsFx.doneData.watch(result => {
 });
 
 postNotificationsSettingsFx.fail.watch(() => {});
+
+export const changePushNotificationsSettings =
+	createEvent<PutNotificationsSettingsRequestData>();
+
+const debouncedChangePushNotificationsSettings = debounce({
+	source: changePushNotificationsSettings,
+	timeout: 400,
+});
+
+sample({
+	clock: debouncedChangePushNotificationsSettings,
+	target: putNotificationsSettingsFx,
+});

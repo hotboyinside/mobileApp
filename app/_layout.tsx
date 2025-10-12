@@ -1,6 +1,6 @@
 // import '@/i18n';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import 'react-native-reanimated';
 import { AppProvider } from '@/components/appProvider/AppProvider';
 import { SplashScreenController } from '@/components/splash/SplashScreenController';
@@ -17,6 +17,8 @@ import { useUnit } from 'effector-react';
 import { $appState, appStateChanged } from '@/stores/appState/model';
 import { useNotificationObserver } from '@/hooks/useNotifications';
 import { loadAppThemeFx } from '@/stores/userSettings/theme';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const appStateRef = useRef(AppState.currentState);
@@ -73,10 +75,14 @@ export default function RootLayout() {
 }
 
 function RootNavigator() {
-	const { session } = useSession();
+	const { session, isLoading } = useSession();
 	const isEmptySession = Object.keys(session ?? {}).length === 0;
 
 	useNotificationObserver();
+
+	if (isLoading) {
+		return null;
+	}
 
 	return (
 		<Stack

@@ -6,11 +6,11 @@ import { appTokens } from '@/constants/tokens';
 import { Change } from '@/components/ui/Change/Change';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { SymbolStats } from './SymbolsStats';
-import { IFilteredNews } from '@/stores/allNews/news/model';
 import { $dataSymbolsData } from '@/stores/symbols/model';
 import { useUnit } from 'effector-react';
 import { ReadOnlyKeyword } from '../News/ReadOnlyKeyword';
 import { formatNewsTimeFull } from '@/helpers/time/formatNewsTimeFull';
+import { IFilteredNews } from '@/types/news';
 
 type NewsInformationProps = {
 	news: IFilteredNews;

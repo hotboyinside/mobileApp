@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
-import { ALL_NEWS, NEWS_DETAILS } from '@/constants/routes';
+import { ALL_NEWS } from '@/constants/routes';
 
 export type NotificationData = {
 	newsId?: string;
@@ -10,13 +10,6 @@ export type NotificationData = {
 export function useNotificationObserver() {
 	useEffect(() => {
 		function redirect(notification: Notifications.Notification) {
-			const data = notification.request.content.data as NotificationData;
-
-			if (data?.newsId && typeof data.newsId === 'string') {
-				router.push(NEWS_DETAILS(data?.newsId));
-				return;
-			}
-
 			router.push(ALL_NEWS);
 		}
 

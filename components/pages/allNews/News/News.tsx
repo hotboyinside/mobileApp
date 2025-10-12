@@ -6,7 +6,6 @@ import { appTokens } from '@/constants/tokens';
 import { useRouter } from 'expo-router';
 import { NEWS_DETAILS } from '@/constants/routes';
 import { Stars } from '@/components/ui/Stars';
-import { IFilteredNews } from '@/stores/allNews/news/model';
 import { ReadOnlyKeyword } from './ReadOnlyKeyword';
 import { $now } from '@/stores/allNews/globalTick/model';
 import { useUnit } from 'effector-react';
@@ -14,6 +13,7 @@ import { $dataSymbolsData } from '@/stores/symbols/model';
 import { formatNewsTime } from '@/helpers/time/formatNewsTime';
 import { SymbolWithChange } from './SymbolWithChange';
 import { useMemo } from 'react';
+import { IFilteredNews } from '@/types/news';
 
 type ListItemProps = {
 	item: IFilteredNews;

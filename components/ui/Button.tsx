@@ -102,6 +102,7 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 			break;
 		case 'tertiary':
 			buttonColorStyles['color'] = tertiaryFontColor;
+			buttonColorStyles['backgroundColor'] = 'transparent';
 			break;
 		case 'link-gray':
 			buttonColorStyles['backgroundColor'] = linkGrayBackgroundColor;
@@ -178,8 +179,8 @@ const sizeStyles = StyleSheet.create({
 
 const onlyIconSizeStyles = StyleSheet.create({
 	sm: {
-		paddingHorizontal: 8,
-		paddingVertical: 8,
+		paddingHorizontal: 6,
+		paddingVertical: 6,
 	},
 
 	md: {

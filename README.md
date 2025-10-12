@@ -12,9 +12,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 2. Start the app
 
-   ```bash
-   npx expo start/npm run start
-   ```
+### ⚠️ Using React Native Firebase with Expo
+
+In Expo SDK 54+, **Expo Go does not support native Firebase modules** (e.g., `@react-native-firebase/messaging`).  
+Running `expo start` or `expo run` in dev mode will fail with:
+
+**Solution:** Use a release build or custom dev client:
 
 In the output, you'll find options to open the app in a
 
@@ -34,6 +37,8 @@ In the output, you'll find options to open the app in a
 - finish work with symbol change
 - delete repeated news
 - work with imports
+- add status bar
+- add "Not Found" page
 
 ## Bugs associated with version
 
