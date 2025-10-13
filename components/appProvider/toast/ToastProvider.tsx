@@ -102,7 +102,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 
 			showToast(
 				<ToastKeywordAlertContent title={title} keywords={keywords} />,
-				3000,
+				5000,
 				onPress
 			);
 		}

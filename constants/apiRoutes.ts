@@ -14,9 +14,9 @@ export const USERS_KEYWORDS_ITEM = ({ keywordId }: { keywordId: string }) =>
 export const USERS_RATING = urlJoin(API_USERS, '/rating');
 
 // news
-export const NEWS = `${API_BASE_PATH}/news`;
-export const NEWS_GET_NEWS = `${NEWS}/get-news`;
-export const NEWS_GET_SORTED_NEWS = `${NEWS}/get-sorted-news`;
+export const NEWS = urlJoin(API_BASE_PATH, '/news');
+export const NEWS_BY_ID = (id: string) => urlJoin(NEWS, id);
+export const NEWS_GET_NEWS = urlJoin(NEWS,'/get-news');
 
 // notifications
 export const API_NOTIFICATIONS = urlJoin(API_BASE_PATH, '/notification');

@@ -1,14 +1,13 @@
-import { NEWS_GET_NEWS } from "@/constants/apiRoutes";
+import { NEWS_BY_ID, NEWS_GET_NEWS } from "@/constants/apiRoutes";
 import { api } from "./axios";
 import { PaginationDefaults } from "@/constants/paginationDefaultLimit";
-import { NewsSortValues, OrderValues, SortLabels } from "@/types/sortBy";
+import { NewsSortValues, OrderValues, SortByStore, SortLabels } from "@/types/sortBy";
 import { WindowsNames } from "@/constants/socket/clientEvents";
 import { MarketNames } from "@/stores/allNews/filtersPanel/filters/market/model";
 import { NewsTypesNames } from "@/stores/allNews/filtersPanel/filters/newsType/model";
 import { StockTypesNames } from "@/stores/allNews/filtersPanel/filters/stockType/model";
 import { StarNumberStateKey } from "@/types/starRating";
-import { FiltersData } from "@/stores/allNews/filtersPanel/sortBy/model";
-import { INews } from "@/types/news";
+import { FiltersStore } from '@/types/filters';
 
 export enum NewsTypesOrigins {
   News = "news",
@@ -19,6 +18,15 @@ export enum NewsTypesCategories {
   DealNews = "dealNews",
   Insiders = "insiders",
 }
+
+export type FiltersData = {
+  sortBy?: SortByStore;
+  market?: MarketNames[];
+  stockType?: StockTypesNames[];
+  newsType?: NewsTypesNames[];
+  additionalFilters?: FiltersStore | null;
+  windowName?: WindowsNames;
+};
 
 export interface IParamsGetNews {
   typeOrigin?: NewsTypesOrigins;
@@ -35,15 +43,6 @@ export interface IParamsGetNews {
 
 type BackendFilter = { from: number | string; to: number | string };
 type BackendFilters = Record<string, BackendFilter>;
-
-export interface GetNewsResponse {
-  data: {
-    success: {
-      docs: INews[];
-    };
-    errors: any;
-  };
-}
 
 interface PreparedParameters {
   isMobile?: boolean;
@@ -125,4 +124,8 @@ export const getNewsRequest = async ({
     { filters: preparedFilters },
     { params: preparedParams, signal }
   );
+};
+
+export const getNewsByIdRequest = (newsId: string) => {
+  return api.get(NEWS_BY_ID(newsId));
 };

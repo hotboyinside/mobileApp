@@ -10,9 +10,7 @@ import {
   addSelectedTabFilters,
   removeSelectedTabFilters,
 } from "../model";
-import { WindowsNames } from "@/constants/socket/clientEvents";
 import { getTimestampOfStartOfTheDay } from "@/helpers/date/getTimestampOfStartOfTheDay";
-import { FiltersStore } from "@/types/filters";
 import { fetchNewsFx, loadMoreNewsFx } from "../../news/handlers";
 import { $additionalFilters } from "../filters/additionalFilters/model";
 import { MarketNames, $market } from "../filters/market/model";
@@ -82,15 +80,6 @@ sample({
   fn: () => FilterTabVariant.sort,
   target: removeSelectedTabFilters,
 });
-
-export type FiltersData = {
-  sortBy?: SortByStore;
-  market?: MarketNames[];
-  stockType?: StockTypesNames[];
-  newsType?: NewsTypesNames[];
-  additionalFilters?: FiltersStore | null;
-  windowName?: WindowsNames;
-};
 
 sample({
   clock: addNewsFromSseEvent,
@@ -179,7 +168,7 @@ sample({
       return true;
     });
 
-    return [...allNews, ...filteredNews];
+    return [...filteredNews, ...allNews];
   },
   target: $allNews,
 });

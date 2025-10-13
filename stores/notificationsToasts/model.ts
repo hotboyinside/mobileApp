@@ -10,8 +10,4 @@ export const addNewsToast = createEvent<NewsToastContent | null>();
 
 export const $newsToast = createStore<NewsToastContent | null>(null);
 
-$newsToast.on(addNewsToast, (_, toast) => {
-	if (toast) {
-		return toast;
-	}
-});
+$newsToast.on(addNewsToast, (_, toast) => toast ?? null);

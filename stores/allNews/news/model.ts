@@ -12,6 +12,8 @@ import { $isVoiceOverEnabled } from '../../userSettings/voiceOver/model';
 import { extractKeywordsInText } from '@/helpers/keywords/extractKeywordsInText';
 import { INews, IFilteredNews } from '@/types/news';
 import { addNewsToast } from '@/stores/notificationsToasts/model';
+import { router } from 'expo-router';
+import { NEWS_DETAILS } from '@/constants/routes';
 
 export enum NewsLoadStatus {
 	Idle = 'idle',
@@ -140,7 +142,7 @@ sample({
 			return null;
 		}
 
-		const newsFromSse = JSON.parse(newsFromSseJson.data);
+		const newsFromSse: INews[] = JSON.parse(newsFromSseJson.data);
 
 		for (const news of newsFromSse) {
 			const text = [news.title, news.description].filter(Boolean).join(' ');
@@ -149,7 +151,9 @@ sample({
 				return {
 					title: news.title,
 					keywords: matched.map(k => k.word),
-					onPress: () => {},
+					onPress: () => {
+						router.push(NEWS_DETAILS(news._id));
+					},
 				};
 			}
 		}

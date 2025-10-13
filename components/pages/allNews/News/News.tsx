@@ -20,10 +20,10 @@ type ListItemProps = {
 };
 
 export const ListItem = ({ item }: ListItemProps) => {
+	const router = useRouter();
 	const { _id, title, createdAt, keywords, symbols, rating } = item;
 	const dataSymbolsData = useUnit($dataSymbolsData);
 	const now = useUnit($now);
-	const router = useRouter();
 
 	const handlePress = () => {
 		router.push(NEWS_DETAILS(_id.toString()));
