@@ -92,12 +92,7 @@ sample({
     allNews: $allNews,
   },
   filter: ({ sortBy }) => sortBy.currentLabel === SortLabels.NewestFirst,
-  fn(
-    { market, stockType, newsType, additionalFilters, allNews },
-    newsFromSseJson
-  ) {
-    const newsFromSse: INews[] = JSON.parse(newsFromSseJson.data);
-
+  fn({ market, stockType, newsType, additionalFilters, allNews }, newsFromSse) {
     const filteredNews = newsFromSse.filter(news => {
       // Filter by market
       if (market.length > 0) {
