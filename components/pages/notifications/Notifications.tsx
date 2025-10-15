@@ -1,24 +1,24 @@
+import ArrowIcon from '@/assets/icons/arrow-left-soft-icon.svg';
+import SoundIcon from '@/assets/icons/sound-icon.svg';
+import SupportIcon from '@/assets/icons/support-icon.svg';
+import VoiceOverOn from '@/assets/icons/voiceover-on-icon.svg';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import { Button } from '@/components/ui/Button';
-import { goBack } from 'expo-router/build/global-state/routing';
-import { StyleSheet, View } from 'react-native';
-import ArrowIcon from '@/assets/icons/arrow-left-soft-icon.svg';
-import SupportIcon from '@/assets/icons/support-icon.svg';
-import SoundIcon from '@/assets/icons/sound-icon.svg';
-import VoiceOverOn from '@/assets/icons/voiceover-on-icon.svg';
-import { ThemedView } from '@/components/ThemedView';
+import { Switch } from '@/components/ui/Switch/Switch';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { ThemedText } from '@/components/ThemedText';
-import { Switch } from '@/components/ui/Switch/Switch';
-import { $isPushNotificationsEnabled } from '@/stores/userSettings/pushNotifications/model';
-import { useUnit } from 'effector-react';
-import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
-import { $isPushNotificationsSound } from '@/stores/userSettings/pushNotificationsSound/model';
 import { changePushNotificationsSettings } from '@/stores/userSettings/handlers';
+import { $isPushNotificationsEnabled } from '@/stores/userSettings/pushNotifications/model';
+import { $isPushNotificationsSound } from '@/stores/userSettings/pushNotificationsSound/model';
+import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
+import { useUnit } from 'effector-react';
 import * as Device from 'expo-device';
 import * as NotificationsExpo from 'expo-notifications';
+import { goBack } from 'expo-router/build/global-state/routing';
 import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 export const Notifications = () => {
 	const [isPermissionStatusGranted, setIsPermissionStatusGranted] =

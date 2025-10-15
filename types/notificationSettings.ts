@@ -4,6 +4,7 @@ export interface NotificationsSettings {
 	isKeywordsPushesEnabled: boolean;
 	isKeywordsPushesSoundEnabled: boolean;
 	isKeywordsVoiceOverEnabled: boolean;
+	isKeywordsEnabled: boolean;
 }
 
 export interface NotificationsSettingsResponse {
@@ -18,6 +19,7 @@ export interface PutNotificationsSettingsRequestData {
 	isKeywordsPushesEnabled?: boolean;
 	isKeywordsPushesSoundEnabled?: boolean;
 	isKeywordsVoiceOverEnabled?: boolean;
+	isKeywordsEnabled?: boolean;
 	deviceToken?: string;
 	platform?: Platform;
 }

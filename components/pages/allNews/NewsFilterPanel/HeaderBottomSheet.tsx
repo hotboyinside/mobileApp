@@ -1,12 +1,12 @@
-import { ThemedText } from '@/components/ThemedText';
-import RestartIcon from '@/assets/icons/restart-icon.svg';
 import CloseIcon from '@/assets/icons/close-icon.svg';
-import { StyleSheet, View } from 'react-native';
-import { Button } from '@/components/ui/Button';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
+import RestartIcon from '@/assets/icons/restart-icon.svg';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Button } from '@/components/ui/Button';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { FC } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 
 type HeaderBottomSheetProps = {
@@ -34,7 +34,7 @@ export const HeaderBottomSheet = ({
 					onlyIcon
 					variant='secondary'
 					icon={<Icon fill={iconColor} width={20} height={20} />}
-					onPress={onResetDefaultValues}
+					onPressIn={onResetDefaultValues}
 				/>
 			) : (
 				<View style={{ width: 40, height: 40 }} />

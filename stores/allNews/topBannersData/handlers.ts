@@ -1,17 +1,17 @@
 import { createEffect } from "effector";
 
 import {
-  topBannersAddDocsEvent,
-  topBannersAddDocEvent,
-  topBannersSetDefaultStateEvent,
-} from "./model";
-import {
   getNewsRequest,
   IParamsGetNews,
   NewsTypesOrigins,
 } from "@/config/api/newsApi";
 import { getTimestampOfStartOfTheDay } from "@/helpers/date/getTimestampOfStartOfTheDay";
 import { INews } from "@/types/news";
+import {
+  topBannersAddDocEvent,
+  topBannersAddDocsEvent,
+  topBannersSetDefaultStateEvent,
+} from "./model";
 
 export const topBannersGetNewsFx = createEffect(
   async (params: IParamsGetNews) => {

@@ -2,10 +2,7 @@ import { Button } from '@/components/ui/Button';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { $hasChangesInFilters } from '@/stores/allNews/filtersPanel/filters/selectableFilters/model';
-import {
-	$isKeywordsEnabled,
-	keywordsEnabledToggle,
-} from '@/stores/allNews/filtersPanel/keywords/model';
+import { keywordsEnabledToggle } from '@/stores/allNews/filtersPanel/keywords/model';
 import {
 	$hasChangesInSelectedColor,
 	applySelectedColorClick,
@@ -21,8 +18,8 @@ import {
 	FilterTabVariant,
 } from '@/stores/allNews/filtersPanel/model';
 import {
-	applySortingClick,
 	$isSortByChanged,
+	applySortingClick,
 } from '@/stores/allNews/filtersPanel/sortBy/model';
 import {
 	$isStarRatingEnabledStateChanged,
@@ -34,12 +31,13 @@ import {
 	$draftStarRatingKeywords,
 	$isStarRatingChanged,
 } from '@/stores/starRating/model';
+import { $isKeywordsEnabled } from '@/stores/userSettings/keywordsEnabled';
 import {
-	BottomSheetFooterProps,
 	BottomSheetFooter,
+	BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import { useUnit } from 'effector-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Keyboard, StyleSheet } from 'react-native';
 import Animated, {
 	useAnimatedStyle,

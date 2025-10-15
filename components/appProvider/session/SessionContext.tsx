@@ -1,16 +1,16 @@
-import {
-	use,
-	createContext,
-	type PropsWithChildren,
-	useEffect,
-	useCallback,
-} from 'react';
-import { useStorageState } from '../authentication/useStorageState';
-import { User } from '@/types/user';
+import { api } from '@/config/api/axios';
 import { deleteNotificationsTokenRequest } from '@/config/api/notifications/sendNotificationsToken';
 import { registerForPushNotificationsAsync } from '@/helpers/pushNotifications/registerForPushNotificationsAsync';
 import { postNotificationsSettingsFx } from '@/stores/userSettings/handlers';
-import { api } from '@/config/api/axios';
+import { User } from '@/types/user';
+import {
+	createContext,
+	PropsWithChildren,
+	use,
+	useCallback,
+	useEffect,
+} from 'react';
+import { useStorageState } from '../authentication/useStorageState';
 
 const AuthContext = createContext<{
 	signIn: (user: User) => void;

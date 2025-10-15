@@ -5,8 +5,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import { LoginRequestData } from '@/config/api/authApi';
 import {
-	ERROR_SERVER_UNAVAILABLE,
 	ERROR_INVALID_CREDENTIALS,
+	ERROR_SERVER_UNAVAILABLE,
 } from '@/constants/errorMessages';
 import { useLogin } from '@/services/auth';
 import { Input } from '@rneui/base';
@@ -57,7 +57,7 @@ export default function LoginScreen() {
 					<View style={styles.logoContainer}>
 						<LogoIcon />
 						<ThemedText style={styles.title} type='displayXs'>
-							Welcome back to&nbsp;FoxRunner
+							FoxRunner
 						</ThemedText>
 					</View>
 

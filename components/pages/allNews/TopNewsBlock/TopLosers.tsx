@@ -1,17 +1,17 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Tab } from '@/components/ui/Tabs/Tab';
-import { TabView } from '@rneui/base';
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Cards } from './TopNews';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
-	$dataTopBannersSymbolLosersStore,
 	$dataTopBannersSymbolGapLosersStore,
+	$dataTopBannersSymbolLosersStore,
 } from '@/stores/allNews/topBannersData/model';
+import { TabView } from '@rneui/base';
 import { useUnit } from 'effector-react';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { Cards } from './TopNews';
 
 export default function TopLosers() {
 	const dataTopBannersSymbolLosersStore = useUnit(
@@ -32,7 +32,7 @@ export default function TopLosers() {
 			<Tab
 				value={index}
 				onChange={e => setIndex(e)}
-				tabsTitles={['All Stocks', 'With News or Filings']}
+				tabsTitles={['With News or Filings', 'All Stocks']}
 				style={styles.tabContainer}
 			/>
 			<TabView
@@ -48,15 +48,15 @@ export default function TopLosers() {
 				<TabView.Item style={{ flex: 1 }}>
 					<Cards
 						isTopGainers={false}
-						topSymbols={
-							dataTopBannersSymbolGapLosersStore.topThreeLosersSymbols
-						}
+						topSymbols={dataTopBannersSymbolLosersStore.topThreeLosersSymbols}
 					/>
 				</TabView.Item>
 				<TabView.Item style={{ flex: 1 }}>
 					<Cards
 						isTopGainers={false}
-						topSymbols={dataTopBannersSymbolLosersStore.topThreeLosersSymbols}
+						topSymbols={
+							dataTopBannersSymbolGapLosersStore.topThreeLosersSymbols
+						}
 					/>
 				</TabView.Item>
 			</TabView>

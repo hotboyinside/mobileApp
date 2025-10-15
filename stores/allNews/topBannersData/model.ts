@@ -1,9 +1,9 @@
-import { IRedisSymbol } from "@/stores/socket/model";
+import { parseRedisObject } from "@/helpers/redis/parseRedisObject";
+import { INews } from "@/types/news";
 import { ISymbol } from "@/types/symbols";
 import { combine, createEvent, createStore, sample } from "effector";
 import { dataCommonDayChangedEvent } from "../common/model";
-import { parseRedisObject } from "@/helpers/redis/parseRedisObject";
-import { INews } from "@/types/news";
+import { IRedisSymbol } from '@/types/redisSymbol';
 
 interface IDataTopBannersStore {
   docs: INews[];

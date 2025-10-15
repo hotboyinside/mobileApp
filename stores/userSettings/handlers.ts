@@ -2,15 +2,15 @@ import {
 	postNotificationsSettingsRequest,
 	putNotificationsSettingsRequest,
 } from '@/config/api/notifications/getNotificationsSettings';
-import { createEffect, createEvent, sample } from 'effector';
-import { setPushNotificationsEnabled } from './pushNotifications/model';
-import { setVoiceOverEnabled } from './voiceOver/model';
-import { setPushNotificationsSound } from './pushNotificationsSound/model';
+import { Platform } from '@/config/api/notifications/sendNotificationsToken';
 import { PutNotificationsSettingsRequestData } from '@/types/notificationSettings';
 import messaging from '@react-native-firebase/messaging';
-import { Platform as PlatformRN } from 'react-native';
-import { Platform } from '@/config/api/notifications/sendNotificationsToken';
+import { createEffect, createEvent, sample } from 'effector';
 import { debounce } from 'patronum';
+import { Platform as PlatformRN } from 'react-native';
+import { setPushNotificationsEnabled } from './pushNotifications/model';
+import { setPushNotificationsSound } from './pushNotificationsSound/model';
+import { setVoiceOverEnabled } from './voiceOver/model';
 
 export const postNotificationsSettingsFx = createEffect(async () => {
 	const result = await postNotificationsSettingsRequest();

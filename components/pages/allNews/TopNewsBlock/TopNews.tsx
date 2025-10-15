@@ -1,13 +1,13 @@
+import ChartDownIcon from '@/assets/icons/chart-down-icon.svg';
+import ChartUpIcon from '@/assets/icons/chart-up-icon.svg';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { ISymbol } from '@/types/symbols';
 import React from 'react';
 import { Platform, ScrollView, StyleSheet } from 'react-native';
 import { TopNewsCard } from './TopNewsCard';
-import { ISymbol } from '@/types/symbols';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
-import ChartUpIcon from '@/assets/icons/chart-up-icon.svg';
-import ChartDownIcon from '@/assets/icons/chart-down-icon.svg';
 
 type CardsProps = {
 	isTopGainers: boolean;
@@ -35,7 +35,7 @@ export const Cards = ({ topSymbols, isTopGainers }: CardsProps) => {
 						<TopNewsCard
 							key={symbol.symbol}
 							symbol={symbol.symbol}
-							title={symbol.title}
+							title={symbol.title || symbol.name}
 							change={symbol.change}
 							isPositive={isTopGainers}
 						/>

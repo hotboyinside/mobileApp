@@ -1,11 +1,11 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Badge } from '@/components/ui/Badge/Badge';
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Change } from '@/components/ui/Change/Change';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { Change } from '@/components/ui/Change/Change';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
 export type TopNewsCardProps = {
 	symbol: string;
