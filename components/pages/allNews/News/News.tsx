@@ -22,6 +22,7 @@ export const ListItem = ({ item }: ListItemProps) => {
   const router = useRouter();
   const { _id, title, createdAt, keywords, symbols, rating } = item;
   const now = useUnit($now);
+  const isNotEmptyKeywords = keywords.length > 0;
 
   const handlePress = () => {
     router.push(NEWS_DETAILS(_id.toString()));
@@ -61,14 +62,16 @@ export const ListItem = ({ item }: ListItemProps) => {
         </View>
         <Stars rating={rating.score} />
       </View>
-      <ThemedText type='textSm' numberOfLines={2} style={styles.title}>
+      <ThemedText type='textSm' numberOfLines={3} style={styles.title}>
         {title}
       </ThemedText>
-      <View style={styles.keywords}>
-        {keywords.map(keyword => (
-          <ReadOnlyKeyword key={keyword._id} keyword={keyword} />
-        ))}
-      </View>
+      {isNotEmptyKeywords && (
+        <View style={styles.keywords}>
+          {keywords.map(keyword => (
+            <ReadOnlyKeyword key={keyword._id} keyword={keyword} />
+          ))}
+        </View>
+      )}
       <ThemedText type='textXs' style={[styles.time, { color: timeColor }]}>
         {formattedTime}
       </ThemedText>
@@ -83,8 +86,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     padding: 12,
     borderWidth: 1,
-    borderColor: "#eee",
-    backgroundColor: "#fff",
   },
 
   top: {

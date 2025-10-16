@@ -11,6 +11,7 @@ export const ExternalLinks = {
   faqUrl: "https://foxrunner.com/#faq",
   // main
   mainUrl: "https://foxrunner.com",
+  resetPassword: "https://foxrunner.com/resetPassword",
   // rules
   privacyPolicyUrl: "https://foxrunner.com/privacyPolicy",
   termsUrl: "https://foxrunner.com/termsAndConditions?utm_source=chatgpt.com",

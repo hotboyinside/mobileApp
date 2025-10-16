@@ -40,44 +40,54 @@ export default function Form({
 
   return (
     <View style={styles.formContainer}>
-      <View style={styles.inputContainer}>
-        <Controller
-          name='email'
-          control={control}
-          render={({ field }) => (
-            <Input
-              type='text'
-              label='Email'
-              placeholder='Enter your email'
-              value={field.value}
-              onChangeText={field.onChange}
-              onBlur={field.onBlur}
-              ref={inputEmailRef}
-              errorMessage={errors.email?.message}
-              isError={Boolean(errors.email?.message) || Boolean(serverError)}
-            />
-          )}
-        />
-        <Controller
-          name='password'
-          control={control}
-          render={({ field }) => (
-            <Input
-              type='password'
-              label='Password'
-              placeholder='Enter your password'
-              value={field.value}
-              onChangeText={field.onChange}
-              onBlur={field.onBlur}
-              ref={inputPasswordRef}
-              rightIconContainerStyle={styles.iconContainerExtra}
-              errorMessage={serverError || errors.password?.message}
-              isError={
-                Boolean(errors.password?.message) || Boolean(serverError)
-              }
-            />
-          )}
-        />
+      <View>
+        <View style={styles.inputContainer}>
+          <Controller
+            name='email'
+            control={control}
+            render={({ field }) => (
+              <Input
+                type='text'
+                label='Email'
+                placeholder='Enter your email'
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                ref={inputEmailRef}
+                errorMessage={errors.email?.message}
+                isError={Boolean(errors.email?.message) || Boolean(serverError)}
+              />
+            )}
+          />
+          <Controller
+            name='password'
+            control={control}
+            render={({ field }) => (
+              <Input
+                type='password'
+                label='Password'
+                placeholder='Enter your password'
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                ref={inputPasswordRef}
+                rightIconContainerStyle={styles.iconContainerExtra}
+                errorMessage={serverError || errors.password?.message}
+                isError={
+                  Boolean(errors.password?.message) || Boolean(serverError)
+                }
+              />
+            )}
+          />
+        </View>
+        <ThemedText
+          type='textSm'
+          tokenColor={appTokens.component.buttons.link.fg}
+          style={styles.forgotPasswordLink}
+          onPress={() => Linking.openURL(ExternalLinks.resetPassword)}
+        >
+          Forgot password?
+        </ThemedText>
       </View>
       <ThemedView>
         <ThemedText
@@ -124,6 +134,13 @@ export default function Form({
 const styles = StyleSheet.create({
   inputContainer: {
     gap: 24,
+  },
+
+  forgotPasswordLink: {
+    alignSelf: "flex-start",
+    marginTop: 8,
+    fontWeight: 600,
+    fontFamily: "MontserratSemiBold",
   },
 
   formContainer: {

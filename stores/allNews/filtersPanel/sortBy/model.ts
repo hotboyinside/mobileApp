@@ -16,15 +16,17 @@ import { $additionalFilters } from "../filters/additionalFilters/model";
 import { MarketNames, $market } from "../filters/market/model";
 import { NewsTypesNames, $newsType } from "../filters/newsType/model";
 import { StockTypesNames, $stockType } from "../filters/stockType/model";
-import { filtersApplyClick } from "../../model";
-import { INews, NewsTypesOrigins } from "@/types/news";
+import { NewsTypesOrigins } from "@/types/news";
 import {
   addNewsFromSseEvent,
   $allNews,
   getNews,
   $lastAllNewsNewsDate,
   $allNewsPagination,
+  $hasMoreNews,
 } from "@/stores/allNews/news";
+import { getFiltersSnapshotFx } from "../filters/additionalFilters/handlers";
+import { filtersApplyClick } from "../filters/model";
 
 export const $sortBy = createStore<SortByStore>(sortByStoreDefault);
 export const $sortByDraft = createStore<SortLabels>(SortLabels.NewestFirst);
@@ -179,13 +181,15 @@ sample({
     lastAllNewsNewsDate: $lastAllNewsNewsDate,
   },
   filter: (_, { isInitialNews }) => isInitialNews,
-  fn: ({ sortBy, market, stockType, newsType, additionalFilters }) => ({
-    typeOrigin: NewsTypesOrigins.News,
-    limit: 20,
-    start: new Date().getTime(),
-    signal: new AbortController().signal,
-    filters: { sortBy, market, stockType, newsType, additionalFilters },
-  }),
+  fn: ({ sortBy, market, stockType, newsType, additionalFilters }) => {
+    return {
+      typeOrigin: NewsTypesOrigins.News,
+      limit: 20,
+      start: new Date().getTime(),
+      signal: new AbortController().signal,
+      filters: { sortBy, market, stockType, newsType, additionalFilters },
+    };
+  },
   target: fetchNewsFx,
 });
 
@@ -252,4 +256,46 @@ sample({
     page: allNewsPagination.page,
   }),
   target: loadMoreNewsFx,
+});
+
+sample({
+  clock: getFiltersSnapshotFx.doneData,
+  fn: () => ({ isInitialNews: true }),
+  target: getNews,
+});
+
+sample({
+  source: $sortBy,
+  clock: fetchNewsFx.doneData,
+  fn: (sortBy, response) => {
+    if (sortBy.currentLabel !== SortLabels.NewestFirst && !response.nextPage) {
+      return false;
+    } else if (
+      sortBy.currentLabel === SortLabels.NewestFirst &&
+      response.docs.length < 20
+    ) {
+      return false;
+    }
+
+    return true;
+  },
+  target: $hasMoreNews,
+});
+
+sample({
+  source: $sortBy,
+  clock: loadMoreNewsFx.doneData,
+  fn: (sortBy, response) => {
+    if (sortBy.currentLabel !== SortLabels.NewestFirst && !response.nextPage) {
+      return false;
+    } else if (
+      sortBy.currentLabel === SortLabels.NewestFirst &&
+      response.docs.length < 20
+    ) {
+      return false;
+    }
+
+    return true;
+  },
+  target: $hasMoreNews,
 });
