@@ -1,16 +1,16 @@
+import { ThemedText } from '@/components/ThemedText';
+import { Badge } from '@/components/ui/Badge/Badge';
+import { Change } from '@/components/ui/Change/Change';
+import { Stars } from '@/components/ui/Stars';
+import { appTokens } from '@/constants/tokens';
+import { formatNewsTimeFull } from '@/helpers/time/formatNewsTimeFull';
+import { $dataSymbolsData } from '@/stores/symbols/model';
+import { IFilteredNews } from '@/types/news';
+import { useUnit } from 'effector-react';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Stars } from '@/components/ui/Stars';
-import { ThemedText } from '@/components/ThemedText';
-import { appTokens } from '@/constants/tokens';
-import { Change } from '@/components/ui/Change/Change';
-import { Badge } from '@/components/ui/Badge/Badge';
-import { SymbolStats } from './SymbolsStats';
-import { $dataSymbolsData } from '@/stores/symbols/model';
-import { useUnit } from 'effector-react';
 import { ReadOnlyKeyword } from '../News/ReadOnlyKeyword';
-import { formatNewsTimeFull } from '@/helpers/time/formatNewsTimeFull';
-import { IFilteredNews } from '@/types/news';
+import { SymbolStats } from './SymbolsStats';
 
 type NewsInformationProps = {
 	news: IFilteredNews;
@@ -21,6 +21,7 @@ export const NewsInformation = ({ news }: NewsInformationProps) => {
 
 	const { title, description, createdAt, rating, keywords, symbols } = news;
 
+	const isNotEmptyKeywords = keywords.length > 0;
 	const formattedData = formatNewsTimeFull(createdAt);
 
 	const safeSymbolsData = symbols.map(symbol => {
@@ -78,11 +79,13 @@ export const NewsInformation = ({ news }: NewsInformationProps) => {
 				{description}
 			</ThemedText>
 
-			<View style={styles.keywords}>
-				{keywords.map(keyword => (
-					<ReadOnlyKeyword key={keyword._id} keyword={keyword} />
-				))}
-			</View>
+			{isNotEmptyKeywords && (
+				<View style={styles.keywords}>
+					{keywords.map(keyword => (
+						<ReadOnlyKeyword key={keyword._id} keyword={keyword} />
+					))}
+				</View>
+			)}
 
 			<View style={styles.symbolsStats}>
 				{safeSymbolsData.map(symbol => (
