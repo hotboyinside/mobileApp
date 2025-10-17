@@ -49,6 +49,7 @@
 			"expo-localization",
 			"expo-notifications",
 			"expo-audio",
+			"expo-iap",
 			"@react-native-firebase/app",
 			"@react-native-firebase/messaging",
 			[
@@ -57,6 +58,9 @@
 					"ios": {
 						"useFrameworks": "static",
 						"buildReactNativeFromSource": true
+					},
+					"android": {
+						"kotlinVersion": "2.1.20"
 					}
 				}
 			]
