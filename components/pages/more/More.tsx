@@ -240,11 +240,12 @@ export default function More() {
 					variant='secondary'
 					icon={<LogOutIcon width={20} height={20} fill={iconErrorColor} />}
 					titleStyle={{ color: textErrorColor }}
-					buttonStyle={{
-						borderWidth: 0,
-						justifyContent: 'flex-start',
-						backgroundColor: backgroundErrorColor,
-					}}
+					buttonStyle={[
+						styles.buttonExtra,
+						{
+							backgroundColor: backgroundErrorColor,
+						},
+					]}
 					containerStyle={styles.logOut}
 					onPress={() => signOut()}
 				/>
@@ -341,6 +342,11 @@ const styles = StyleSheet.create({
 	settingsText: {
 		fontWeight: 500,
 		fontFamily: 'MontserratMedium',
+	},
+
+	buttonExtra: {
+		borderWidth: 0,
+		justifyContent: 'flex-start',
 	},
 
 	settingsButton: {

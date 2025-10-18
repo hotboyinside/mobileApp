@@ -309,8 +309,8 @@ export const appTokens = {
 			dark: appColors.brand['500'],
 		},
 		brandSecondary: {
-			light: appColors.brand['400'],
-			dark: appColors.brand['600'],
+			light: appColors.brand['500'],
+			dark: appColors.brand['500'],
 		},
 		errorPrimary: {
 			light: appColors.error['600'],

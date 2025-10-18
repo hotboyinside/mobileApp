@@ -1,37 +1,37 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { Button } from '@/components/ui/Button';
-import {
-	ScrollView,
-	StyleSheet,
-	Image,
-	View,
-	Linking,
-	TouchableOpacity,
-	Dimensions,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import CloseIcon from '@/assets/icons/close-icon.svg';
-import StarDuoIcon from '@/assets/icons/star-duo-icon.svg';
-import MicrophoneDuoIcon from '@/assets/icons/microphone-duo-icon.svg';
-import MedalDuoIcon from '@/assets/icons/medal-duo-icon.svg';
 import AdDuoIcon from '@/assets/icons/ad-duo-icon.svg';
+import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
 import ChatLikeDuoIcon from '@/assets/icons/chat-like-duo-icon.svg';
+import CloseIcon from '@/assets/icons/close-icon.svg';
+import FireIcon from '@/assets/icons/fire-icon.svg';
+import MedalDuoIcon from '@/assets/icons/medal-duo-icon.svg';
+import MicrophoneDuoIcon from '@/assets/icons/microphone-duo-icon.svg';
 import PieChartIcon from '@/assets/icons/pie-chart-icon.svg';
 import SettingsDuoIcon from '@/assets/icons/settings-duo-icon.svg';
-import FireIcon from '@/assets/icons/fire-icon.svg';
-import { appTokens } from '@/constants/tokens';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { useRouter } from 'expo-router';
+import StarDuoIcon from '@/assets/icons/star-duo-icon.svg';
+import CallAvatar from '@/assets/images/CallAvatar.png';
 import ModalPremiumImage from '@/assets/images/ModalPremiumImage.svg';
 import ReviewAvatar from '@/assets/images/ReviewAvatar.png';
-import CallAvatar from '@/assets/images/CallAvatar.png';
-import React, { FC, useRef, useState } from 'react';
-import { SvgProps } from 'react-native-svg';
-import { Badge } from '@/components/ui/Badge/Badge';
-import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
-import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
 import { useSession } from '@/components/appProvider/session/SessionContext';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { Badge } from '@/components/ui/Badge/Badge';
+import { Button } from '@/components/ui/Button';
+import { appTokens } from '@/constants/tokens';
+import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { useRouter } from 'expo-router';
+import React, { FC, useRef, useState } from 'react';
+import {
+	Dimensions,
+	Image,
+	Linking,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SvgProps } from 'react-native-svg';
 
 const TERMS_OF_SERVICE_URL =
 	'https://foxrunner.com/termsAndConditions?utm_source=chatgpt.com';
@@ -173,13 +173,7 @@ export default function ModalScreen() {
 				>
 					<ModalPremiumImage
 						width={screenWidth}
-						style={{
-							position: 'absolute',
-							top: 0,
-							right: 0,
-							left: 0,
-							bottom: 0,
-						}}
+						style={styles.image}
 						stroke={backgroundColor}
 					/>
 					<ThemedText
@@ -410,6 +404,7 @@ export default function ModalScreen() {
 												color='primary'
 												size='md'
 												value={`Save ${plan.saveMoney}`}
+												badgeStyle={styles.fullRadius}
 											/>
 											{plan.isPopular && (
 												<Badge
@@ -426,11 +421,13 @@ export default function ModalScreen() {
 															<ThemedText
 																tokenColor={appTokens.text.primaryOnBrand}
 																type='textSm'
+																style={styles.planText}
 															>
 																Most popular
 															</ThemedText>
 														</View>
 													}
+													badgeStyle={styles.fullRadius}
 												/>
 											)}
 										</View>
@@ -540,6 +537,14 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		overflow: 'hidden',
+	},
+
+	image: {
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		left: 0,
+		bottom: 0,
 	},
 
 	iconContainer: {
@@ -712,10 +717,19 @@ const styles = StyleSheet.create({
 		gap: 4,
 	},
 
+	planText: {
+		fontWeight: 500,
+		fontFamily: 'MontserratMedium',
+	},
+
 	planIcon: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 2,
+	},
+
+	fullRadius: {
+		borderRadius: 100,
 	},
 
 	call: {
