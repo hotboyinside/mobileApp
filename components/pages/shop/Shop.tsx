@@ -3,11 +3,7 @@ import { ErrorCode, useIAP } from 'expo-iap';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Button, View } from 'react-native';
 
-const SUB_IDS = [
-	'com.myapp.sub.basic',
-	'com.myapp.sub.pro',
-	'com.myapp.sub.premium',
-];
+const SUB_IDS = ['premium_monthly', 'premium_halfyear', 'premium_yearly'];
 
 export const Shop = () => {
 	const [loading, setLoading] = useState(true);

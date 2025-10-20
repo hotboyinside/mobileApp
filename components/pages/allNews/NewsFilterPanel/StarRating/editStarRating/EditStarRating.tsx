@@ -1,10 +1,17 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { StyleSheet } from 'react-native';
+import CloseIcon from '@/assets/icons/close-icon.svg';
 import { ThemedView } from '@/components/ThemedView';
+import { Badge } from '@/components/ui/Badge/Badge';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { Stars } from '@/components/ui/Stars';
-import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-import { useUnit } from 'effector-react';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import {
+	$inputErrors,
+	$userInputKeywords,
+	changeUserInputKeyword,
+	clearInputError,
+} from '@/stores/allNews/filtersPanel/starRating/model';
 import {
 	$draftStarRatingKeywords,
 	addDraftStarRatingKeyword,
@@ -13,17 +20,10 @@ import {
 	resetToDefaultStarRatingKeywords,
 } from '@/stores/starRating/model';
 import { StarNumber } from '@/types/starRating';
-import { Badge } from '@/components/ui/Badge/Badge';
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { useUnit } from 'effector-react';
+import { StyleSheet } from 'react-native';
 import { HeaderBottomSheet } from '../../HeaderBottomSheet';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import CloseIcon from '@/assets/icons/close-icon.svg';
-import {
-	$inputErrors,
-	$userInputKeywords,
-	changeUserInputKeyword,
-	clearInputError,
-} from '@/stores/allNews/filtersPanel/starRating/model';
 
 type EditStarRatingProps = {
 	onClose: () => void;
@@ -95,6 +95,7 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 							}}
 							isError={!!inputErrors[star]}
 							errorMessage={inputErrors[star] ?? ''}
+							maxLength={25}
 						/>
 						{draftStarRatingKeywords[star] && (
 							<ThemedView
