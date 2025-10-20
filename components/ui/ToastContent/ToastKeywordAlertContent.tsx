@@ -1,11 +1,11 @@
+import PlanetIcon from '@/assets/icons/planet-icon.svg';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { appTokens } from '@/constants/tokens';
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import PlanetIcon from '@/assets/icons/planet-icon.svg';
-import { useThemeColor } from '@/hooks/useThemeColor';
 import { Badge } from '@/components/ui/Badge/Badge';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 type ToastKeywordAlertContentProps = {
 	title: string;
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 
 	iconContainer: {
 		alignSelf: 'flex-start',
-		borderRadius: 16,
+		borderRadius: 8,
 		padding: 8,
 	},
 

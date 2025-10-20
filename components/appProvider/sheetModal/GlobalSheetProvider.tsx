@@ -1,3 +1,11 @@
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import {
+	BottomSheetBackdrop,
+	BottomSheetFooterProps,
+	BottomSheetModal,
+	BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 import React, {
 	createContext,
 	ReactNode,
@@ -7,21 +15,14 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import {
-	BottomSheetBackdrop,
-	BottomSheetFooterProps,
-	BottomSheetModal,
-	BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
 import { StyleSheet, View } from 'react-native';
 
 interface SheetContextType {
 	openSheetModal: (
 		key: SheetKey,
 		content: ReactNode,
-		footer?: (props: BottomSheetFooterProps) => React.ReactElement
+		footer?: (props: BottomSheetFooterProps) => React.ReactElement,
+		onDismiss?: () => void
 	) => void;
 	closeSheetModal: (key: SheetKey) => void;
 }
@@ -48,19 +49,27 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 		((props: BottomSheetFooterProps) => React.ReactElement) | null
 	>(null);
 
+	const [mainOnDismiss, setMainOnDismiss] = useState<(() => void) | null>(null);
+	const [secondaryOnDismiss, setSecondaryOnDismiss] = useState<
+		(() => void) | null
+	>(null);
+
 	const openSheetModal = useCallback(
 		(
 			key: SheetKey,
 			content: ReactNode,
-			footer?: (props: BottomSheetFooterProps) => React.ReactElement
+			footer?: (props: BottomSheetFooterProps) => React.ReactElement,
+			onDismiss?: () => void
 		) => {
 			if (key === 'main') {
 				setMainContent(content);
 				setMainFooter(() => footer || null);
+				setMainOnDismiss(() => onDismiss || null);
 				mainModalRef.current?.present();
 			} else if (key === 'secondary') {
 				setSecondaryContent(content);
 				setSecondaryFooter(() => footer || null);
+				setSecondaryOnDismiss(() => onDismiss || null);
 				secondaryModalRef.current?.present();
 			}
 		},
@@ -98,6 +107,7 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 						{ backgroundColor: backgroundColor },
 					]}
 					footerComponent={mainFooter || undefined}
+					onDismiss={mainOnDismiss || undefined}
 				>
 					{mainContent}
 				</BottomSheetModal>
@@ -119,6 +129,7 @@ export const GlobalSheetProvider = ({ children }: GlobalSheetProviderProps) => {
 						{ backgroundColor: backgroundColor },
 					]}
 					footerComponent={secondaryFooter || undefined}
+					onDismiss={secondaryOnDismiss || undefined}
 				>
 					{secondaryContent}
 				</BottomSheetModal>

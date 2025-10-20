@@ -3,9 +3,8 @@ import {
 	updateUserStarRatingRequest,
 } from '@/config/api/userStarRating';
 import { DefaultStarRatingSet } from '@/constants/starRatingDefaultSet';
-import { createEffect } from 'effector';
-import { saveDraftStarRatingKeyword, setStarRatingKeywords } from './model';
 import { StarRatingKeywords } from '@/types/starRating';
+import { createEffect } from 'effector';
 
 export const getStarRatingFx = createEffect(async () => {
 	const result = await getUserStarRatingRequest();
@@ -15,10 +14,6 @@ export const getStarRatingFx = createEffect(async () => {
 	return DefaultStarRatingSet;
 });
 
-getStarRatingFx.done.watch(({ result }) => {
-	setStarRatingKeywords(result.userRating!.keywordsByStar);
-});
-
 export const updateStarRatingFx = createEffect(
 	async (data: StarRatingKeywords) => {
 		const result = await updateUserStarRatingRequest(data);
@@ -26,6 +21,3 @@ export const updateStarRatingFx = createEffect(
 		return result;
 	}
 );
-
-updateStarRatingFx.done.watch(() => saveDraftStarRatingKeyword());
-updateStarRatingFx.fail.watch(({ error }: { error: any }) => {});

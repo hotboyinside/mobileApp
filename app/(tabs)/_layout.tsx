@@ -1,20 +1,20 @@
+import CongressGradientIcon from '@/assets/icons/congress-icon-gradient.svg';
+import CongressIcon from '@/assets/icons/congress-icon.svg';
+import DashboardGradientIcon from '@/assets/icons/dashboard-icon-gradient.svg';
+import DashboardIcon from '@/assets/icons/dashboard-icon.svg';
+import FireGradientIcon from '@/assets/icons/fire-icon-gradient.svg';
+import FireIcon from '@/assets/icons/fire-icon.svg';
+import LockIcon from '@/assets/icons/lock-closed-icon.svg';
+import MagnifierGradientIcon from '@/assets/icons/magnifier-icon-gradient.svg';
+import MagnifierIcon from '@/assets/icons/magnifier-icon.svg';
+import PlanetGradientIcon from '@/assets/icons/planet-icon-gradient.svg';
+import PlanetIcon from '@/assets/icons/planet-icon.svg';
+import { HapticTab } from '@/components/HapticTab';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
-import PlanetIcon from '@/assets/icons/planet-icon.svg';
-import PlanetGradientIcon from '@/assets/icons/planet-icon-gradient.svg';
-import CongressIcon from '@/assets/icons/congress-icon.svg';
-import CongressGradientIcon from '@/assets/icons/congress-icon-gradient.svg';
-import DashboardIcon from '@/assets/icons/dashboard-icon.svg';
-import DashboardGradientIcon from '@/assets/icons/dashboard-icon-gradient.svg';
-import FireIcon from '@/assets/icons/fire-icon.svg';
-import FireGradientIcon from '@/assets/icons/fire-icon-gradient.svg';
-import MagnifierIcon from '@/assets/icons/magnifier-icon.svg';
-import LockIcon from '@/assets/icons/lock-closed-icon.svg';
-import MagnifierGradientIcon from '@/assets/icons/magnifier-icon-gradient.svg';
-import { HapticTab } from '@/components/HapticTab';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
 
 export default function TabLayout() {
 	const borderColor = useThemeColor(appTokens.border.tertiary);
@@ -38,7 +38,6 @@ export default function TabLayout() {
 					borderTopColor: borderColor,
 					backgroundColor: backgroundColor,
 					paddingBottom: 4,
-					marginBottom: Platform.OS === 'android' ? 4 : 0,
 					...Platform.select({
 						ios: {
 							shadowColor: 'rgba(13, 18, 28, 0.05)',

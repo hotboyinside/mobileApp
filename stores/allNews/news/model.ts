@@ -12,7 +12,7 @@ import {
 	$keywords,
 	$withVoiceOverKeywords,
 } from '../filtersPanel/keywords/model';
-import { $starRatingEnabledState } from '../filtersPanel/starRating/starRatingEnabledState/model';
+import { $starRatingEnabledState } from '../filtersPanel/starRating/starRatingEnabledState';
 import { fetchNewsFx, loadMoreNewsFx, speakTtsFx } from './handlers';
 
 export enum NewsLoadStatus {

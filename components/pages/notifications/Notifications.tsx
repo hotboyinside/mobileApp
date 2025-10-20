@@ -1,7 +1,9 @@
 import ArrowIcon from '@/assets/icons/arrow-left-soft-icon.svg';
+import CheckLineIcon from '@/assets/icons/check-line-icon.svg';
 import SoundIcon from '@/assets/icons/sound-icon.svg';
 import SupportIcon from '@/assets/icons/support-icon.svg';
 import VoiceOverOn from '@/assets/icons/voiceover-on-icon.svg';
+import loader from '@/assets/loader/loader.json';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
@@ -9,27 +11,58 @@ import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/Switch/Switch';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { changePushNotificationsSettings } from '@/stores/userSettings/handlers';
-import { $isPushNotificationsEnabled } from '@/stores/userSettings/pushNotifications/model';
-import { $isPushNotificationsSound } from '@/stores/userSettings/pushNotificationsSound/model';
-import { $isVoiceOverEnabled } from '@/stores/userSettings/voiceOver/model';
+import {
+	putNotificationsSettingsFx,
+	resetSettings,
+} from '@/stores/userSettings';
+import { $hasSettingsChanges } from '@/stores/userSettings/hasChangesSettings';
+import {
+	$isPushNotificationsEnabledDraft,
+	togglePushNotificationsEnabledDraft,
+} from '@/stores/userSettings/pushNotifications';
+import {
+	$isPushNotificationsSoundDraft,
+	togglePushNotificationsSoundDraft,
+} from '@/stores/userSettings/pushNotificationsSound';
+import {
+	$isVoiceOverEnabledDraft,
+	toggleVoiceoverEnabledDraft,
+} from '@/stores/userSettings/voiceOver';
 import { useUnit } from 'effector-react';
 import * as Device from 'expo-device';
 import * as NotificationsExpo from 'expo-notifications';
 import { goBack } from 'expo-router/build/global-state/routing';
-import { useEffect, useState } from 'react';
+import LottieView from 'lottie-react-native';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useNotificationsToast } from './hooks/useNotificationsToast';
 
 export const Notifications = () => {
+	useNotificationsToast();
+
 	const [isPermissionStatusGranted, setIsPermissionStatusGranted] =
 		useState(false);
 	const [isLoadingPermissionRequest, setIsLoadingPermissionRequest] =
 		useState(false);
 
-	const isPushNotificationsEnabled = useUnit($isPushNotificationsEnabled);
-	const isPushNotificationsSound = useUnit($isPushNotificationsSound);
-	const isVoiceOverEnabled = useUnit($isVoiceOverEnabled);
+	const isPushNotificationsEnabledDraft = useUnit(
+		$isPushNotificationsEnabledDraft
+	);
+	const isPushNotificationsSoundDraft = useUnit($isPushNotificationsSoundDraft);
+	const isVoiceOverEnabledDraft = useUnit($isVoiceOverEnabledDraft);
+	const hasSettingsChanges = useUnit($hasSettingsChanges);
 
+	const onTogglePushNotificationsEnabledDraft = useUnit(
+		togglePushNotificationsEnabledDraft
+	);
+	const onTogglePushNotificationsSoundDraft = useUnit(
+		togglePushNotificationsSoundDraft
+	);
+	const onToggleVoiceoverEnabledDraft = useUnit(toggleVoiceoverEnabledDraft);
+
+	const iconPrimaryColor = useThemeColor(
+		appTokens.component.buttons.primary.fg
+	);
 	const backButtonColor = useThemeColor(
 		appTokens.component.buttons.secondaryGray.fg
 	);
@@ -52,7 +85,16 @@ export const Notifications = () => {
 	}, []);
 
 	if (!isLoadingPermissionRequest) {
-		return null;
+		return (
+			<ThemedView style={stylesLoader.container}>
+				<LottieView
+					source={loader}
+					autoPlay
+					loop
+					style={stylesLoader.animation}
+				/>
+			</ThemedView>
+		);
 	}
 
 	return (
@@ -66,12 +108,33 @@ export const Notifications = () => {
 						variant='secondary'
 						onlyIcon
 						icon={<ArrowIcon width={20} height={20} fill={backButtonColor} />}
-						onPress={goBack}
+						onPress={() => {
+							resetSettings();
+							goBack();
+						}}
 					/>
 					<ThemedText type='textMd' style={styles.title}>
 						Notifications
 					</ThemedText>
-					<View style={styles.mock} />
+					{hasSettingsChanges ? (
+						<Button
+							variant='primary'
+							size='md'
+							onlyIcon
+							icon={
+								<CheckLineIcon width={20} height={20} fill={iconPrimaryColor} />
+							}
+							onPress={() =>
+								putNotificationsSettingsFx({
+									isKeywordsPushesEnabled: isPushNotificationsEnabledDraft,
+									isKeywordsPushesSoundEnabled: isPushNotificationsSoundDraft,
+									isKeywordsVoiceOverEnabled: isVoiceOverEnabledDraft,
+								})
+							}
+						/>
+					) : (
+						<View style={styles.mock} />
+					)}
 				</ThemedView>
 
 				<ThemedView style={styles.content}>
@@ -118,13 +181,9 @@ export const Notifications = () => {
 								</ThemedView>
 							</ThemedView>
 							<Switch
-								value={isPushNotificationsEnabled}
+								value={isPushNotificationsEnabledDraft}
 								disabled={!isPermissionStatusGranted}
-								onChange={newValue =>
-									changePushNotificationsSettings({
-										isKeywordsPushesEnabled: newValue,
-									})
-								}
+								onChange={onTogglePushNotificationsEnabledDraft}
 							/>
 						</ThemedView>
 
@@ -155,13 +214,9 @@ export const Notifications = () => {
 								</ThemedView>
 							</ThemedView>
 							<Switch
-								value={isPushNotificationsSound}
+								value={isPushNotificationsSoundDraft}
 								disabled={!isPermissionStatusGranted}
-								onChange={newValue =>
-									changePushNotificationsSettings({
-										isKeywordsPushesSoundEnabled: newValue,
-									})
-								}
+								onChange={onTogglePushNotificationsSoundDraft}
 							/>
 						</ThemedView>
 
@@ -190,12 +245,8 @@ export const Notifications = () => {
 								</ThemedView>
 							</ThemedView>
 							<Switch
-								value={isVoiceOverEnabled}
-								onChange={newValue =>
-									changePushNotificationsSettings({
-										isKeywordsVoiceOverEnabled: newValue,
-									})
-								}
+								value={isVoiceOverEnabledDraft}
+								onChange={onToggleVoiceoverEnabledDraft}
 							/>
 						</ThemedView>
 					</ThemedView>
@@ -204,6 +255,19 @@ export const Notifications = () => {
 		</ThemedViewWithSafeArea>
 	);
 };
+
+const stylesLoader = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+
+	animation: {
+		width: 260,
+		height: 260,
+	},
+});
 
 const styles = StyleSheet.create({
 	wrapper: {

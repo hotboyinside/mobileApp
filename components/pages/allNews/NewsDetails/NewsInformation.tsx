@@ -75,14 +75,18 @@ export const NewsInformation = ({ news }: NewsInformationProps) => {
 				))}
 			</View>
 
-			<ThemedText type='textMd' style={styles.description}>
+			<ThemedText
+				tokenColor={appTokens.text.secondary}
+				type='textMd'
+				style={styles.description}
+			>
 				{description}
 			</ThemedText>
 
 			{isNotEmptyKeywords && (
 				<View style={styles.keywords}>
 					{keywords.map(keyword => (
-						<ReadOnlyKeyword key={keyword._id} keyword={keyword} />
+						<ReadOnlyKeyword key={keyword._id} keyword={keyword} size='lg' />
 					))}
 				</View>
 			)}

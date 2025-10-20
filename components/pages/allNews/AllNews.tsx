@@ -4,7 +4,6 @@ import Loader from '@/components/ui/Loader/Loader';
 import { WindowsNames } from '@/constants/socket/clientEvents';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { getAllNewsKeywordsFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
 import { pageMounted } from '@/stores/allNews/model';
 import {
 	$allNewsLoadStatus,
@@ -30,7 +29,6 @@ import {
 	removeListener,
 	SseEvents,
 } from '@/stores/sse/model';
-import { getStarRatingFx } from '@/stores/starRating/handlers';
 import { symbolsSubscribeAndUnsubscribeEvent } from '@/stores/symbols/model';
 import { useUnit } from 'effector-react';
 import debounce from 'lodash/debounce';
@@ -61,6 +59,7 @@ const renderItem = ({ item }: { item: any }) => {
 };
 
 export default function AllNews() {
+	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [isShowBottomHeader, setIsShowBottomHeader] = useState(false);
 	const allNews = useUnit($filteredNews);
 	const allNewsLoadStatus = useUnit($allNewsLoadStatus);
@@ -76,15 +75,14 @@ export default function AllNews() {
 		setIsShowBottomHeader(offsetY > 0);
 	}, []);
 
-	const handleLoadMore = useMemo(
-		() =>
-			debounce(() => {
-				if (hasMoreNews && !isLoading) {
-					getNews({ isInitialNews: false });
-				}
-			}, 500),
-		[hasMoreNews, isLoading]
-	);
+	const handleRefresh = useCallback(async () => {
+		setIsRefreshing(true);
+		try {
+			onPageMounted();
+		} finally {
+			setIsRefreshing(false);
+		}
+	}, []);
 
 	const subscribeToTickersOnScreen = useCallback(
 		(start: number, end: number) => {
@@ -109,6 +107,16 @@ export default function AllNews() {
 			}
 		},
 		[allNews]
+	);
+
+	const handleLoadMore = useMemo(
+		() =>
+			debounce(() => {
+				if (hasMoreNews && !isLoading) {
+					getNews({ isInitialNews: false });
+				}
+			}, 500),
+		[hasMoreNews, isLoading]
 	);
 
 	const onViewableItemsChanged = useMemo(
@@ -142,6 +150,10 @@ export default function AllNews() {
 	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
 
 	useEffect(() => {
+		onPageMounted();
+	}, [onPageMounted]);
+
+	useEffect(() => {
 		handleTopBannersGetNews();
 		addListener({
 			eventName: SseEvents.News,
@@ -168,15 +180,6 @@ export default function AllNews() {
 			onUnsubscribeTopBanners();
 		};
 	}, [onSubscribeTopBanners, onUnsubscribeTopBanners, socketSource]);
-
-	useEffect(() => {
-		onPageMounted();
-	}, [onPageMounted]);
-
-	useEffect(() => {
-		getStarRatingFx();
-		getAllNewsKeywordsFx();
-	}, []);
 
 	useEffect(() => {
 		addListener({ eventName: SseEvents.News, listener: getNewsFroSseEvent });
@@ -211,6 +214,8 @@ export default function AllNews() {
 				viewabilityConfig={{
 					itemVisiblePercentThreshold: 50,
 				}}
+				refreshing={isRefreshing}
+				onRefresh={handleRefresh}
 			/>
 		</ThemedViewWithSafeArea>
 	);

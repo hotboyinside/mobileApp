@@ -3,10 +3,10 @@ import { ThemedView } from '@/components/ThemedView';
 import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
 import {
 	$marketDraft,
-	MarketNames,
 	getMarketLabel,
 	toggleMarketDraft,
-} from '@/stores/allNews/filtersPanel/filters/market/model';
+} from '@/stores/allNews/filtersPanel/filters/market';
+import { MarketNames } from '@/types/market';
 
 import { useUnit } from 'effector-react';
 import { StyleSheet } from 'react-native';

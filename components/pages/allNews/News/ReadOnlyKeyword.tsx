@@ -6,7 +6,12 @@ import { useKeywordsColors } from '@/hooks/useKeywordsColors';
 import { UserKeyword } from '@/types/keywords';
 import { StyleSheet } from 'react-native';
 
-export const ReadOnlyKeyword = ({ keyword }: { keyword: UserKeyword }) => {
+type ReadOnlyKeywordProps = {
+	keyword: UserKeyword;
+	size?: 'sm' | 'lg';
+};
+
+export const ReadOnlyKeyword = ({ keyword, size }: ReadOnlyKeywordProps) => {
 	const Icon = keywordsIcons[keyword.iconKey || 'smile'];
 	const keywordsColors = useKeywordsColors();
 	const bgColor = keywordsColors[keyword.color].background;
@@ -28,7 +33,7 @@ export const ReadOnlyKeyword = ({ keyword }: { keyword: UserKeyword }) => {
 			}
 			color='gray'
 			variant='keywords'
-			size='sm'
+			size={size}
 			badgeStyle={{ backgroundColor: bgColor }}
 			textStyle={{ color: textColor }}
 		/>

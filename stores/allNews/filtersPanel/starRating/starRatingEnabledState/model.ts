@@ -26,6 +26,7 @@ export const $isStarRatingEnabledStateChanged = combine(
 export const toggleDraftStarRatingEnabledState =
 	createEvent<StarNumberStateKey>();
 export const applyDraftStarRatingEnabledState = createEvent();
+export const discardStarRatingEnabledStateDraft = createEvent();
 
 $draftStarRatingEnabledState.on(
 	toggleDraftStarRatingEnabledState,
@@ -38,4 +39,10 @@ sample({
 	clock: applyDraftStarRatingEnabledState,
 	source: $draftStarRatingEnabledState,
 	target: $starRatingEnabledState,
+});
+
+sample({
+	clock: discardStarRatingEnabledStateDraft,
+	source: $starRatingEnabledState,
+	target: $draftStarRatingEnabledState,
 });

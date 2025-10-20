@@ -12,6 +12,8 @@ import {
 	changeUserInputKeyword,
 	showDuplicateError,
 } from '../allNews/filtersPanel/starRating/model';
+import { pageMounted } from '../allNews/model';
+import { getStarRatingFx, updateStarRatingFx } from './handlers';
 
 export const $starRatingKeywords =
 	createStore<StarRatingKeywords>(initialStarRating);
@@ -61,6 +63,18 @@ $draftStarRatingKeywords.on(
 	resetToDefaultStarRatingKeywords,
 	_ => DefaultStarRatingSet.userRating.keywordsByStar
 );
+
+sample({
+	clock: pageMounted,
+	target: getStarRatingFx,
+});
+
+getStarRatingFx.done.watch(({ result }) => {
+	setStarRatingKeywords(result.userRating!.keywordsByStar);
+});
+
+updateStarRatingFx.done.watch(() => saveDraftStarRatingKeyword());
+updateStarRatingFx.fail.watch(({ error }: { error: any }) => {});
 
 sample({
 	clock: openEditStarRating,

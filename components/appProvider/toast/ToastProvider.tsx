@@ -1,25 +1,26 @@
-import React, {
-	createContext,
-	useContext,
-	useState,
-	useCallback,
-	useRef,
-	useEffect,
-} from 'react';
 import CloseIcon from '@/assets/icons/close-icon.svg';
-import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
 import { Button } from '@/components/ui/Button';
+import { ToastKeywordAlertContent } from '@/components/ui/ToastContent/ToastKeywordAlertContent';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { $newsToast } from '@/stores/notificationsToasts/model';
 import { useUnit } from 'effector-react';
-import { ToastKeywordAlertContent } from '@/components/ui/ToastContent/ToastKeywordAlertContent';
+import React, {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
+import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface ToastContextType {
 	showToast: (
 		content: React.ReactNode,
 		duration?: number,
-		onPress?: () => void
+		onPress?: () => void,
+		position?: 'top' | 'bottom'
 	) => void;
 	closeToast: () => void;
 }
@@ -36,6 +37,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 	const [onPressCallback, setOnPressCallback] = useState<(() => void) | null>(
 		null
 	);
+	const [position, setPosition] = useState<'top' | 'bottom'>('top');
 
 	const toastData = useUnit($newsToast);
 
@@ -52,7 +54,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 
 		Animated.parallel([
 			Animated.timing(translateY, {
-				toValue: -100,
+				toValue: position === 'top' ? -100 : 100,
 				duration: 300,
 				useNativeDriver: true,
 			}),
@@ -65,17 +67,21 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 			setContent(null);
 			setOnPressCallback(null);
 		});
-	}, []);
+	}, [position]);
 
 	const showToast = useCallback(
 		(
 			newContent: React.ReactNode,
 			duration: number = 3000,
-			onPress?: () => void
+			onPress?: () => void,
+			pos: 'top' | 'bottom' = 'top'
 		) => {
 			if (hideTimeout.current) clearTimeout(hideTimeout.current);
 			setContent(newContent);
 			setOnPressCallback(() => onPress || null);
+			setPosition(pos);
+
+			translateY.setValue(pos === 'top' ? -100 : 100);
 
 			Animated.parallel([
 				Animated.spring(translateY, {
@@ -93,17 +99,17 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 				closeToast();
 			}, duration);
 		},
-		[closeToast]
+		[closeToast, fadeAnim, translateY]
 	);
 
 	useEffect(() => {
 		if (toastData) {
 			const { title, keywords, onPress } = toastData;
-
 			showToast(
 				<ToastKeywordAlertContent title={title} keywords={keywords} />,
 				5000,
-				onPress
+				onPress,
+				'top'
 			);
 		}
 	}, [toastData, showToast]);
@@ -116,6 +122,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 				<Animated.View
 					style={[
 						styles.toastContainer,
+						position === 'top' ? styles.topPosition : styles.bottomPosition,
 						{
 							transform: [{ translateY }],
 							opacity: fadeAnim,
@@ -156,18 +163,25 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 const styles = StyleSheet.create({
 	toastContainer: {
 		position: 'absolute',
-		top: 0,
 		left: 0,
 		right: 0,
 		paddingHorizontal: 16,
-		zIndex: 1,
+		zIndex: 100,
+	},
+
+	topPosition: {
+		top: 0,
+		paddingTop: 40,
+	},
+
+	bottomPosition: {
+		bottom: 60,
 	},
 
 	toastInner: {
 		position: 'relative',
 		borderWidth: 1,
 		borderRadius: 16,
-		marginTop: 40,
 		padding: 12,
 		flexDirection: 'row',
 	},

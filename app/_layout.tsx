@@ -1,22 +1,22 @@
 // import '@/i18n';
+import { AppProvider } from '@/components/appProvider/AppProvider';
+import { useSession } from '@/components/appProvider/session/SessionContext';
+import { SplashScreenController } from '@/components/splash/SplashScreenController';
+import {
+	closeToSseEventNews,
+	subscribeToSseEventNews,
+} from '@/stores/sse/model';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import 'react-native-reanimated';
-import { AppProvider } from '@/components/appProvider/AppProvider';
-import { SplashScreenController } from '@/components/splash/SplashScreenController';
-import { useSession } from '@/components/appProvider/session/SessionContext';
-import {
-	subscribeToSseEventNews,
-	closeToSseEventNews,
-} from '@/stores/sse/model';
 import { useEffect, useRef } from 'react';
+import 'react-native-reanimated';
 // import { tick } from "@/stores/allNews/globalTick/model";
-import { connectSocketEvent } from '@/stores/socket/model';
-import { AppState } from 'react-native';
-import { useUnit } from 'effector-react';
-import { $appState, appStateChanged } from '@/stores/appState/model';
 import { useNotificationObserver } from '@/hooks/useNotifications';
+import { $appState, appStateChanged } from '@/stores/appState/model';
+import { connectSocketEvent } from '@/stores/socket/model';
 import { loadAppThemeFx } from '@/stores/userSettings/theme';
+import { useUnit } from 'effector-react';
+import { AppState } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 

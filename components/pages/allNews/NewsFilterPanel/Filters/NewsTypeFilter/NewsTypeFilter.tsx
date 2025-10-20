@@ -3,10 +3,10 @@ import { ThemedView } from '@/components/ThemedView';
 import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
 import {
 	$newsTypeDraft,
-	NewsTypesNames,
 	getNewsTypeLabel,
 	toggleNewsTypeDraft,
-} from '@/stores/allNews/filtersPanel/filters/newsType/model';
+} from '@/stores/allNews/filtersPanel/filters/newsType';
+import { NewsTypesNames } from '@/types/newsType';
 
 import { useUnit } from 'effector-react';
 import { StyleSheet } from 'react-native';

@@ -3,10 +3,10 @@ import { ThemedView } from '@/components/ThemedView';
 import { MultiSelectTabs } from '@/components/ui/Tabs/MultiSelectTabs';
 import {
 	$stockTypeDraft,
-	toggleStockTypeDraft,
-	StockTypesNames,
 	getStockTypeLabel,
-} from '@/stores/allNews/filtersPanel/filters/stockType/model';
+	toggleStockTypeDraft,
+} from '@/stores/allNews/filtersPanel/filters/stockType';
+import { StockTypesNames } from '@/types/stockTypes';
 
 import { useUnit } from 'effector-react';
 import { StyleSheet } from 'react-native';

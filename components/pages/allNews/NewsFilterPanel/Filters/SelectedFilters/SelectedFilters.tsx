@@ -1,28 +1,22 @@
+import CloseIcon from '@/assets/icons/close-icon.svg';
 import { ThemedView } from '@/components/ThemedView';
 import { Badge } from '@/components/ui/Badge/Badge';
-import { StyleSheet } from 'react-native';
-import CloseIcon from '@/assets/icons/close-icon.svg';
-import { useThemeColor } from '@/hooks/useThemeColor';
 import { appTokens } from '@/constants/tokens';
-import { useUnit } from 'effector-react';
-import { AdditionalFilterKey } from '@/types/filters';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { toggleFilterEnabled } from '@/stores/allNews/filtersPanel/filters/additionalFilters/model';
-import {
-	removeMarketFromDraft,
-	MarketNames,
-} from '@/stores/allNews/filtersPanel/filters/market/model';
-import {
-	removeNewsTypeFromDraft,
-	NewsTypesNames,
-} from '@/stores/allNews/filtersPanel/filters/newsType/model';
+import { removeMarketFromDraft } from '@/stores/allNews/filtersPanel/filters/market';
+import { removeNewsTypeFromDraft } from '@/stores/allNews/filtersPanel/filters/newsType';
 import {
 	$activeFiltersCount,
 	$selectableFilters,
-} from '@/stores/allNews/filtersPanel/filters/selectableFilters/model';
-import {
-	removeStockTypeFromDraft,
-	StockTypesNames,
-} from '@/stores/allNews/filtersPanel/filters/stockType/model';
+} from '@/stores/allNews/filtersPanel/filters/selectableFilters';
+import { removeStockTypeFromDraft } from '@/stores/allNews/filtersPanel/filters/stockType';
+import { AdditionalFilterKey } from '@/types/filters';
+import { MarketNames } from '@/types/market';
+import { NewsTypesNames } from '@/types/newsType';
+import { StockTypesNames } from '@/types/stockTypes';
+import { useUnit } from 'effector-react';
+import { StyleSheet } from 'react-native';
 
 export const SelectedFilters = () => {
 	const selectableFilters = useUnit($selectableFilters);

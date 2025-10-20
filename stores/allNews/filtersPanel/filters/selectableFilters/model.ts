@@ -1,21 +1,17 @@
+import { AdditionalFilterKey, additionalFiltersLabels } from '@/types/filters';
 import { combine, sample } from 'effector';
-import {
-	$stockType,
-	$stockTypeDraft,
-	getStockTypeLabel,
-} from '../stockType/model';
-import { $newsType, $newsTypeDraft, getNewsTypeLabel } from '../newsType/model';
-import { $market, $marketDraft, getMarketLabel } from '../market/model';
-import {
-	$additionalFilters,
-	$additionalFiltersDraft,
-} from '../additionalFilters/model';
-import { additionalFiltersLabels, AdditionalFilterKey } from '@/types/filters';
 import {
 	addSelectedTabFilters,
 	FilterTabVariant,
 	removeSelectedTabFilters,
 } from '../../model';
+import {
+	$additionalFilters,
+	$additionalFiltersDraft,
+} from '../additionalFilters';
+import { $market, $marketDraft, getMarketLabel } from '../market';
+import { $newsType, $newsTypeDraft, getNewsTypeLabel } from '../newsType';
+import { $stockType, $stockTypeDraft, getStockTypeLabel } from '../stockType';
 
 export const $hasChangesInFilters = combine(
 	$marketDraft,

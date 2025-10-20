@@ -1,206 +1,217 @@
-import { Button } from "@/components/ui/Button";
-import { appTokens } from "@/constants/tokens";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { filtersApplyClick } from "@/stores/allNews/filtersPanel/filters/model";
-import { $hasChangesInFilters } from "@/stores/allNews/filtersPanel/filters/selectableFilters/model";
+import { Button } from '@/components/ui/Button';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { filtersApplyClick } from '@/stores/allNews/filtersPanel/filters/model';
+import { $hasChangesInFilters } from '@/stores/allNews/filtersPanel/filters/selectableFilters';
 import {
-  $hasChangesInSelectedColor,
-  applySelectedColorClick,
-} from "@/stores/allNews/filtersPanel/keywords/selectedColor/model";
+	$hasChangesInSelectedColor,
+	applySelectedColorClick,
+} from '@/stores/allNews/filtersPanel/keywords/selectedColor/model';
 import {
-  $hasChangesInSelectedIcon,
-  applySelectedKeyIconClick,
-} from "@/stores/allNews/filtersPanel/keywords/selectedIcon/model";
+	$hasChangesInSelectedIcon,
+	applySelectedKeyIconClick,
+} from '@/stores/allNews/filtersPanel/keywords/selectedIcon/model';
 import {
-  $openedFilterSubTab,
-  $openedFilterTab,
-  FilterSubTabVariant,
-  FilterTabVariant,
-} from "@/stores/allNews/filtersPanel/model";
+	$openedFilterSubTab,
+	$openedFilterTab,
+	FilterSubTabVariant,
+	FilterTabVariant,
+} from '@/stores/allNews/filtersPanel/model';
 import {
-  $isSortByChanged,
-  applySortingClick,
-} from "@/stores/allNews/filtersPanel/sortBy/model";
+	$isSortByChanged,
+	applySortingClick,
+} from '@/stores/allNews/filtersPanel/sortBy';
 import {
-  $isStarRatingEnabledStateChanged,
-  applyDraftStarRatingEnabledState,
-} from "@/stores/allNews/filtersPanel/starRating/starRatingEnabledState/model";
-import { updateStarRatingFx } from "@/stores/starRating/handlers";
+	$isStarRatingEnabledStateChanged,
+	applyDraftStarRatingEnabledState,
+} from '@/stores/allNews/filtersPanel/starRating/starRatingEnabledState';
+
+import { updateStarRatingFx } from '@/stores/starRating/handlers';
 import {
-  $draftStarRatingKeywords,
-  $isStarRatingChanged,
-} from "@/stores/starRating/model";
-import { putNotificationsSettingsFx } from "@/stores/userSettings";
-import { $isKeywordsEnabled } from "@/stores/userSettings/keywordsEnabled";
+	$draftStarRatingKeywords,
+	$isStarRatingChanged,
+} from '@/stores/starRating/model';
+import { putNotificationsSettingsFx } from '@/stores/userSettings';
+import { $isKeywordsEnabled } from '@/stores/userSettings/keywordsEnabled';
 import {
-  BottomSheetFooter,
-  BottomSheetFooterProps,
-} from "@gorhom/bottom-sheet";
-import { useUnit } from "effector-react";
-import { useEffect, useState } from "react";
-import { Keyboard, StyleSheet } from "react-native";
+	BottomSheetFooter,
+	BottomSheetFooterProps,
+} from '@gorhom/bottom-sheet';
+import { useUnit } from 'effector-react';
+import { useEffect, useState } from 'react';
+import { Keyboard, StyleSheet } from 'react-native';
 import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface BottomSheetApplyFooterProps extends BottomSheetFooterProps {
-  applyButtonTitle?: string;
-  closeButtonTitle?: string;
-  closeButtonIsSecondary?: boolean;
-  onClose?: () => void;
+	applyButtonTitle?: string;
+	closeButtonTitle?: string;
+	closeButtonIsSecondary?: boolean;
+	onClose?: () => void;
 }
 
 export const BottomSheetApplyFooter = ({
-  applyButtonTitle = "Apply",
-  closeButtonTitle = "Close",
-  animatedFooterPosition,
-  closeButtonIsSecondary,
-  onClose = () => {},
+	applyButtonTitle = 'Apply',
+	closeButtonTitle = 'Close',
+	animatedFooterPosition,
+	closeButtonIsSecondary,
+	onClose = () => {},
 }: BottomSheetApplyFooterProps) => {
-  const openedFilterTab = useUnit($openedFilterTab);
-  const openedFilterSubTab = useUnit($openedFilterSubTab);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const { bottom: bottomSafeArea } = useSafeAreaInsets();
-  const padding = useSharedValue({ top: 8, bottom: 8 });
+	const openedFilterTab = useUnit($openedFilterTab);
+	const openedFilterSubTab = useUnit($openedFilterSubTab);
+	const [keyboardVisible, setKeyboardVisible] = useState(false);
+	const { bottom: bottomSafeArea } = useSafeAreaInsets();
+	const padding = useSharedValue({ top: 8, bottom: 8 });
 
-  const applySortingClickFx = useUnit(applySortingClick);
-  const hasChangesInSortingFilters = useUnit($isSortByChanged);
+	const applySortingClickFx = useUnit(applySortingClick);
+	const hasChangesInSortingFilters = useUnit($isSortByChanged);
 
-  const applyFiltersFx = useUnit(filtersApplyClick);
-  const hasChangesInFilters = useUnit($hasChangesInFilters);
+	const applyFiltersFx = useUnit(filtersApplyClick);
+	const hasChangesInFilters = useUnit($hasChangesInFilters);
 
-  const applyKeywordColorFx = useUnit(applySelectedColorClick);
-  const hasChangesInSelectedColor = useUnit($hasChangesInSelectedColor);
+	const applyKeywordColorFx = useUnit(applySelectedColorClick);
+	const hasChangesInSelectedColor = useUnit($hasChangesInSelectedColor);
 
-  const applySelectedKeyIconClickFx = useUnit(applySelectedKeyIconClick);
-  const hasChangesInSelectedIcon = useUnit($hasChangesInSelectedIcon);
+	const applySelectedKeyIconClickFx = useUnit(applySelectedKeyIconClick);
+	const hasChangesInSelectedIcon = useUnit($hasChangesInSelectedIcon);
 
-  const onApplyDraftStarRatingEnabledState = useUnit(
-    applyDraftStarRatingEnabledState
-  );
-  const isStarRatingEnabledStateChanged = useUnit(
-    $isStarRatingEnabledStateChanged
-  );
+	const onApplyDraftStarRatingEnabledState = useUnit(
+		applyDraftStarRatingEnabledState
+	);
+	const isStarRatingEnabledStateChanged = useUnit(
+		$isStarRatingEnabledStateChanged
+	);
 
-  const updateStarRating = useUnit(updateStarRatingFx);
-  const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
-  const isStarRatingChanged = useUnit($isStarRatingChanged);
+	const updateStarRating = useUnit(updateStarRatingFx);
+	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
+	const isStarRatingChanged = useUnit($isStarRatingChanged);
 
-  const isKeywordsEnabled = useUnit($isKeywordsEnabled);
-  const onKeywordsEnabledToggle = () =>
-    putNotificationsSettingsFx({
-      isKeywordsEnabled: !isKeywordsEnabled,
-    });
+	const isKeywordsEnabled = useUnit($isKeywordsEnabled);
+	const onKeywordsEnabledToggle = () =>
+		putNotificationsSettingsFx({
+			isKeywordsEnabled: !isKeywordsEnabled,
+		});
 
-  const animatedPadding = useAnimatedStyle(() => {
-    return {
-      paddingTop: withSpring(padding.value.top),
-      paddingBottom: withSpring(padding.value.bottom),
-    };
-  });
+	const animatedPadding = useAnimatedStyle(() => {
+		return {
+			paddingTop: withSpring(padding.value.top),
+			paddingBottom: withSpring(padding.value.bottom),
+		};
+	});
 
-  let applyAction: () => void = () => {};
-  let hasChanges = false;
+	let applyAction: () => void = () => {};
+	let hasChanges = false;
+	let isShowApplyTitle = true;
 
-  switch (openedFilterTab) {
-    case FilterTabVariant.sort:
-      applyAction = applySortingClickFx;
-      hasChanges = hasChangesInSortingFilters;
-      break;
+	switch (openedFilterTab) {
+		case FilterTabVariant.sort:
+			applyAction = applySortingClickFx;
+			hasChanges = hasChangesInSortingFilters;
+			isShowApplyTitle = hasChangesInSortingFilters;
+			break;
 
-    case FilterTabVariant.filters:
-      applyAction = applyFiltersFx;
-      hasChanges = hasChangesInFilters;
-      break;
+		case FilterTabVariant.filters:
+			applyAction = applyFiltersFx;
+			hasChanges = hasChangesInFilters;
+			isShowApplyTitle = hasChangesInFilters;
+			break;
 
-    case FilterTabVariant.keywords:
-      applyAction = onKeywordsEnabledToggle;
-      hasChanges = isKeywordsEnabled;
-      break;
+		case FilterTabVariant.keywords:
+			applyAction = onKeywordsEnabledToggle;
+			hasChanges = true;
+			isShowApplyTitle = isKeywordsEnabled;
+			break;
 
-    case FilterTabVariant.rating:
-      applyAction = onApplyDraftStarRatingEnabledState;
-      hasChanges = isStarRatingEnabledStateChanged;
-      break;
-  }
+		case FilterTabVariant.rating:
+			applyAction = onApplyDraftStarRatingEnabledState;
+			hasChanges = isStarRatingEnabledStateChanged;
+			isShowApplyTitle = isStarRatingEnabledStateChanged;
+			break;
+	}
 
-  switch (openedFilterSubTab) {
-    case FilterSubTabVariant.keywordsColor:
-      applyAction = applyKeywordColorFx;
-      hasChanges = hasChangesInSelectedColor;
-      break;
+	switch (openedFilterSubTab) {
+		case FilterSubTabVariant.keywordsColor:
+			applyAction = applyKeywordColorFx;
+			hasChanges = hasChangesInSelectedColor;
+			isShowApplyTitle = hasChangesInSelectedColor;
+			break;
 
-    case FilterSubTabVariant.keywordsIcon:
-      applyAction = applySelectedKeyIconClickFx;
-      hasChanges = hasChangesInSelectedIcon;
-      break;
+		case FilterSubTabVariant.keywordsIcon:
+			applyAction = applySelectedKeyIconClickFx;
+			hasChanges = hasChangesInSelectedIcon;
+			isShowApplyTitle = hasChangesInSelectedIcon;
+			break;
 
-    case FilterSubTabVariant.editRating:
-      applyAction = () => updateStarRating(draftStarRatingKeywords);
-      hasChanges = isStarRatingChanged;
-  }
+		case FilterSubTabVariant.editRating:
+			applyAction = () => updateStarRating(draftStarRatingKeywords);
+			hasChanges = isStarRatingChanged;
+			isShowApplyTitle = isStarRatingChanged;
+	}
 
-  const bgColor = useThemeColor(appTokens.background.primary);
-  const borderColor = useThemeColor(appTokens.border.tertiary);
-  const isSecondaryButton = closeButtonIsSecondary && hasChanges;
+	const bgColor = useThemeColor(appTokens.background.primary);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const isSecondaryButton = closeButtonIsSecondary && isShowApplyTitle;
 
-  useEffect(() => {
-    const showKeyboard = Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardVisible(true);
-    });
-    const hideKeyboard = Keyboard.addListener("keyboardDidHide", () =>
-      setKeyboardVisible(false)
-    );
+	useEffect(() => {
+		const showKeyboard = Keyboard.addListener('keyboardDidShow', () => {
+			setKeyboardVisible(true);
+		});
+		const hideKeyboard = Keyboard.addListener('keyboardDidHide', () =>
+			setKeyboardVisible(false)
+		);
 
-    return () => {
-      showKeyboard.remove();
-      hideKeyboard.remove();
-    };
-  }, []);
+		return () => {
+			showKeyboard.remove();
+			hideKeyboard.remove();
+		};
+	}, []);
 
-  useEffect(() => {
-    if (keyboardVisible) {
-      padding.value = { top: 8, bottom: 8 };
-    } else {
-      padding.value = { top: 16, bottom: 16 + bottomSafeArea };
-    }
-  }, [keyboardVisible, bottomSafeArea, padding]);
+	useEffect(() => {
+		if (keyboardVisible) {
+			padding.value = { top: 8, bottom: 8 };
+		} else {
+			padding.value = { top: 16, bottom: 16 + bottomSafeArea };
+		}
+	}, [keyboardVisible, bottomSafeArea, padding]);
 
-  return (
-    <BottomSheetFooter animatedFooterPosition={animatedFooterPosition}>
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            borderColor: borderColor,
-            backgroundColor: bgColor,
-          },
-          animatedPadding,
-        ]}
-      >
-        <Button
-          variant={isSecondaryButton ? "secondary" : "primary"}
-          size='lg'
-          title={hasChanges ? applyButtonTitle : closeButtonTitle}
-          onPress={() => {
-            applyAction();
-            onClose();
-          }}
-        />
-      </Animated.View>
-    </BottomSheetFooter>
-  );
+	return (
+		<BottomSheetFooter animatedFooterPosition={animatedFooterPosition}>
+			<Animated.View
+				style={[
+					styles.container,
+					{
+						borderColor: borderColor,
+						backgroundColor: bgColor,
+					},
+					animatedPadding,
+				]}
+			>
+				<Button
+					variant={isSecondaryButton ? 'secondary' : 'primary'}
+					size='lg'
+					title={isShowApplyTitle ? applyButtonTitle : closeButtonTitle}
+					onPress={() => {
+						if (hasChanges) {
+							applyAction();
+						}
+						onClose();
+					}}
+				/>
+			</Animated.View>
+		</BottomSheetFooter>
+	);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
-    borderBottomWidth: 0,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingHorizontal: 16,
-  },
+	container: {
+		borderWidth: 1,
+		borderBottomWidth: 0,
+		borderTopLeftRadius: 16,
+		borderTopRightRadius: 16,
+		paddingHorizontal: 16,
+	},
 });

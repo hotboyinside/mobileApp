@@ -1,32 +1,32 @@
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { StyleSheet } from 'react-native';
-import { HeaderBottomSheet } from '../HeaderBottomSheet';
-import { ThemedView } from '@/components/ThemedView';
-import { Stars } from '@/components/ui/Stars';
-import { Switch } from '@/components/ui/Switch/Switch';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
-import { useUnit } from 'effector-react';
-import {
-	$starRatingKeywords,
-	openEditStarRating,
-} from '@/stores/starRating/model';
-import { StarNumber, StarNumberStateKey } from '@/types/starRating';
-import { Badge } from '@/components/ui/Badge/Badge';
 import EditIcon from '@/assets/icons/edit-icon.svg';
 import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
+import { ThemedView } from '@/components/ThemedView';
+import { Badge } from '@/components/ui/Badge/Badge';
+import { Stars } from '@/components/ui/Stars';
+import { Switch } from '@/components/ui/Switch/Switch';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import {
 	FilterSubTabVariant,
 	closeFilterSubTab,
 	openFilterSubTab,
 } from '@/stores/allNews/filtersPanel/model';
-import { BottomSheetApplyFooter } from '../BottomSheetApplyFooter';
-import { EditStarRating } from './editStarRating/EditStarRating';
-import { useCallback } from 'react';
 import {
 	$draftStarRatingEnabledState,
 	toggleDraftStarRatingEnabledState,
-} from '@/stores/allNews/filtersPanel/starRating/starRatingEnabledState/model';
+} from '@/stores/allNews/filtersPanel/starRating/starRatingEnabledState';
+import {
+	$starRatingKeywords,
+	openEditStarRating,
+} from '@/stores/starRating/model';
+import { StarNumber, StarNumberStateKey } from '@/types/starRating';
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { useUnit } from 'effector-react';
+import { useCallback } from 'react';
+import { StyleSheet } from 'react-native';
+import { BottomSheetApplyFooter } from '../BottomSheetApplyFooter';
+import { HeaderBottomSheet } from '../HeaderBottomSheet';
+import { EditStarRating } from './editStarRating/EditStarRating';
 
 type StarRatingProps = {
 	onClose: () => void;

@@ -1,8 +1,8 @@
-import { createEvent, createStore, sample } from "effector";
 import {
-  postNotificationsSettingsFx,
-  putNotificationsSettingsFx,
-} from "@/stores/userSettings";
+	postNotificationsSettingsFx,
+	putNotificationsSettingsFx,
+} from '@/stores/userSettings';
+import { createEvent, createStore, sample } from 'effector';
 
 export const $isKeywordsEnabled = createStore<boolean>(false);
 
@@ -14,13 +14,13 @@ $isKeywordsEnabled.on(setKeywordsEnabled, (_, payload) => payload);
 $isKeywordsEnabled.on(toggleKeywordsEnabled, (state, _) => !state);
 
 sample({
-  clock: postNotificationsSettingsFx.doneData,
-  fn: result => result.success.isKeywordsEnabled,
-  target: setKeywordsEnabled,
+	clock: postNotificationsSettingsFx.doneData,
+	fn: result => result.success.isKeywordsEnabled,
+	target: setKeywordsEnabled,
 });
 
 sample({
-  clock: putNotificationsSettingsFx.doneData,
-  fn: result => result.success.isKeywordsEnabled,
-  target: setKeywordsEnabled,
+	clock: putNotificationsSettingsFx.doneData,
+	fn: result => result.success.isKeywordsEnabled,
+	target: setKeywordsEnabled,
 });
