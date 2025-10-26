@@ -50,7 +50,9 @@ In the output, you'll find options to open the app in a
 
 > npx expo prebuild
 > ./gradlew clean
-> EXPO_PUBLIC_API_URL=https://test-news-scan-app.staging.forasoft.com ./gradlew assembleRelease
+> EXPO_PUBLIC_API_URL=https://test-news-scan-app.staging.forasoft.com ./gradlew assembleRelease (.apk)
+> EXPO_PUBLIC_API_URL=https://test-news-scan-app.staging.forasoft.com ./gradlew bundleRelease (.aab)
+
 
 # Checks logs on emulator
 

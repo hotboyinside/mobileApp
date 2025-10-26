@@ -32,3 +32,7 @@ export const API_NOTIFICATIONS_MOBILE_SETTINGS = urlJoin(
 
 // text to speech
 export const TEXT_TO_SPEECH = `${API_BASE_PATH}/textToSpeech`;
+
+// in-app-purchases
+export const API_IN_APP_PURCHASES = urlJoin(API_BASE_PATH, '/in-app-purchases');
+export const API_IN_APP_PURCHASES_APPLE = urlJoin(API_IN_APP_PURCHASES, '/apple');
