@@ -16,7 +16,7 @@ export const USERS_RATING = urlJoin(API_USERS, '/rating');
 // news
 export const NEWS = urlJoin(API_BASE_PATH, '/news');
 export const NEWS_BY_ID = (id: string) => urlJoin(NEWS, id);
-export const NEWS_GET_NEWS = urlJoin(NEWS,'/get-news');
+export const NEWS_GET_NEWS = urlJoin(NEWS, '/get-news');
 
 // notifications
 export const API_NOTIFICATIONS = urlJoin(API_BASE_PATH, '/notification');
@@ -35,4 +35,3 @@ export const TEXT_TO_SPEECH = `${API_BASE_PATH}/textToSpeech`;
 
 // in-app-purchases
 export const API_IN_APP_PURCHASES = urlJoin(API_BASE_PATH, '/in-app-purchases');
-export const API_IN_APP_PURCHASES_APPLE = urlJoin(API_IN_APP_PURCHASES, '/apple');

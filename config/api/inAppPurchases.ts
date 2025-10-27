@@ -1,8 +1,8 @@
-import { api } from './axios';
 import { API_IN_APP_PURCHASES } from '@/constants/apiRoutes';
+import { api } from './axios';
 
-type InAppPerchases = any;
+type InAppPurchases = any;
 
-export const postInAppPurchasesRequest = (data: InAppPerchases) => {
-    return api.post(API_IN_APP_PURCHASES, data);
+export const postInAppPurchasesRequest = (data: InAppPurchases) => {
+	return api.post(API_IN_APP_PURCHASES, data);
 };
