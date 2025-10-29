@@ -13,7 +13,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import Social from '@/components/ui/Social';
 import { ExternalLinks } from '@/constants/links';
-import { MODAL, NOTIFICATIONS, SHOP, THEME } from '@/constants/routes';
+import { MODAL, NOTIFICATIONS, THEME } from '@/constants/routes';
 import { appTokens } from '@/constants/tokens';
 import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -198,7 +198,6 @@ export default function More() {
 							styles.settingsButton,
 							{ borderColor: borderTertiaryColor },
 						]}
-						onPress={() => router.push(SHOP)}
 					>
 						<ThemedView
 							style={[

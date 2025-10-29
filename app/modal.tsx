@@ -16,12 +16,15 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button';
+import { postInAppPurchasesRequest } from '@/config/api/inAppPurchases';
 import { appTokens } from '@/constants/tokens';
 import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { ErrorCode, PurchaseAndroid, PurchaseIOS, useIAP } from 'expo-iap';
 import { useRouter } from 'expo-router';
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
+	Alert,
 	Dimensions,
 	Image,
 	Linking,
@@ -92,6 +95,7 @@ const CARDS: Card[] = [
 ];
 
 interface Plan {
+	id: string;
 	name: string;
 	period: string;
 	monthPrice: string;
@@ -102,6 +106,7 @@ interface Plan {
 
 const PLANS: Plan[] = [
 	{
+		id: 'premium_monthly',
 		name: 'Monthly',
 		period: '1 month of Premium',
 		monthPrice: '$69',
@@ -109,6 +114,7 @@ const PLANS: Plan[] = [
 		isPopular: false,
 	},
 	{
+		id: 'premium_halfyear',
 		name: 'Semi-annual',
 		period: '6 months of Premium',
 		monthPrice: '$58',
@@ -117,6 +123,7 @@ const PLANS: Plan[] = [
 		saveMoney: '$70',
 	},
 	{
+		id: 'premium_yearly',
 		name: 'Annual',
 		period: '12 months of Premium',
 		monthPrice: '$49',
@@ -126,14 +133,74 @@ const PLANS: Plan[] = [
 	},
 ];
 
+const SUB_IDS = ['premium_monthly', 'premium_halfyear', 'premium_yearly'];
+
 export default function ModalScreen() {
 	const scrollRef = useRef<ScrollView>(null);
 	const router = useRouter();
-	const { session } = useSession();
+	const { session, updateUser } = useSession();
 	const [selectedPlan, setSelectedPlan] = useState<Plan>(PLANS[2]);
 	const [plansPosition, setPlansPosition] = useState(0);
 	const { top: topSafeArea, bottom: bottomSafeArea } = useSafeAreaInsets();
 	const { width: screenWidth } = Dimensions.get('window');
+
+	const { connected, fetchProducts, requestPurchase, finishTransaction } =
+		useIAP({
+			onPurchaseSuccess: async purchase => {
+				try {
+					let payload: any = {};
+					if (purchase.platform === 'ios') {
+						const p = purchase as PurchaseIOS;
+						payload = {
+							platform: 'ios',
+							appBundleIdIOS: p.appBundleIdIOS,
+							transactionId: p.transactionId,
+							originalTransactionIdentifierIOS:
+								p.originalTransactionIdentifierIOS,
+							productId: p.productId,
+							purchaseToken: p.purchaseToken,
+							expirationDateIOS: p.expirationDateIOS,
+							transactionDate: p.transactionDate,
+							environmentIOS: p.environmentIOS,
+						};
+					} else {
+						const p = purchase as PurchaseAndroid;
+						const dataAndroid = p.dataAndroid ? JSON.parse(p.dataAndroid) : {};
+						payload = {
+							platform: 'android',
+							transactionId: p.transactionId || dataAndroid.orderId,
+							productId: p.productId,
+							purchaseToken: p.purchaseToken || dataAndroid.purchaseToken,
+							transactionDate: p.transactionDate || dataAndroid.purchaseTime,
+							packageNameAndroid:
+								p.packageNameAndroid || dataAndroid.packageName,
+						};
+					}
+
+					const result = await postInAppPurchasesRequest(payload);
+					if (result.status === 200) {
+						await finishTransaction({ purchase, isConsumable: false });
+						updateUser({
+							currentSubscription: {
+								price: selectedPlan.id,
+							},
+						});
+						Alert.alert('Успех', 'Подписка активирована ✅');
+					} else {
+						Alert.alert('Ошибка', 'Не прошла валидация покупки на сервере');
+					}
+				} catch (err) {
+					console.warn('finishTransaction error', err);
+				}
+			},
+			onPurchaseError: ({ code, message }) => {
+				if (code === ErrorCode.UserCancelled) {
+					Alert.alert('Покупка отменена');
+					return;
+				}
+				Alert.alert('Ошибка', message || 'Не удалось оформить покупку');
+			},
+		});
 
 	const isPremiumUser = isUserPremium(session);
 	const isFreeTrialUsed = session?.currentSubscription?.isFreeTrialUsed;
@@ -157,6 +224,29 @@ export default function ModalScreen() {
 	const textQuaternaryColor = useThemeColor(appTokens.text.quaternary);
 	const textBrandColor = useThemeColor(appTokens.text.brandSecondary);
 	const bgButtonColor = appTokens.alpha.white[10];
+
+	useEffect(() => {
+		if (!connected) return;
+		(async () => {
+			try {
+				await fetchProducts({ skus: SUB_IDS, type: 'subs' });
+			} catch (err) {
+				console.warn('fetchProducts error:', err);
+			}
+		})();
+	}, [connected]);
+
+	const handleBuy = async (id: string) => {
+		try {
+			await requestPurchase({
+				request: { ios: { sku: id }, android: { skus: [id] } },
+				type: 'subs',
+			});
+		} catch (err) {
+			console.warn('requestPurchase error:', err);
+			Alert.alert('Ошибка', 'Не удалось инициировать покупку');
+		}
+	};
 
 	return (
 		<ThemedView style={{ flex: 1 }}>
@@ -355,6 +445,7 @@ export default function ModalScreen() {
 							<TouchableOpacity
 								key={plan.name}
 								onPress={() => setSelectedPlan(PLANS[index])}
+								disabled={isPremiumUser}
 							>
 								<ThemedView
 									style={[
@@ -496,18 +587,36 @@ export default function ModalScreen() {
 					},
 				]}
 			>
-				<ThemedText type='textXs' style={styles.bottomText}>
-					{isFreeUserWithTrial && (
-						<ThemedText type='textXs'>1 month free, then</ThemedText>
-					)}{' '}
-					<ThemedText type='textXs'>{`${selectedPlan.total} / year `}</ThemedText>
-					<ThemedText
-						type='textXs'
-						style={{ color: textQuaternaryColor }}
-					>{`(${selectedPlan.monthPrice}/mo)`}</ThemedText>
-				</ThemedText>
+				{!isPremiumUser && (
+					<ThemedText type='textXs' style={styles.bottomText}>
+						{isFreeUserWithTrial && (
+							<ThemedText type='textXs'>1 month free, then</ThemedText>
+						)}{' '}
+						<ThemedText type='textXs'>{`${selectedPlan.total} / year `}</ThemedText>
+						<ThemedText
+							type='textXs'
+							style={{ color: textQuaternaryColor }}
+						>{`(${selectedPlan.monthPrice}/mo)`}</ThemedText>
+					</ThemedText>
+				)}
 				<View style={styles.buttons}>
-					<Button title='Continue' variant='primary' size='lg' />
+					{!isPremiumUser && (
+						<Button
+							title='Continue'
+							variant='primary'
+							size='lg'
+							onPress={() => handleBuy(selectedPlan.id)}
+						/>
+					)}
+					{isPremiumUser && (
+						<Button
+							title='Premium Active'
+							variant='primary'
+							size='lg'
+							disabled={true}
+						/>
+					)}
+
 					<Button
 						title='All Plans'
 						variant='link'

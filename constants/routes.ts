@@ -8,6 +8,5 @@ export const NEWS_DETAILS = (id: string) =>
 	urlJoin(NEWS_LIST, id) as RelativePathString;
 
 export const NOTIFICATIONS = '/notifications' as RelativePathString;
-export const SHOP = '/shop' as RelativePathString;
 export const THEME = '/theme' as RelativePathString;
 export const MODAL = '/modal' as RelativePathString;
