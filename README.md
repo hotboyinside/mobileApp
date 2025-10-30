@@ -31,14 +31,11 @@ In the output, you'll find options to open the app in a
 - Remake structure of stores (keywords relate to all pages, not only for all news)
 - rename effector's events functions names (fnFx -> handleFn or onFn) - in progress
 - check shadow - in progress
-- close tab's stores when swipe modal sheet
 - delete sse events logs
 - reset errors/input stores after quit filter's page
-- finish work with symbol change
-- delete repeated news
 - work with imports
-- add status bar
 - add "Not Found" page
+- add mobile sub in app
 
 ## Bugs associated with version
 
@@ -52,7 +49,6 @@ In the output, you'll find options to open the app in a
 > ./gradlew clean
 > EXPO_PUBLIC_API_URL=https://test-news-scan-app.staging.forasoft.com ./gradlew assembleRelease (.apk)
 > EXPO_PUBLIC_API_URL=https://test-news-scan-app.staging.forasoft.com ./gradlew bundleRelease (.aab)
-
 
 # Checks logs on emulator
 
