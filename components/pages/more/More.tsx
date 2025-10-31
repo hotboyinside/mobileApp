@@ -36,9 +36,9 @@ export default function More() {
   const { session, signOut } = useSession();
 
   const isPremiumUser = isUserPremium(session);
-  const isFreeTrialUsed = session?.currentSubscription?.isFreeTrialUsed;
+  const isFreeTrialUsed = session?.isFreeTrialUsed;
   const userFullName = `${session?.firstName} ${session?.lastName}`;
-  const expirationDate = session?.currentSubscription.nextBillingDate;
+  const expirationDate = session?.currentSubscription.mobileSubscription?.expirationDate || session?.currentSubscription.nextBillingDate;
   const expirationInfo = expirationDate
     ? `Active until ${format(new Date(expirationDate), "MMM d, yyyy")}`
     : "Active";

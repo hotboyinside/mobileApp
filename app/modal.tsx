@@ -139,6 +139,8 @@ export default function ModalScreen() {
   const scrollRef = useRef<ScrollView>(null);
   const router = useRouter();
   const { session, updateUser } = useSession();
+  const currentPlanId =
+    session?.currentSubscription.mobileSubscription?.productId || ;
   const [selectedPlan, setSelectedPlan] = useState<Plan>(PLANS[2]);
   const [plansPosition, setPlansPosition] = useState(0);
   const { top: topSafeArea, bottom: bottomSafeArea } = useSafeAreaInsets();
@@ -182,8 +184,9 @@ export default function ModalScreen() {
             await finishTransaction({ purchase, isConsumable: false });
             updateUser({
               currentSubscription: {
-                price: selectedPlan.id,
-                nextBillingDate: result.data.success.expirationDate,
+                mobileSubscription: {
+                  ...result.data.success.purchase,
+                },
               },
             });
             Alert.alert("Успех", "Подписка активирована ✅");
@@ -196,7 +199,6 @@ export default function ModalScreen() {
       },
       onPurchaseError: ({ code, message }) => {
         if (code === ErrorCode.UserCancelled) {
-          Alert.alert("Покупка отменена");
           return;
         }
         Alert.alert("Ошибка", message || "Не удалось оформить покупку");
@@ -204,7 +206,7 @@ export default function ModalScreen() {
     });
 
   const isPremiumUser = isUserPremium(session);
-  const isFreeTrialUsed = session?.currentSubscription?.isFreeTrialUsed;
+  const isFreeTrialUsed = session?.isFreeTrialUsed;
 
   const isFreeUserWithTrialUsed = !isPremiumUser && isFreeTrialUsed;
   const isFreeUserWithTrial = !isPremiumUser && !isFreeTrialUsed;
@@ -248,6 +250,8 @@ export default function ModalScreen() {
       Alert.alert("Ошибка", "Не удалось инициировать покупку");
     }
   };
+
+  console.log("session", session);
 
   return (
     <ThemedView style={{ flex: 1 }}>
