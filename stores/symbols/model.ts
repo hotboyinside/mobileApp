@@ -1,12 +1,12 @@
+import { WindowsNames } from '@/constants/socket/clientEvents';
+import { parseRedisObject } from '@/helpers/redis/parseRedisObject';
+import { ISymbol, SymbolData } from '@/types/symbols';
 import { createEvent, createStore, sample } from 'effector';
 import {
 	receiveSocketSymbolsEvent,
 	subscribeAndUnsubscribeSymbolsEvent,
 	subscribeToSymbolsEvent,
-} from '../socket/model';
-import { parseRedisObject } from '@/helpers/redis/parseRedisObject';
-import { ISymbol, SymbolData } from '@/types/symbols';
-import { WindowsNames } from '@/constants/socket/clientEvents';
+} from '../socket';
 
 export const $dataSymbolsData = createStore<Record<string, ISymbol>>({});
 export const $dataSymbolsSubscriptions = createStore<Set<string>>(new Set());

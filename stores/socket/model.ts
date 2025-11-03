@@ -1,11 +1,10 @@
-import { config } from '@/config/vars';
 import {
 	SocketClientEvents,
 	WindowsNames,
 } from '@/constants/socket/clientEvents';
 import { IRedisSymbol } from '@/types/redisSymbol';
-import { createEvent, createStore } from 'effector';
-import { io, Socket } from 'socket.io-client';
+import { createEvent, createStore, sample } from 'effector';
+import { Socket } from 'socket.io-client';
 import {
 	resetDataTopBannersSymbolsGainersLosersEvent,
 	updateDataTopBannersSymbolsGainersEvent,
@@ -13,22 +12,27 @@ import {
 	updateDataTopBannersSymbolsGapLosersEvent,
 	updateDataTopBannersSymbolsLosersEvent,
 } from '../allNews/topBannersData/model';
+import { connectSocketFx } from './handlers';
 
-export enum SocketServerEvents {
+enum SocketServerEvents {
 	Symbols = 'symbols',
 	StockTrade = 'stockTrade',
 }
 
-export enum SocketBannersEvents {
+enum SocketBannersEvents {
 	ClearGainersLosersSymbols = 'clearGainersLosersSymbols',
 	BannersGainersSymbols = 'bannersGainersSymbols',
 	BannersLosersSymbols = 'bannersLosersSymbols',
 	BannersGainersGappersSymbols = 'bannersGainerGappersSymbols',
 	BannersLosersGappersSymbols = 'bannersLoserGappersSymbols',
 }
-export const $socketSource = createStore<Socket | null>(null);
 
 export const connectSocketEvent = createEvent();
+export const disconnectSocketEvent = createEvent();
+
+export const socketConnectedEvent = createEvent();
+export const socketDisconnectedEvent = createEvent();
+
 export const receiveSocketSymbolsEvent = createEvent<{
 	symbols: IRedisSymbol[];
 }>();
@@ -43,19 +47,31 @@ export const subscribeAndUnsubscribeSymbolsEvent = createEvent<{
 export const subscribeTopBanners = createEvent();
 export const unsubscribeTopBanners = createEvent();
 
-$socketSource.on(connectSocketEvent, state => {
-	state?.disconnect();
-
-	const socket = io(config.apiUrl, {
-		transports: ['websocket'],
+export const $socketSource = createStore<Socket | null>(null)
+	.on(connectSocketFx.doneData, (_, socket) => socket)
+	.on(disconnectSocketEvent, state => {
+		state?.disconnect();
+		return null;
 	});
+
+export const $isSocketConnected = createStore(false)
+	.on(socketConnectedEvent, () => true)
+	.on(socketDisconnectedEvent, () => false);
+
+sample({
+	clock: connectSocketFx.doneData,
+	fn: socket => socket,
+}).watch(socket => {
+	if (!socket) return;
 
 	socket.on('connect', () => {
 		console.log(`✅ SOCKET connected ${socket.id}`);
+		socketConnectedTrigger();
 	});
 
 	socket.on('disconnect', reason => {
-		console.error('❌ SOCKET Disconnected', reason);
+		console.error('❌ SOCKET disconnected:', reason);
+		socketDisconnectedTrigger();
 	});
 
 	socket.on(SocketServerEvents.Symbols, receiveSocketSymbolsEvent);
@@ -80,8 +96,19 @@ $socketSource.on(connectSocketEvent, state => {
 		SocketBannersEvents.BannersLosersGappersSymbols,
 		updateDataTopBannersSymbolsGapLosersEvent
 	);
+});
 
-	return socket;
+const socketConnectedTrigger = createEvent<void>();
+const socketDisconnectedTrigger = createEvent<void>();
+
+sample({
+	clock: socketConnectedTrigger,
+	target: socketConnectedEvent,
+});
+
+sample({
+	clock: socketDisconnectedTrigger,
+	target: socketDisconnectedEvent,
 });
 
 $socketSource.on(subscribeToSymbolsEvent, (state, data) => {
@@ -102,4 +129,9 @@ $socketSource.on(subscribeTopBanners, state => {
 $socketSource.on(unsubscribeTopBanners, state => {
 	state?.emit(SocketClientEvents.UnsubscribeTopBanners);
 	return state;
+});
+
+sample({
+	clock: connectSocketEvent,
+	target: connectSocketFx,
 });

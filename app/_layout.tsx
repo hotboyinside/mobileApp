@@ -13,7 +13,7 @@ import 'react-native-reanimated';
 // import { tick } from "@/stores/allNews/globalTick/model";
 import { useNotificationObserver } from '@/hooks/useNotifications';
 import { $appState, appStateChanged } from '@/stores/appState/model';
-import { connectSocketEvent } from '@/stores/socket/model';
+import { connectSocketEvent } from '@/stores/socket';
 import { loadAppThemeFx } from '@/stores/userSettings/theme';
 import { useUnit } from 'effector-react';
 import { AppState } from 'react-native';

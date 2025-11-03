@@ -19,10 +19,11 @@ import {
 } from '@/stores/allNews/topBannersData/handlers';
 import { setDefaultStateEvent } from '@/stores/allNews/topBannersData/model';
 import {
+	$isSocketConnected,
 	$socketSource,
 	subscribeTopBanners,
 	unsubscribeTopBanners,
-} from '@/stores/socket/model';
+} from '@/stores/socket';
 import {
 	$sseNewsEventSource,
 	addListener,
@@ -65,6 +66,7 @@ export default function AllNews() {
 	const allNewsLoadStatus = useUnit($allNewsLoadStatus);
 	const hasMoreNews = useUnit($hasMoreNews);
 	const socketSource = useUnit($socketSource);
+	const isSocketReady = useUnit($isSocketConnected);
 	const sseNewsEventSource = useUnit($sseNewsEventSource);
 	const isLoading = allNewsLoadStatus === NewsLoadStatus.Loading;
 	const onPageMounted = useUnit(pageMounted);
@@ -122,6 +124,8 @@ export default function AllNews() {
 	const onViewableItemsChanged = useMemo(
 		() =>
 			debounce(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+				if (!isSocketReady) return;
+
 				const firstIndex = viewableItems[0]?.index ?? 0;
 				const lastIndex = viewableItems[viewableItems.length - 1]?.index ?? 0;
 
@@ -133,7 +137,7 @@ export default function AllNews() {
 
 				subscribeToTickersOnScreen(overscanStart, overscanEnd);
 			}, 300),
-		[allNews, subscribeToTickersOnScreen]
+		[allNews, subscribeToTickersOnScreen, isSocketReady]
 	);
 
 	const combinedData = useMemo(() => {
