@@ -1,269 +1,299 @@
-import { ThemedView } from "@/components/ThemedView";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { StyleSheet } from "react-native";
-import CheckLineIcon from "@/assets/icons/check-line-icon.svg";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { appTokens } from "@/constants/tokens";
-import CircleIcon from "@/assets/icons/circle-icon.svg";
-import VoiceOverOff from "@/assets/icons/voiceover-off-icon.svg";
-import VoiceOverOn from "@/assets/icons/voiceover-on-icon.svg";
-import { useGlobalSheet } from "@/components/appProvider/sheetModal/GlobalSheetProvider";
-import { KeywordColorPicker } from "./KeywordColorPicker";
-import { BottomSheetApplyFooter } from "../BottomSheetApplyFooter";
-import { useUnit } from "effector-react";
-import { $selectedColor } from "@/stores/allNews/filtersPanel/keywords/selectedColor/model";
-import { KeywordsMode } from "@/types/keywords";
-import { KeywordIconPicker } from "./KeywordIconPicker";
+import CheckLineIcon from '@/assets/icons/check-line-icon.svg';
+import CircleIcon from '@/assets/icons/circle-icon.svg';
+import CloseIcon from '@/assets/icons/close-icon.svg';
+import { keywordsIcons } from '@/assets/icons/keywordsIcons';
+import VoiceOverOff from '@/assets/icons/voiceover-off-icon.svg';
+import VoiceOverOn from '@/assets/icons/voiceover-on-icon.svg';
+import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
+import { ThemedView } from '@/components/ThemedView';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { PREMIUM } from '@/constants/routes';
+import { appTokens } from '@/constants/tokens';
+import { useKeywordsColors } from '@/hooks/useKeywordsColors';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import {
-  openFilterSubTab,
-  closeFilterSubTab,
-  FilterSubTabVariant,
-} from "@/stores/allNews/filtersPanel/model";
-import { $selectedKeyIcon } from "@/stores/allNews/filtersPanel/keywords/selectedIcon/model";
+	$editingKeyword,
+	$hasChangesInEditingKeyword,
+} from '@/stores/allNews/filtersPanel/keywords/editingKeyword/model';
 import {
-  $isSelectedVoiceoverEnabled,
-  toggleIsSelectedVoiceoverEnabled,
-} from "@/stores/allNews/filtersPanel/keywords/selectedVoiceOverState/model";
-import { keywordsIcons } from "@/assets/icons/keywordsIcons";
+	postKeywordFx,
+	updateKeywordFx,
+} from '@/stores/allNews/filtersPanel/keywords/handlers';
 import {
-  $isNotEmptyValueInInsertMode,
-  $selectedText,
-  changeSelectedText,
-} from "@/stores/allNews/filtersPanel/keywords/selectedText/model";
+	$keywordMode,
+	$keywords,
+	$withVoiceOverKeywords,
+	cancelEditKeyword,
+} from '@/stores/allNews/filtersPanel/keywords/model';
+import { $selectedColor } from '@/stores/allNews/filtersPanel/keywords/selectedColor/model';
+import { $selectedKeyIcon } from '@/stores/allNews/filtersPanel/keywords/selectedIcon/model';
 import {
-  postKeywordFx,
-  updateKeywordFx,
-} from "@/stores/allNews/filtersPanel/keywords/handlers";
+	$isNotEmptyValueInInsertMode,
+	$selectedText,
+	changeSelectedText,
+} from '@/stores/allNews/filtersPanel/keywords/selectedText/model';
 import {
-  $keywordMode,
-  cancelEditKeyword,
-} from "@/stores/allNews/filtersPanel/keywords/model";
-import CloseIcon from "@/assets/icons/close-icon.svg";
+	$isSelectedVoiceoverEnabled,
+	toggleIsSelectedVoiceoverEnabled,
+} from '@/stores/allNews/filtersPanel/keywords/selectedVoiceOverState/model';
 import {
-  $editingKeyword,
-  $hasChangesInEditingKeyword,
-} from "@/stores/allNews/filtersPanel/keywords/editingKeyword/model";
-import { useKeywordsColors } from "@/hooks/useKeywordsColors";
+	closeFilterSubTab,
+	FilterSubTabVariant,
+	openFilterSubTab,
+} from '@/stores/allNews/filtersPanel/model';
+import { KeywordsMode } from '@/types/keywords';
+import { useUnit } from 'effector-react';
+import { router } from 'expo-router';
+import { StyleSheet } from 'react-native';
+import { BottomSheetApplyFooter } from '../BottomSheetApplyFooter';
+import { KeywordColorPicker } from './KeywordColorPicker';
+import { KeywordIconPicker } from './KeywordIconPicker';
 
-export const KeywordCreator = () => {
-  const { openSheetModal, closeSheetModal } = useGlobalSheet();
-  const mode = useUnit($keywordMode);
-  const selectedText = useUnit($selectedText);
-  const selectedColor = useUnit($selectedColor);
-  const selectedKeyIcon = useUnit($selectedKeyIcon);
-  const isSelectedVoiceoverEnabled = useUnit($isSelectedVoiceoverEnabled);
-  const editingKeyword = useUnit($editingKeyword);
-  const hasChangesInEditingKeyword = useUnit($hasChangesInEditingKeyword);
-  const isNotEmptyValueInInsertMode = useUnit($isNotEmptyValueInInsertMode);
+interface KeywordCreatorProps {
+	isPremiumUser: boolean;
+	onCloseKeywords: () => void;
+}
 
-  const onToggleIsSelectedVoiceoverEnabled = useUnit(
-    toggleIsSelectedVoiceoverEnabled
-  );
-  const onOpenFilterSubTab = useUnit(openFilterSubTab);
-  const onCloseFilterSubTab = useUnit(closeFilterSubTab);
-  const onChangeSelectedText = useUnit(changeSelectedText);
+export const KeywordCreator = ({
+	isPremiumUser,
+	onCloseKeywords,
+}: KeywordCreatorProps) => {
+	const { openSheetModal, closeSheetModal } = useGlobalSheet();
 
-  const onCreateKeyword = useUnit(postKeywordFx);
-  const onUpdateKeyword = useUnit(updateKeywordFx);
+	const keywords = useUnit($keywords);
+	const withVoiceOverKeywords = useUnit($withVoiceOverKeywords);
+	const mode = useUnit($keywordMode);
+	const selectedText = useUnit($selectedText);
+	const selectedColor = useUnit($selectedColor);
+	const selectedKeyIcon = useUnit($selectedKeyIcon);
+	const isSelectedVoiceoverEnabled = useUnit($isSelectedVoiceoverEnabled);
+	const editingKeyword = useUnit($editingKeyword);
+	const hasChangesInEditingKeyword = useUnit($hasChangesInEditingKeyword);
+	const isNotEmptyValueInInsertMode = useUnit($isNotEmptyValueInInsertMode);
 
-  const currentKeyIcon = selectedKeyIcon || "smile";
-  const CurrentIcon = keywordsIcons[currentKeyIcon];
+	const onToggleIsSelectedVoiceoverEnabled = useUnit(
+		toggleIsSelectedVoiceoverEnabled
+	);
+	const onOpenFilterSubTab = useUnit(openFilterSubTab);
+	const onCloseFilterSubTab = useUnit(closeFilterSubTab);
+	const onChangeSelectedText = useUnit(changeSelectedText);
 
-  const disabledColor = useThemeColor(appTokens.foreground.disabled);
-  const secondaryColor = useThemeColor(
-    appTokens.component.buttons.secondaryGray.fg
-  );
-  const borderColor = useThemeColor(appTokens.border.tertiary);
-  const utilityGray = useThemeColor(appTokens.utilityGray[400]);
-  const tertiaryGray = useThemeColor(
-    appTokens.component.buttons.tertiaryGray.fg
-  );
+	const onCreateKeyword = useUnit(postKeywordFx);
+	const onUpdateKeyword = useUnit(updateKeywordFx);
 
-  const keywordsColors = useKeywordsColors();
+	const currentKeyIcon = selectedKeyIcon || 'smile';
+	const CurrentIcon = keywordsIcons[currentKeyIcon];
 
-  const openKeywordColorPickerSheet = () => {
-    onOpenFilterSubTab(FilterSubTabVariant.keywordsColor);
-    openSheetModal(
-      "secondary",
-      <KeywordColorPicker
-        onClose={() => {
-          closeSheetModal("secondary");
-        }}
-      />,
-      props => (
-        <BottomSheetApplyFooter
-          {...props}
-          applyButtonTitle='Save'
-          onClose={() => {
-            onCloseFilterSubTab();
-            closeSheetModal("secondary");
-          }}
-        />
-      )
-    );
-  };
+	const disabledColor = useThemeColor(appTokens.foreground.disabled);
+	const secondaryColor = useThemeColor(
+		appTokens.component.buttons.secondaryGray.fg
+	);
+	const borderColor = useThemeColor(appTokens.border.tertiary);
+	const utilityGray = useThemeColor(appTokens.utilityGray[400]);
+	const tertiaryGray = useThemeColor(
+		appTokens.component.buttons.tertiaryGray.fg
+	);
 
-  const openKeywordIconPickerSheet = () => {
-    onOpenFilterSubTab(FilterSubTabVariant.keywordsIcon);
-    openSheetModal(
-      "secondary",
-      <KeywordIconPicker
-        onClose={() => {
-          onCloseFilterSubTab();
-          closeSheetModal("secondary");
-        }}
-      />,
-      props => (
-        <BottomSheetApplyFooter
-          {...props}
-          applyButtonTitle='Save'
-          onClose={() => {
-            closeSheetModal("secondary");
-          }}
-        />
-      )
-    );
-  };
+	const keywordsColors = useKeywordsColors();
 
-  return (
-    <ThemedView style={[styles.container, { borderColor: borderColor }]}>
-      <ThemedView style={styles.topButtons}>
-        <Input
-          placeholder='Add keyword'
-          containerStyle={styles.inputContainer}
-          value={selectedText}
-          onChangeText={text => onChangeSelectedText(text)}
-        />
-        {mode === KeywordsMode.EditMode && (
-          <Button
-            variant='secondary'
-            size='lg'
-            onlyIcon
-            icon={<CloseIcon width={20} height={20} fill={secondaryColor} />}
-            onPress={() => cancelEditKeyword()}
-          />
-        )}
-        <Button
-          variant={
-            hasChangesInEditingKeyword || isNotEmptyValueInInsertMode
-              ? "primary"
-              : "secondary"
-          }
-          size='lg'
-          onlyIcon
-          icon={
-            <CheckLineIcon
-              width={20}
-              height={20}
-              fill={
-                hasChangesInEditingKeyword || isNotEmptyValueInInsertMode
-                  ? secondaryColor
-                  : disabledColor
-              }
-            />
-          }
-          onPress={() => {
-            if (!selectedText.trim()) return;
-            if (mode === KeywordsMode.InsertMode) {
-              onCreateKeyword({
-                word: selectedText,
-                color: selectedColor,
-                iconKey: currentKeyIcon,
-                isVoiceoverEnabled: isSelectedVoiceoverEnabled,
-              });
-            } else if (mode === KeywordsMode.EditMode) {
-              onUpdateKeyword({
-                _id: editingKeyword?._id!,
-                word: selectedText,
-                color: selectedColor,
-                iconKey: selectedKeyIcon!,
-                isVoiceoverEnabled: isSelectedVoiceoverEnabled,
-              });
-            }
-            onChangeSelectedText("");
-          }}
-        />
-      </ThemedView>
-      <ThemedView style={styles.bottomButtons}>
-        <Button
-          icon={
-            <CircleIcon
-              width={20}
-              height={20}
-              fill={keywordsColors[selectedColor].icon}
-            />
-          }
-          title={selectedColor}
-          variant='link-gray'
-          iconPosition='left'
-          titleStyle={{ color: tertiaryGray }}
-          onPress={openKeywordColorPickerSheet}
-        />
-        <Button
-          icon={
-            <CurrentIcon
-              width={20}
-              height={20}
-              fill={selectedKeyIcon ? tertiaryGray : utilityGray}
-            />
-          }
-          title='Icon'
-          variant='link-gray'
-          iconPosition='left'
-          titleStyle={{ color: selectedKeyIcon ? tertiaryGray : utilityGray }}
-          onPress={openKeywordIconPickerSheet}
-        />
-        <Button
-          icon={
-            isSelectedVoiceoverEnabled ? (
-              <VoiceOverOn width={20} height={20} fill={tertiaryGray} />
-            ) : (
-              <VoiceOverOff width={20} height={20} fill={utilityGray} />
-            )
-          }
-          title={isSelectedVoiceoverEnabled ? "Voiceover on" : "Voiceover off"}
-          variant='link-gray'
-          iconPosition='left'
-          onPress={onToggleIsSelectedVoiceoverEnabled}
-          titleStyle={{
-            color: isSelectedVoiceoverEnabled ? tertiaryGray : utilityGray,
-          }}
-          titleProps={{
-            numberOfLines: 1,
-          }}
-        />
-      </ThemedView>
-    </ThemedView>
-  );
+	const openKeywordColorPickerSheet = () => {
+		onOpenFilterSubTab(FilterSubTabVariant.keywordsColor);
+		openSheetModal(
+			'secondary',
+			<KeywordColorPicker
+				isPremiumUser={isPremiumUser}
+				onCloseKeywordsBottomSheet={onCloseKeywords}
+				onClose={() => {
+					closeSheetModal('secondary');
+				}}
+			/>,
+			props => (
+				<BottomSheetApplyFooter
+					{...props}
+					applyButtonTitle='Save'
+					onClose={() => {
+						onCloseFilterSubTab();
+						closeSheetModal('secondary');
+					}}
+				/>
+			)
+		);
+	};
+
+	const openKeywordIconPickerSheet = () => {
+		onOpenFilterSubTab(FilterSubTabVariant.keywordsIcon);
+		openSheetModal(
+			'secondary',
+			<KeywordIconPicker
+				isPremiumUser={isPremiumUser}
+				onCloseKeywordsBottomSheet={onCloseKeywords}
+				onClose={() => {
+					onCloseFilterSubTab();
+					closeSheetModal('secondary');
+				}}
+			/>,
+			props => (
+				<BottomSheetApplyFooter
+					{...props}
+					applyButtonTitle='Save'
+					onClose={() => {
+						closeSheetModal('secondary');
+					}}
+				/>
+			)
+		);
+	};
+
+	return (
+		<ThemedView style={[styles.container, { borderColor: borderColor }]}>
+			<ThemedView style={styles.topButtons}>
+				<Input
+					placeholder='Add keyword'
+					containerStyle={styles.inputContainer}
+					value={selectedText}
+					onChangeText={text => onChangeSelectedText(text)}
+				/>
+				{mode === KeywordsMode.EditMode && (
+					<Button
+						variant='secondary'
+						size='lg'
+						onlyIcon
+						icon={<CloseIcon width={20} height={20} fill={secondaryColor} />}
+						onPress={() => cancelEditKeyword()}
+					/>
+				)}
+				<Button
+					variant={
+						hasChangesInEditingKeyword || isNotEmptyValueInInsertMode
+							? 'primary'
+							: 'secondary'
+					}
+					size='lg'
+					onlyIcon
+					icon={
+						<CheckLineIcon
+							width={20}
+							height={20}
+							fill={
+								hasChangesInEditingKeyword || isNotEmptyValueInInsertMode
+									? secondaryColor
+									: disabledColor
+							}
+						/>
+					}
+					onPress={() => {
+						if (!selectedText.trim()) return;
+						if (mode === KeywordsMode.InsertMode) {
+							if (
+								!isPremiumUser &&
+								((isSelectedVoiceoverEnabled &&
+									withVoiceOverKeywords.length >= 3) ||
+									keywords.length >= 5)
+							) {
+								onCloseKeywords();
+								router.push(PREMIUM);
+								return;
+							}
+
+							onCreateKeyword({
+								word: selectedText,
+								color: selectedColor,
+								iconKey: currentKeyIcon,
+								isVoiceoverEnabled: isSelectedVoiceoverEnabled,
+							});
+						} else if (mode === KeywordsMode.EditMode) {
+							onUpdateKeyword({
+								_id: editingKeyword?._id!,
+								word: selectedText,
+								color: selectedColor,
+								iconKey: selectedKeyIcon!,
+								isVoiceoverEnabled: isSelectedVoiceoverEnabled,
+							});
+						}
+						onChangeSelectedText('');
+					}}
+				/>
+			</ThemedView>
+			<ThemedView style={styles.bottomButtons}>
+				<Button
+					icon={
+						<CircleIcon
+							width={20}
+							height={20}
+							fill={keywordsColors[selectedColor].icon}
+						/>
+					}
+					title={selectedColor}
+					variant='link-gray'
+					iconPosition='left'
+					titleStyle={{ color: tertiaryGray }}
+					onPress={openKeywordColorPickerSheet}
+				/>
+				<Button
+					icon={
+						<CurrentIcon
+							width={20}
+							height={20}
+							fill={selectedKeyIcon ? tertiaryGray : utilityGray}
+						/>
+					}
+					title='Icon'
+					variant='link-gray'
+					iconPosition='left'
+					titleStyle={{ color: selectedKeyIcon ? tertiaryGray : utilityGray }}
+					onPress={openKeywordIconPickerSheet}
+				/>
+				<Button
+					icon={
+						isSelectedVoiceoverEnabled ? (
+							<VoiceOverOn width={20} height={20} fill={tertiaryGray} />
+						) : (
+							<VoiceOverOff width={20} height={20} fill={utilityGray} />
+						)
+					}
+					title={isSelectedVoiceoverEnabled ? 'Voiceover on' : 'Voiceover off'}
+					variant='link-gray'
+					iconPosition='left'
+					onPress={onToggleIsSelectedVoiceoverEnabled}
+					titleStyle={{
+						color: isSelectedVoiceoverEnabled ? tertiaryGray : utilityGray,
+					}}
+					titleProps={{
+						numberOfLines: 1,
+					}}
+				/>
+			</ThemedView>
+		</ThemedView>
+	);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 12,
-    borderWidth: 1,
-    padding: 12,
-    shadowColor: "rgba(13,18,28,0.06)",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 20,
-    elevation: 12,
-  },
+	container: {
+		borderRadius: 12,
+		borderWidth: 1,
+		padding: 12,
+		shadowColor: 'rgba(13,18,28,0.06)',
+		shadowOffset: { width: 0, height: 0 },
+		shadowOpacity: 1,
+		shadowRadius: 20,
+		elevation: 12,
+	},
 
-  inputContainer: {
-    flex: 1,
-  },
+	inputContainer: {
+		flex: 1,
+	},
 
-  topButtons: {
-    flex: 1,
-    flexDirection: "row",
-    gap: 8,
-    marginBottom: 12,
-  },
+	topButtons: {
+		flex: 1,
+		flexDirection: 'row',
+		gap: 8,
+		marginBottom: 12,
+	},
 
-  bottomButtons: {
-    flex: 1,
-    flexDirection: "row",
-    gap: 12,
-  },
+	bottomButtons: {
+		flex: 1,
+		flexDirection: 'row',
+		gap: 12,
+	},
 });
