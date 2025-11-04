@@ -9,4 +9,4 @@ export const NEWS_DETAILS = (id: string) =>
 
 export const NOTIFICATIONS = '/notifications' as RelativePathString;
 export const THEME = '/theme' as RelativePathString;
-export const MODAL = '/modal' as RelativePathString;
+export const PREMIUM = '/premium' as RelativePathString;

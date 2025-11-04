@@ -26,7 +26,13 @@ type ButtonSizeStyles = {
 type ButtonProps = RNButtonProps & {
 	onlyIcon?: boolean;
 	size?: 'sm' | 'md' | 'lg';
-	variant?: 'primary' | 'secondary' | 'tertiary' | 'link-gray' | 'link';
+	variant?:
+		| 'primary'
+		| 'secondary'
+		| 'tertiary'
+		| 'link-gray'
+		| 'link'
+		| 'destructive';
 };
 
 const getTitlePadding = (
@@ -74,6 +80,8 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 		appTokens.component.buttons.linkGray.bg
 	);
 	const linkFontColor = useThemeColor(appTokens.component.buttons.link.fg);
+
+	const buttonDestructiveColor = appTokens.component.buttons.destructive.bg;
 
 	switch (variant) {
 		case 'primary':
@@ -130,6 +138,10 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 		case 'link':
 			buttonColorStyles['color'] = linkFontColor;
 			buttonColorStyles['backgroundColor'] = 'transparent';
+			break;
+		case 'destructive':
+			buttonColorStyles['color'] = primaryFontColor;
+			buttonColorStyles['backgroundColor'] = buttonDestructiveColor;
 			break;
 	}
 

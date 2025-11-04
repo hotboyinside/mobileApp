@@ -1,20 +1,20 @@
+import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
+import gradientImg from '@/assets/images/Glow.png';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { MODAL } from '@/constants/routes';
+import { PREMIUM } from '@/constants/routes';
 import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { router } from 'expo-router';
 import React from 'react';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
-import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import gradientImg from '@/assets/images/Glow.png';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 export const PromoButton = () => {
 	const bgOverlayColor = useThemeColor(appTokens.background.overlay);
 	const iconFgColor = useThemeColor(appTokens.foreground.white);
 
 	return (
-		<TouchableOpacity onPress={() => router.push(MODAL)}>
+		<TouchableOpacity onPress={() => router.push(PREMIUM)}>
 			<ThemedView style={[styles.root, { backgroundColor: bgOverlayColor }]}>
 				<ThemedText
 					tokenColor={appTokens.text.primaryOnBrand}
