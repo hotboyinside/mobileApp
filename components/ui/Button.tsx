@@ -2,8 +2,8 @@ import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { IconNode } from '@rneui/base';
 import {
-	ButtonProps as RNButtonProps,
 	Button as RNButton,
+	ButtonProps as RNButtonProps,
 } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
@@ -53,6 +53,10 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 	const primaryFontColor = useThemeColor(
 		appTokens.component.buttons.primary.fg
 	);
+
+	const disabledBgColor = useThemeColor(appTokens.background.disabled);
+	const textColorDisabled = useThemeColor(appTokens.foreground.disabled);
+
 	const secondaryBgColor = useThemeColor(
 		appTokens.component.buttons.secondaryGray.bg
 	);
@@ -73,7 +77,17 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 
 	switch (variant) {
 		case 'primary':
-			return (
+			return props.disabled ? (
+				<RNButton
+					{...props}
+					buttonStyle={[generalStyles.generalBorderRadius, buttonSizeStyles]}
+					disabledStyle={{ backgroundColor: disabledBgColor }}
+					disabledTitleStyle={[
+						generalStyles.generalTextStyles,
+						{ color: textColorDisabled },
+					]}
+				/>
+			) : (
 				<RNButton
 					{...props}
 					ViewComponent={LinearGradient as any}

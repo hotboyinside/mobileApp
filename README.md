@@ -36,6 +36,7 @@ In the output, you'll find options to open the app in a
 - work with imports
 - add "Not Found" page
 - add mobile sub in app
+- add badges in sub's modal cards
 
 ## Bugs associated with version
 

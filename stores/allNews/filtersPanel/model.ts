@@ -11,6 +11,7 @@ export enum FilterSubTabVariant {
 	keywordsColor = 'Color',
 	keywordsIcon = 'Icon',
 	editRating = 'EditRating',
+	premiumSuccessPurchase = 'PremiumSuccessPurchase',
 }
 
 export const $selectedTabsFilters = createStore<FilterTabVariant[]>([]);
