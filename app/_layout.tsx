@@ -37,8 +37,7 @@ export default function RootLayout() {
 	});
 
 	useEffect(() => {
-		const currentState = AppState.currentState;
-		if (currentState === 'active') {
+		if (appState === 'active') {
 			onSubscribeToSseEventNews();
 			onConnectSocketEvent();
 		}
