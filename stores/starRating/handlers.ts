@@ -15,8 +15,17 @@ export const getStarRatingFx = createEffect(async () => {
 });
 
 export const updateStarRatingFx = createEffect(
-	async (data: StarRatingKeywords) => {
-		const result = await updateUserStarRatingRequest(data);
+	async ({
+		starRating,
+		modificationCount,
+	}: {
+		starRating: StarRatingKeywords;
+		modificationCount: number;
+	}) => {
+		const result = await updateUserStarRatingRequest(
+			starRating,
+			modificationCount
+		);
 		if (!result) throw new Error('something went wrong...');
 		return result;
 	}

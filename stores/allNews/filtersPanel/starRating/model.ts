@@ -13,6 +13,14 @@ export const $inputErrors = createStore<Record<StarNumber, string | null>>({
 	3: null,
 	4: null,
 });
+export const $sessionModifiedKeywords = createStore<
+	Record<StarNumber, string[]>
+>({
+	1: [],
+	2: [],
+	3: [],
+	4: [],
+});
 
 export const changeUserInputKeyword = createEvent<{
 	star: StarNumber;
@@ -23,6 +31,17 @@ export const showDuplicateError = createEvent<{
 	message: string;
 }>();
 export const clearInputError = createEvent<StarNumber>();
+export const addSessionKeyword = createEvent<{
+	star: StarNumber;
+	word: string;
+}>();
+export const removeSessionKeyword = createEvent<{
+	star: StarNumber;
+	word: string;
+}>();
+export const removeSessionKeywordsByStar = createEvent<StarNumber>();
+export const removeAllSessionKeywords = createEvent();
+export const resetSessionKeywords = createEvent<void>();
 
 $userInputKeywords.on(changeUserInputKeyword, (state, { star, text }) => ({
 	...state,
@@ -52,3 +71,38 @@ sample({
 	}),
 	target: $inputErrors,
 });
+
+sample({
+	clock: addSessionKeyword,
+	source: $sessionModifiedKeywords,
+	fn: (keywordsByStar, { star, word }) => ({
+		...keywordsByStar,
+		[star]: keywordsByStar[star].includes(word)
+			? keywordsByStar[star]
+			: [...keywordsByStar[star], word],
+	}),
+	target: $sessionModifiedKeywords,
+});
+
+sample({
+	clock: removeSessionKeyword,
+	source: $sessionModifiedKeywords,
+	fn: (keywordsByStar, { star, word }) => ({
+		...keywordsByStar,
+		[star]: keywordsByStar[star].filter(w => w !== word),
+	}),
+	target: $sessionModifiedKeywords,
+});
+
+sample({
+	clock: removeSessionKeywordsByStar,
+	source: $sessionModifiedKeywords,
+	filter: (keywordsByStar, star) => keywordsByStar[star].length > 0,
+	fn: (keywordsByStar, star) => ({
+		...keywordsByStar,
+		[star]: [],
+	}),
+	target: $sessionModifiedKeywords,
+});
+
+$sessionModifiedKeywords.reset(resetSessionKeywords);

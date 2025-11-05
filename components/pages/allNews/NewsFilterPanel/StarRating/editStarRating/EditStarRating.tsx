@@ -1,21 +1,32 @@
+import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
 import CloseIcon from '@/assets/icons/close-icon.svg';
+import { useSession } from '@/components/appProvider/session/SessionContext';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Stars } from '@/components/ui/Stars';
+import { MAX_MODIFICATION_IN_STAR_RATING } from '@/constants/limits';
 import { appTokens } from '@/constants/tokens';
+import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
 	$inputErrors,
+	$sessionModifiedKeywords,
 	$userInputKeywords,
+	addSessionKeyword,
 	changeUserInputKeyword,
 	clearInputError,
+	removeSessionKeyword,
+	removeSessionKeywordsByStar,
 } from '@/stores/allNews/filtersPanel/starRating/model';
 import {
 	$draftStarRatingKeywords,
+	$modificationCountDraft,
 	addDraftStarRatingKeyword,
 	clearDraftStarRatingKeywordsByStar,
+	decrementModificationCountDraft,
 	deleteDraftStarRatingKeyword,
 	resetToDefaultStarRatingKeywords,
 } from '@/stores/starRating/model';
@@ -32,8 +43,13 @@ type EditStarRatingProps = {
 const STARS: StarNumber[] = [4, 3, 2, 1];
 
 export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
+	const { session } = useSession();
+	const isPremiumUser = isUserPremium(session);
+
 	const userInputKeywords = useUnit($userInputKeywords);
 	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
+	const sessionModifiedKeywords = useUnit($sessionModifiedKeywords);
+	const modificationCountDraft = useUnit($modificationCountDraft);
 	const inputErrors = useUnit($inputErrors);
 
 	const onDeleteDraftStarRatingKeyword = useUnit(deleteDraftStarRatingKeyword);
@@ -47,6 +63,7 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 	);
 	const onClearInputError = useUnit(clearInputError);
 
+	const iconForegroundColor = useThemeColor(appTokens.foreground.brandPrimary);
 	const borderColor = useThemeColor(appTokens.border.tertiary);
 	const bgColor = useThemeColor(appTokens.background.secondarySubtle);
 	const iconColor = useThemeColor(appTokens.foreground.quinary);
@@ -62,6 +79,42 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 				onCloseFilters={onClose}
 				onResetDefaultValues={onResetToDefaultStarRatingKeywords}
 			/>
+			{!isPremiumUser &&
+				modificationCountDraft < MAX_MODIFICATION_IN_STAR_RATING && (
+					<ThemedView
+						style={[styles.modificationLimit, { borderColor: borderColor }]}
+					>
+						<BoltDuoIcon width={24} height={24} fill={iconForegroundColor} />
+						<ThemedText type='textSm' style={styles.modificationLimitText}>
+							{`${modificationCountDraft}/${MAX_MODIFICATION_IN_STAR_RATING} Customizations used`}
+						</ThemedText>
+					</ThemedView>
+				)}
+
+			{!isPremiumUser &&
+				modificationCountDraft >= MAX_MODIFICATION_IN_STAR_RATING && (
+					<ThemedView
+						style={[
+							styles.modificationLimitArchived,
+							{ borderColor: borderColor },
+						]}
+					>
+						<BoltDuoIcon width={24} height={24} fill={iconForegroundColor} />
+						<ThemedView style={styles.textContainer}>
+							<ThemedText type='textSm' style={styles.modificationLimitText}>
+								Limit reached
+							</ThemedText>
+							<ThemedText
+								type='textSm'
+								tokenColor={appTokens.text.quaternary}
+								style={styles.modificationLimitArchivedText}
+							>
+								Reset or upgrade for unlimited customizations
+							</ThemedText>
+						</ThemedView>
+					</ThemedView>
+				)}
+
 			<ThemedView style={styles.container}>
 				{STARS.map(star => (
 					<ThemedView
@@ -76,7 +129,19 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 							<Button
 								title='Clear'
 								variant='link-gray'
-								onPress={() => onClearDraftStarRatingKeywordsByStar(star)}
+								onPress={() => {
+									if (!isPremiumUser) {
+										const sessionLengthByStar =
+											sessionModifiedKeywords[star].length;
+
+										if (sessionLengthByStar > 0) {
+											decrementModificationCountDraft(sessionLengthByStar);
+											removeSessionKeywordsByStar(star);
+										}
+									}
+
+									onClearDraftStarRatingKeywordsByStar(star);
+								}}
 							/>
 						</ThemedView>
 						<Input
@@ -88,10 +153,37 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 								onChangeUserInputKeyword({ star, text });
 							}}
 							onBlur={() => {
-								onAddDraftStarRatingKeyword({
-									changeableStar: star,
-									word: userInputKeywords[star],
-								});
+								if (!isPremiumUser && modificationCountDraft < 5) {
+									const trimmedWord = userInputKeywords[star]
+										.trim()
+										.toLowerCase();
+
+									if (trimmedWord === '') return;
+
+									const isDuplicate = Object.values(
+										draftStarRatingKeywords
+									).some(keywords =>
+										keywords.some(
+											(k: string) => k.toLowerCase() === trimmedWord
+										)
+									);
+
+									if (!isDuplicate) {
+										addSessionKeyword({ star, word: trimmedWord });
+									}
+
+									onAddDraftStarRatingKeyword({
+										changeableStar: star,
+										word: userInputKeywords[star],
+									});
+								}
+
+								if (isPremiumUser) {
+									onAddDraftStarRatingKeyword({
+										changeableStar: star,
+										word: userInputKeywords[star],
+									});
+								}
 							}}
 							isError={!!inputErrors[star]}
 							errorMessage={inputErrors[star] ?? ''}
@@ -114,6 +206,21 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 												height={16}
 												fill={iconColor}
 												onPress={() => {
+													if (!isPremiumUser) {
+														const currentWord = ratingWord.toLowerCase();
+														if (
+															sessionModifiedKeywords[star].includes(
+																currentWord
+															)
+														) {
+															decrementModificationCountDraft(1);
+															removeSessionKeyword({
+																star,
+																word: currentWord,
+															});
+														}
+													}
+
 													onDeleteDraftStarRatingKeyword({
 														changeableStar: star,
 														word: ratingWord,
@@ -133,6 +240,43 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 };
 
 const styles = StyleSheet.create({
+	modificationLimit: {
+		borderWidth: 2,
+		borderRadius: 16,
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+		marginHorizontal: 16,
+		padding: 16,
+		marginBottom: 8,
+		marginTop: 16,
+	},
+
+	modificationLimitArchived: {
+		borderWidth: 2,
+		borderRadius: 16,
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		gap: 8,
+		marginHorizontal: 16,
+		padding: 16,
+		marginBottom: 8,
+		marginTop: 16,
+	},
+
+	textContainer: {
+		maxWidth: 280,
+	},
+
+	modificationLimitText: {
+		fontWeight: 600,
+		fontFamily: 'MontserratSemiBold',
+	},
+
+	modificationLimitArchivedText: {
+		marginTop: 4,
+	},
+
 	container: {
 		flex: 1,
 		gap: 24,

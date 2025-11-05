@@ -111,6 +111,7 @@ export const DefaultStarRatingSet = {
 				'Positive CEO statement',
 			],
 		},
+		modificationCount: 0,
 	},
 };
 

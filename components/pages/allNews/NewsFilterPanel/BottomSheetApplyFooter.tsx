@@ -30,6 +30,7 @@ import { updateStarRatingFx } from '@/stores/starRating/handlers';
 import {
 	$draftStarRatingKeywords,
 	$isStarRatingChanged,
+	$modificationCountDraft,
 } from '@/stores/starRating/model';
 import { putNotificationsSettingsFx } from '@/stores/userSettings';
 import { $isKeywordsEnabled } from '@/stores/userSettings/keywordsEnabled';
@@ -88,6 +89,7 @@ export const BottomSheetApplyFooter = ({
 
 	const updateStarRating = useUnit(updateStarRatingFx);
 	const draftStarRatingKeywords = useUnit($draftStarRatingKeywords);
+	const modificationCountDraft = useUnit($modificationCountDraft);
 	const isStarRatingChanged = useUnit($isStarRatingChanged);
 
 	const isKeywordsEnabled = useUnit($isKeywordsEnabled);
@@ -147,7 +149,11 @@ export const BottomSheetApplyFooter = ({
 			break;
 
 		case FilterSubTabVariant.editRating:
-			applyAction = () => updateStarRating(draftStarRatingKeywords);
+			applyAction = () =>
+				updateStarRating({
+					starRating: draftStarRatingKeywords,
+					modificationCount: modificationCountDraft,
+				});
 			hasChanges = isStarRatingChanged;
 			isShowApplyTitle = isStarRatingChanged;
 	}
