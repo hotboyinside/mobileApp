@@ -55,7 +55,7 @@ export default function PurchaseSuccessBottomSheet({
 			<Button
 				variant='primary'
 				size='lg'
-				title='Got in'
+				title='Got it'
 				style={styles.button}
 				onPress={onClose}
 			/>

@@ -1,10 +1,9 @@
-import { HeaderProps as RNHeaderProps, Header as RNHeader } from '@rneui/base';
 import LogoIcon from '@/assets/icons/logo-icon.svg';
-import { StyleSheet } from 'react-native';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { Header as RNHeader, HeaderProps as RNHeaderProps } from '@rneui/base';
+import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '../ThemedText';
-import { NavNotification } from './NavNotification';
 
 export interface HeaderProps extends RNHeaderProps {
 	title: string;
@@ -27,7 +26,7 @@ export default function Header(props: HeaderProps) {
 					{title}
 				</ThemedText>
 			}
-			rightComponent={<NavNotification />}
+			rightComponent={<View style={styles.mock} />}
 			containerStyle={[
 				styles.container,
 				isShowBottomBorder && {
@@ -60,4 +59,9 @@ const styles = StyleSheet.create({
 	contentContainer: {
 		justifyContent: 'center',
 	},
+
+	mock: {
+		width: 40,
+		height: 40
+	}
 });

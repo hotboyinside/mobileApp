@@ -1,3 +1,4 @@
+import { useSession } from '@/components/appProvider/session/SessionContext';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import Header from '@/components/ui/Header';
 import Loader from '@/components/ui/Loader/Loader';
@@ -62,6 +63,7 @@ const renderItem = ({ item }: { item: any }) => {
 export default function AllNews() {
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [isShowBottomHeader, setIsShowBottomHeader] = useState(false);
+	const { session } = useSession();
 	const allNews = useUnit($filteredNews);
 	const allNewsLoadStatus = useUnit($allNewsLoadStatus);
 	const hasMoreNews = useUnit($hasMoreNews);
@@ -124,7 +126,7 @@ export default function AllNews() {
 	const onViewableItemsChanged = useMemo(
 		() =>
 			debounce(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-				if (!isSocketReady) return;
+				if (!isSocketReady || !session) return;
 
 				const firstIndex = viewableItems[0]?.index ?? 0;
 				const lastIndex = viewableItems[viewableItems.length - 1]?.index ?? 0;
@@ -137,7 +139,7 @@ export default function AllNews() {
 
 				subscribeToTickersOnScreen(overscanStart, overscanEnd);
 			}, 300),
-		[allNews, subscribeToTickersOnScreen, isSocketReady]
+		[allNews, subscribeToTickersOnScreen, isSocketReady, session]
 	);
 
 	const combinedData = useMemo(() => {

@@ -69,7 +69,7 @@ sample({
     });
 
     es.addEventListener(SseEvents.Error, error => {
-      console.error("❌ SSE error", error);
+      console.warn("❌ SSE error", error);
       sseDisconnected();
       es.close();
 

@@ -13,7 +13,7 @@ import 'react-native-reanimated';
 // import { tick } from "@/stores/allNews/globalTick/model";
 import { useNotificationObserver } from '@/hooks/useNotifications';
 import { $appState, appStateChanged } from '@/stores/appState/model';
-import { connectSocketEvent } from '@/stores/socket';
+import { connectSocketEvent, disconnectSocketEvent } from '@/stores/socket';
 import { loadAppThemeFx } from '@/stores/userSettings/theme';
 import { useUnit } from 'effector-react';
 import { AppState } from 'react-native';
@@ -26,6 +26,7 @@ export default function RootLayout() {
 	const onAppStateChanged = useUnit(appStateChanged);
 	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);
 	const onConnectSocketEvent = useUnit(connectSocketEvent);
+	const onDisconnectSocketEvent = useUnit(disconnectSocketEvent);
 	const onCloseToSseEventNews = useUnit(closeToSseEventNews);
 
 	const [loaded] = useFonts({
@@ -43,6 +44,7 @@ export default function RootLayout() {
 
 		return () => {
 			onCloseToSseEventNews();
+			onDisconnectSocketEvent();
 		};
 	}, [appState]);
 
