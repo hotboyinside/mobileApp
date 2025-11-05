@@ -21,6 +21,7 @@ import { AppState } from 'react-native';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+	const { session, isLoading } = useSession();
 	const appStateRef = useRef(AppState.currentState);
 	const appState = useUnit($appState);
 	const onAppStateChanged = useUnit(appStateChanged);
@@ -37,16 +38,14 @@ export default function RootLayout() {
 	});
 
 	useEffect(() => {
-		if (appState === 'active') {
-			onSubscribeToSseEventNews();
-			onConnectSocketEvent();
-		}
+		onSubscribeToSseEventNews();
+		onConnectSocketEvent();
 
 		return () => {
 			onCloseToSseEventNews();
 			onDisconnectSocketEvent();
 		};
-	}, [appState]);
+	}, [appState, session, isLoading]);
 
 	// useEffect(() => {
 	//   const interval = setInterval(() => tick(), 60000);
