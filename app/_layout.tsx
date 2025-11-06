@@ -12,7 +12,7 @@ import { useEffect, useRef } from 'react';
 import 'react-native-reanimated';
 // import { tick } from "@/stores/allNews/globalTick/model";
 import { useNotificationObserver } from '@/hooks/useNotifications';
-import { $appState, appStateChanged } from '@/stores/appState/model';
+import { appStateChanged } from '@/stores/appState/model';
 import { connectSocketEvent, disconnectSocketEvent } from '@/stores/socket';
 import { loadAppThemeFx } from '@/stores/userSettings/theme';
 import { useUnit } from 'effector-react';
@@ -21,14 +21,9 @@ import { AppState } from 'react-native';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-	const { session, isLoading } = useSession();
 	const appStateRef = useRef(AppState.currentState);
-	const appState = useUnit($appState);
+
 	const onAppStateChanged = useUnit(appStateChanged);
-	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);
-	const onConnectSocketEvent = useUnit(connectSocketEvent);
-	const onDisconnectSocketEvent = useUnit(disconnectSocketEvent);
-	const onCloseToSseEventNews = useUnit(closeToSseEventNews);
 
 	const [loaded] = useFonts({
 		MontserratRegular: require('../assets/fonts/Montserrat-Regular.ttf'),
@@ -36,16 +31,6 @@ export default function RootLayout() {
 		MontserratSemiBold: require('../assets/fonts/Montserrat-SemiBold.ttf'),
 		MontserratBold: require('../assets/fonts/Montserrat-Bold.ttf'),
 	});
-
-	useEffect(() => {
-		onSubscribeToSseEventNews();
-		onConnectSocketEvent();
-
-		return () => {
-			onCloseToSseEventNews();
-			onDisconnectSocketEvent();
-		};
-	}, [appState, session, isLoading]);
 
 	// useEffect(() => {
 	//   const interval = setInterval(() => tick(), 60000);
@@ -78,6 +63,24 @@ export default function RootLayout() {
 function RootNavigator() {
 	const { session, isLoading } = useSession();
 	const isEmptySession = Object.keys(session ?? {}).length === 0;
+
+	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);
+	const onConnectSocketEvent = useUnit(connectSocketEvent);
+	const onDisconnectSocketEvent = useUnit(disconnectSocketEvent);
+	const onCloseToSseEventNews = useUnit(closeToSseEventNews);
+
+	useEffect(() => {
+		if (isLoading) return;
+		if (!session || isEmptySession) return;
+
+		onSubscribeToSseEventNews();
+		onConnectSocketEvent();
+
+		return () => {
+			onCloseToSseEventNews();
+			onDisconnectSocketEvent();
+		};
+	}, [session, isEmptySession, isLoading]);
 
 	useNotificationObserver();
 
