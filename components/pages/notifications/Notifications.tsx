@@ -12,6 +12,7 @@ import { Switch } from '@/components/ui/Switch/Switch';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
+	postNotificationsSettingsFx,
 	putNotificationsSettingsFx,
 	resetSettings,
 } from '@/stores/userSettings';
@@ -38,8 +39,6 @@ import { StyleSheet, View } from 'react-native';
 import { useNotificationsToast } from './hooks/useNotificationsToast';
 
 export const Notifications = () => {
-	useNotificationsToast();
-
 	const [isPermissionStatusGranted, setIsPermissionStatusGranted] =
 		useState(false);
 	const [isLoadingPermissionRequest, setIsLoadingPermissionRequest] =
@@ -72,6 +71,8 @@ export const Notifications = () => {
 		appTokens.background.secondarySubtle
 	);
 
+	useNotificationsToast();
+
 	useEffect(() => {
 		const checkNotificationPermission = async () => {
 			if (Device.isDevice) {
@@ -84,7 +85,11 @@ export const Notifications = () => {
 		checkNotificationPermission();
 	}, []);
 
-	if (!isLoadingPermissionRequest) {
+	useEffect(() => {
+		postNotificationsSettingsFx();
+	}, []);
+
+	if (!isLoadingPermissionRequest && postNotificationsSettingsFx.pending) {
 		return (
 			<ThemedView style={stylesLoader.container}>
 				<LottieView

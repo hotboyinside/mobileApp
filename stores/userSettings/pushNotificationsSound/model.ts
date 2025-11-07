@@ -16,11 +16,14 @@ $isPushNotificationsSoundDraft.on(
 	(state, _) => !state
 );
 
-sample({
-	clock: postNotificationsSettingsFx.doneData,
-	fn: result => result.success.isKeywordsPushesSoundEnabled,
-	target: setPushNotificationsSound,
-});
+$isPushNotificationsSoundDraft.on(
+	postNotificationsSettingsFx.doneData,
+	(_, result) => result.success.isKeywordsPushesSoundEnabled
+);
+$isPushNotificationsSound.on(
+	postNotificationsSettingsFx.doneData,
+	(_, result) => result.success.isKeywordsPushesSoundEnabled
+);
 
 sample({
 	clock: putNotificationsSettingsFx.doneData,

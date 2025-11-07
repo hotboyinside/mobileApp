@@ -32,6 +32,7 @@ import {
 	SseEvents,
 } from '@/stores/sse/model';
 import { symbolsSubscribeAndUnsubscribeEvent } from '@/stores/symbols/model';
+import { postNotificationsSettingsFx } from '@/stores/userSettings';
 import { useUnit } from 'effector-react';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -154,6 +155,10 @@ export default function AllNews() {
 	}, [allNews]);
 
 	const backgroundColor = useThemeColor(appTokens.background.secondarySubtle);
+
+	useEffect(() => {
+		postNotificationsSettingsFx();
+	}, []);
 
 	useEffect(() => {
 		onPageMounted();

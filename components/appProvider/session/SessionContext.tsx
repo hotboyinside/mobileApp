@@ -1,7 +1,5 @@
 import { api } from '@/config/api/axios';
 import { deleteNotificationsTokenRequest } from '@/config/api/notifications/sendNotificationsToken';
-import { registerForPushNotificationsAsync } from '@/helpers/pushNotifications/registerForPushNotificationsAsync';
-import { postNotificationsSettingsFx } from '@/stores/userSettings/handlers';
 import { User } from '@/types/user';
 import {
 	createContext,
@@ -11,6 +9,7 @@ import {
 	useEffect,
 } from 'react';
 import { useStorageState } from '../authentication/useStorageState';
+import { registerForPushNotificationsAsync } from '@/helpers/pushNotifications/registerForPushNotificationsAsync';
 
 const AuthContext = createContext<{
 	signIn: (user: User) => void;
@@ -75,10 +74,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
 	useEffect(() => {
 		if (!session) return;
 
-		postNotificationsSettingsFx();
 		registerForPushNotificationsAsync();
 	}, [session]);
-
 	useEffect(() => {
 		const interceptor = api.interceptors.response.use(
 			response => response,

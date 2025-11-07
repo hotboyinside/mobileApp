@@ -2,27 +2,29 @@
 import { AppProvider } from '@/components/appProvider/AppProvider';
 import { useSession } from '@/components/appProvider/session/SessionContext';
 import { SplashScreenController } from '@/components/splash/SplashScreenController';
+import { useNotificationObserver } from '@/hooks/useNotifications';
+import { $appState, appStateChanged } from '@/stores/appState/model';
+import { connectSocketEvent, disconnectSocketEvent } from '@/stores/socket';
 import {
 	closeToSseEventNews,
 	subscribeToSseEventNews,
 } from '@/stores/sse/model';
+import { loadAppThemeFx } from '@/stores/userSettings/theme';
+import { useUnit } from 'effector-react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect, useRef } from 'react';
-import 'react-native-reanimated';
-// import { tick } from "@/stores/allNews/globalTick/model";
-import { useNotificationObserver } from '@/hooks/useNotifications';
-import { appStateChanged } from '@/stores/appState/model';
-import { connectSocketEvent, disconnectSocketEvent } from '@/stores/socket';
-import { loadAppThemeFx } from '@/stores/userSettings/theme';
-import { useUnit } from 'effector-react';
 import { AppState } from 'react-native';
+import 'react-native-reanimated';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const appStateRef = useRef(AppState.currentState);
 
+	const appState = useUnit($appState);
+	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);
+	const onCloseToSseEventNews = useUnit(closeToSseEventNews);
 	const onAppStateChanged = useUnit(appStateChanged);
 
 	const [loaded] = useFonts({
@@ -32,10 +34,15 @@ export default function RootLayout() {
 		MontserratBold: require('../assets/fonts/Montserrat-Bold.ttf'),
 	});
 
-	// useEffect(() => {
-	//   const interval = setInterval(() => tick(), 60000);
-	//   return () => clearInterval(interval);
-	// }, []);
+	useEffect(() => {
+		if (appState === 'active') {
+			onSubscribeToSseEventNews();
+		}
+
+		return () => {
+			onCloseToSseEventNews();
+		};
+	}, [appState]);
 
 	useEffect(() => {
 		const subscription = AppState.addEventListener('change', nextState => {
@@ -64,22 +71,17 @@ function RootNavigator() {
 	const { session, isLoading } = useSession();
 	const isEmptySession = Object.keys(session ?? {}).length === 0;
 
-	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);
 	const onConnectSocketEvent = useUnit(connectSocketEvent);
 	const onDisconnectSocketEvent = useUnit(disconnectSocketEvent);
-	const onCloseToSseEventNews = useUnit(closeToSseEventNews);
 
 	useEffect(() => {
 		if (isLoading) return;
-		if (!session || isEmptySession) return;
-
-		onSubscribeToSseEventNews();
-		onConnectSocketEvent();
-
-		return () => {
-			onCloseToSseEventNews();
-			onDisconnectSocketEvent();
-		};
+		if (session && !isEmptySession) {
+			onConnectSocketEvent();
+			return () => {
+				onDisconnectSocketEvent();
+			};
+		}
 	}, [session, isEmptySession, isLoading]);
 
 	useNotificationObserver();

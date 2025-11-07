@@ -13,20 +13,18 @@ export const toggleVoiceoverEnabledDraft = createEvent();
 
 $isVoiceOverEnabledDraft.on(toggleVoiceoverEnabledDraft, (state, _) => !state);
 
-sample({
-	clock: postNotificationsSettingsFx.doneData,
-	fn: result => result.success.isKeywordsVoiceOverEnabled,
-	target: setVoiceOverEnabled,
-});
+$isVoiceOverEnabledDraft.on(
+	postNotificationsSettingsFx.doneData,
+	(_, result) => result.success.isKeywordsVoiceOverEnabled
+);
+$isVoiceOverEnabled.on(
+	postNotificationsSettingsFx.doneData,
+	(_, result) => result.success.isKeywordsVoiceOverEnabled
+);
 
 sample({
 	clock: putNotificationsSettingsFx.doneData,
 	fn: result => result.success.isKeywordsVoiceOverEnabled,
-	target: setVoiceOverEnabled,
-});
-
-sample({
-	clock: setVoiceOverEnabled,
 	target: [$isVoiceOverEnabled, $isVoiceOverEnabledDraft],
 });
 
