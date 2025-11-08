@@ -82,7 +82,7 @@ export const KeywordCreator = ({
 	const onCreateKeyword = useUnit(postKeywordFx);
 	const onUpdateKeyword = useUnit(updateKeywordFx);
 
-	const currentKeyIcon = selectedKeyIcon || 'smile';
+	const currentKeyIcon = selectedKeyIcon || 'bolt';
 	const CurrentIcon = keywordsIcons[currentKeyIcon];
 
 	const disabledColor = useThemeColor(appTokens.foreground.disabled);

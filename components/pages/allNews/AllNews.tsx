@@ -19,6 +19,7 @@ import {
 	handleTopBannersGetNews,
 } from '@/stores/allNews/topBannersData/handlers';
 import { setDefaultStateEvent } from '@/stores/allNews/topBannersData/model';
+import { $appState } from '@/stores/appState/model';
 import {
 	$isSocketConnected,
 	$socketSource,
@@ -26,6 +27,7 @@ import {
 	unsubscribeTopBanners,
 } from '@/stores/socket';
 import {
+	$isSseConnected,
 	$sseNewsEventSource,
 	addListener,
 	removeListener,
@@ -65,6 +67,8 @@ export default function AllNews() {
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [isShowBottomHeader, setIsShowBottomHeader] = useState(false);
 	const { session } = useSession();
+	const appState = useUnit($appState);
+	const isSseConnected = useUnit($isSseConnected);
 	const allNews = useUnit($filteredNews);
 	const allNewsLoadStatus = useUnit($allNewsLoadStatus);
 	const hasMoreNews = useUnit($hasMoreNews);
@@ -161,8 +165,10 @@ export default function AllNews() {
 	}, []);
 
 	useEffect(() => {
-		onPageMounted();
-	}, [onPageMounted]);
+		if (appState === 'active') {
+			onPageMounted();
+		}
+	}, [appState, onPageMounted]);
 
 	useEffect(() => {
 		handleTopBannersGetNews();
@@ -193,7 +199,9 @@ export default function AllNews() {
 	}, [onSubscribeTopBanners, onUnsubscribeTopBanners, socketSource]);
 
 	useEffect(() => {
-		addListener({ eventName: SseEvents.News, listener: getNewsFroSseEvent });
+		if (appState === 'active' && isSseConnected) {
+			addListener({ eventName: SseEvents.News, listener: getNewsFroSseEvent });
+		}
 
 		return () => {
 			removeListener({
@@ -201,7 +209,7 @@ export default function AllNews() {
 				listener: getNewsFroSseEvent,
 			});
 		};
-	}, []);
+	}, [appState, isSseConnected]);
 
 	return (
 		<ThemedViewWithSafeArea
