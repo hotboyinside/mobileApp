@@ -6,6 +6,7 @@ import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { discardFiltersDraft } from '@/stores/allNews/filtersPanel/filters/model';
 import { $activeFiltersCount } from '@/stores/allNews/filtersPanel/filters/selectableFilters';
+import { discardKeywords } from '@/stores/allNews/filtersPanel/keywords';
 import {
 	$selectedTabsFilters,
 	closeFilterTab,
@@ -37,6 +38,7 @@ export const NewsFilterPanel = () => {
 	const onDiscardStarRatingEnabledStateDraft = useUnit(
 		discardStarRatingEnabledStateDraft
 	);
+	const onDiscardKeywords = useUnit(discardKeywords);
 
 	const openTabFilters = (tab: FilterTabVariant) => {
 		switch (tab) {
@@ -101,7 +103,8 @@ export const NewsFilterPanel = () => {
 							closeButtonTitle='Enable Keywords'
 							closeButtonIsSecondary
 						/>
-					)
+					),
+					() => onDiscardKeywords()
 				);
 				break;
 			case FilterTabVariant.rating:

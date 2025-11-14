@@ -1,28 +1,31 @@
-import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
 import { Input } from '@/components/ui/Input';
+import { appTokens } from '@/constants/tokens';
 import { useBottomSheetInternal } from '@gorhom/bottom-sheet';
 import { useCallback } from 'react';
 import {
-	StyleSheet,
-	FocusEvent,
 	BlurEvent,
+	FocusEvent,
+	StyleSheet,
 	TextInputProps,
+	View,
 } from 'react-native';
 
 interface RangeInputProps
 	extends Omit<TextInputProps, 'onChange' | 'onChangeText'> {
 	from: string;
 	to: string;
+	error?: string | null;
 	onChange: (from: string, to: string) => void;
 }
 
 export const RangeInput = ({
 	from,
 	to,
+	error,
 	onChange,
 	onFocus,
 	onBlur,
-	...rest
 }: RangeInputProps) => {
 	/**
 	 * Handlers below are required specifically for @gorhom/bottom-sheet.
@@ -63,32 +66,40 @@ export const RangeInput = ({
 	);
 
 	return (
-		<ThemedView style={styles.container}>
-			<Input
-				value={from}
-				onChangeText={value => onChange(value, to)}
-				type='number'
-				containerStyle={styles.inputContainer}
-				placeholder='From'
-				onFocus={handleOnFocus}
-				onBlur={handleOnBlur}
-			/>
+		<View>
+			<View style={styles.inputs}>
+				<Input
+					value={from}
+					onChangeText={value => onChange(value, to)}
+					keyboardType='numbers-and-punctuation'
+					containerStyle={styles.inputContainer}
+					placeholder='From'
+					onFocus={handleOnFocus}
+					onBlur={handleOnBlur}
+				/>
 
-			<Input
-				value={to}
-				onChangeText={value => onChange(from, value)}
-				type='number'
-				containerStyle={styles.inputContainer}
-				placeholder='To'
-				onFocus={handleOnFocus}
-				onBlur={handleOnBlur}
-			/>
-		</ThemedView>
+				<Input
+					value={to}
+					onChangeText={value => onChange(from, value)}
+					keyboardType='numbers-and-punctuation'
+					containerStyle={styles.inputContainer}
+					placeholder='To'
+					onFocus={handleOnFocus}
+					onBlur={handleOnBlur}
+				/>
+			</View>
+
+			{error && (
+				<ThemedText type={'textXs'} tokenColor={appTokens.text.errorPrimary}>
+					{error}
+				</ThemedText>
+			)}
+		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {
+	inputs: {
 		flex: 1,
 		flexDirection: 'row',
 		gap: 8,

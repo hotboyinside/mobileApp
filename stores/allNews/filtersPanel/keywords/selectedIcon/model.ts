@@ -1,6 +1,7 @@
 import { combine, createEvent, createStore, sample } from 'effector';
 import {
 	cancelEditKeyword,
+	discardKeywords,
 	finishEditKeyword,
 	startEditKeyword,
 } from '../model';
@@ -28,7 +29,7 @@ sample({
 	target: $selectedKeyIcon,
 });
 
-const resetEvents = [cancelEditKeyword, finishEditKeyword];
+const resetEvents = [cancelEditKeyword, finishEditKeyword, discardKeywords];
 
 $selectedKeyIcon.reset(resetEvents);
 $selectedKeyIconDraft.reset(resetEvents);

@@ -1,4 +1,5 @@
 import { NEWS_DETAILS } from '@/constants/routes';
+import { Status } from '@/constants/status';
 import { extractKeywordsInText } from '@/helpers/keywords/extractKeywordsInText';
 import { addNewsToast } from '@/stores/notificationsToasts';
 import { $starRatingKeywords } from '@/stores/starRating/model';
@@ -15,16 +16,7 @@ import {
 import { $starRatingEnabledState } from '../filtersPanel/starRating/starRatingEnabledState';
 import { fetchNewsFx, loadMoreNewsFx, speakTtsFx } from './handlers';
 
-export enum NewsLoadStatus {
-	Idle = 'idle',
-	Loading = 'loading',
-	LoadingMore = 'loadingMore',
-	Error = 'error',
-}
-
-export const $allNewsLoadStatus = createStore<NewsLoadStatus>(
-	NewsLoadStatus.Idle
-);
+export const $allNewsLoadStatus = createStore<Status>(Status.Idle);
 export const $allNews = createStore<INews[]>([]);
 export const $hasMoreNews = createStore<boolean>(false);
 export const $allNewsPagination = createStore<{ page: number }>({ page: 1 });
@@ -193,12 +185,12 @@ $allNewsPagination.on(loadMoreNewsFx.doneData, (_, response) => ({
 
 $allNewsLoadStatus
 	.on(fetchNewsFx.pending, (_, pending) =>
-		pending ? NewsLoadStatus.Loading : NewsLoadStatus.Idle
+		pending ? Status.Loading : Status.Idle
 	)
-	.on(fetchNewsFx.done, () => NewsLoadStatus.Idle)
-	.on(fetchNewsFx.fail, () => NewsLoadStatus.Error)
+	.on(fetchNewsFx.done, () => Status.Idle)
+	.on(fetchNewsFx.fail, () => Status.Error)
 	.on(loadMoreNewsFx.pending, (_, pending) =>
-		pending ? NewsLoadStatus.Loading : NewsLoadStatus.Idle
+		pending ? Status.Loading : Status.Idle
 	)
-	.on(loadMoreNewsFx.done, () => NewsLoadStatus.Idle)
-	.on(loadMoreNewsFx.fail, () => NewsLoadStatus.Error);
+	.on(loadMoreNewsFx.done, () => Status.Idle)
+	.on(loadMoreNewsFx.fail, () => Status.Error);

@@ -1,19 +1,21 @@
 import { UserKeyword } from '@/types/keywords';
 import { combine, createStore } from 'effector';
 import {
-	startEditKeyword,
-	finishEditKeyword,
 	cancelEditKeyword,
+	discardKeywords,
+	finishEditKeyword,
+	startEditKeyword,
 } from '../model';
 import { $selectedColor } from '../selectedColor/model';
-import { $selectedText } from '../selectedText/model';
 import { $selectedKeyIcon } from '../selectedIcon/model';
+import { $selectedText } from '../selectedText/model';
 import { $isSelectedVoiceoverEnabled } from '../selectedVoiceOverState/model';
 
 export const $editingKeyword = createStore<UserKeyword | null>(null);
 
 $editingKeyword.on(startEditKeyword, (_, payload) => payload);
 $editingKeyword.on(finishEditKeyword, () => null);
+$editingKeyword.on(discardKeywords, () => null);
 
 export const $hasChangesInEditingKeyword = combine(
 	$editingKeyword,

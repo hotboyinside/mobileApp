@@ -29,6 +29,7 @@ export const $onlyVisualKeywords = $keywords.map(state =>
 export const $withVoiceOverKeywords = $keywords.map(state =>
 	state.filter(keyword => keyword.isVoiceoverEnabled)
 );
+export const $keywordsInputError = createStore<null | string>(null);
 
 export const startEditKeyword = createEvent<UserKeyword>();
 export const finishEditKeyword = createEvent();
@@ -38,10 +39,13 @@ export const setKeywords = createEvent<UserKeyword[]>();
 export const addKeyword = createEvent<UserKeyword>();
 export const deleteKeyword = createEvent<string>();
 export const updateKeyword = createEvent<UserKeyword>();
+export const setInputKeywordError = createEvent<string | null>();
+export const discardKeywords = createEvent();
 
 $keywordMode.on(startEditKeyword, () => KeywordsMode.EditMode);
 $keywordMode.on(finishEditKeyword, () => KeywordsMode.InsertMode);
 $keywordMode.on(cancelEditKeyword, () => KeywordsMode.InsertMode);
+$keywordMode.on(discardKeywords, () => KeywordsMode.InsertMode);
 
 $keywords.on(setKeywords, (_, payload) => payload);
 $keywords.on(addKeyword, (state, payload) => [payload, ...state]);
@@ -56,6 +60,8 @@ $keywords.on(updateKeyword, (state, payload) =>
 		return keyword;
 	})
 );
+$keywordsInputError.on(setInputKeywordError, (_, newError) => newError);
+$keywordsInputError.on(discardKeywords, () => null);
 
 sample({
 	source: $isKeywordsEnabled,

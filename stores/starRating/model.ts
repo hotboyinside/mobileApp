@@ -143,7 +143,7 @@ sample({
 	},
 	fn: (_, { changeableStar, word }) => ({
 		star: changeableStar,
-		message: `Word "${word.trim()}" already exists in another rating`,
+		message: `The word "${word.trim()}" is already used in another rating.`,
 	}),
 	target: showDuplicateError,
 });

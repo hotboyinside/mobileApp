@@ -3,6 +3,7 @@ import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import Header from '@/components/ui/Header';
 import Loader from '@/components/ui/Loader/Loader';
 import { WindowsNames } from '@/constants/socket/clientEvents';
+import { Status } from '@/constants/status';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { pageMounted } from '@/stores/allNews/model';
@@ -12,7 +13,6 @@ import {
 	$hasMoreNews,
 	getNews,
 	getNewsFroSseEvent,
-	NewsLoadStatus,
 } from '@/stores/allNews/news/model';
 import {
 	handleFetchedNewsFromSse,
@@ -75,7 +75,7 @@ export default function AllNews() {
 	const socketSource = useUnit($socketSource);
 	const isSocketReady = useUnit($isSocketConnected);
 	const sseNewsEventSource = useUnit($sseNewsEventSource);
-	const isLoading = allNewsLoadStatus === NewsLoadStatus.Loading;
+	const isLoading = allNewsLoadStatus === Status.Loading;
 	const onPageMounted = useUnit(pageMounted);
 	const onSubscribeTopBanners = useUnit(subscribeTopBanners);
 	const onUnsubscribeTopBanners = useUnit(unsubscribeTopBanners);

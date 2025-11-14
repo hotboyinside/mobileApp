@@ -1,6 +1,7 @@
 import { createEvent, createStore } from 'effector';
 import {
 	cancelEditKeyword,
+	discardKeywords,
 	finishEditKeyword,
 	startEditKeyword,
 } from '../model';
@@ -23,3 +24,4 @@ $isSelectedVoiceoverEnabled.on(
 
 $isSelectedVoiceoverEnabled.reset(cancelEditKeyword);
 $isSelectedVoiceoverEnabled.reset(finishEditKeyword);
+$isSelectedVoiceoverEnabled.reset(discardKeywords);

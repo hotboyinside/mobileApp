@@ -1,7 +1,8 @@
-import { combine, createEvent, createStore, sample } from 'effector';
 import { KeywordsColorVariants } from '@/types/keywords';
+import { combine, createEvent, createStore, sample } from 'effector';
 import {
 	cancelEditKeyword,
+	discardKeywords,
 	finishEditKeyword,
 	startEditKeyword,
 } from '../model';
@@ -30,7 +31,7 @@ sample({
 	target: $selectedColor,
 });
 
-const resetEvents = [cancelEditKeyword, finishEditKeyword];
+const resetEvents = [cancelEditKeyword, finishEditKeyword, discardKeywords];
 
 $selectedColor.reset(resetEvents);
 $selectedColorDraft.reset(resetEvents);

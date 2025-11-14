@@ -1,1 +1,0 @@
-export const MAX_MODIFICATION_IN_STAR_RATING = 5;

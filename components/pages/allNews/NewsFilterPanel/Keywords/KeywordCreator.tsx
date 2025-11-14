@@ -5,9 +5,14 @@ import { keywordsIcons } from '@/assets/icons/keywordsIcons';
 import VoiceOverOff from '@/assets/icons/voiceover-off-icon.svg';
 import VoiceOverOn from '@/assets/icons/voiceover-on-icon.svg';
 import { useGlobalSheet } from '@/components/appProvider/sheetModal/GlobalSheetProvider';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import {
+	MAX_KEYWORDS_COUNT,
+	MAX_VOICE_OVERS_COUNT,
+} from '@/constants/freeUsersLimits';
 import { PREMIUM } from '@/constants/routes';
 import { appTokens } from '@/constants/tokens';
 import { useKeywordsColors } from '@/hooks/useKeywordsColors';
@@ -23,8 +28,10 @@ import {
 import {
 	$keywordMode,
 	$keywords,
+	$keywordsInputError,
 	$withVoiceOverKeywords,
 	cancelEditKeyword,
+	setInputKeywordError,
 } from '@/stores/allNews/filtersPanel/keywords/model';
 import { $selectedColor } from '@/stores/allNews/filtersPanel/keywords/selectedColor/model';
 import { $selectedKeyIcon } from '@/stores/allNews/filtersPanel/keywords/selectedIcon/model';
@@ -45,10 +52,12 @@ import {
 import { KeywordsMode } from '@/types/keywords';
 import { useUnit } from 'effector-react';
 import { router } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { BottomSheetApplyFooter } from '../BottomSheetApplyFooter';
 import { KeywordColorPicker } from './KeywordColorPicker';
 import { KeywordIconPicker } from './KeywordIconPicker';
+
+const ERROR_EXIST_WORD = 'This keyword is already in the list';
 
 interface KeywordCreatorProps {
 	isPremiumUser: boolean;
@@ -62,6 +71,7 @@ export const KeywordCreator = ({
 	const { openSheetModal, closeSheetModal } = useGlobalSheet();
 
 	const keywords = useUnit($keywords);
+	const keywordsInputError = useUnit($keywordsInputError);
 	const withVoiceOverKeywords = useUnit($withVoiceOverKeywords);
 	const mode = useUnit($keywordMode);
 	const selectedText = useUnit($selectedText);
@@ -78,6 +88,7 @@ export const KeywordCreator = ({
 	const onOpenFilterSubTab = useUnit(openFilterSubTab);
 	const onCloseFilterSubTab = useUnit(closeFilterSubTab);
 	const onChangeSelectedText = useUnit(changeSelectedText);
+	const onSetInputKeywordError = useUnit(setInputKeywordError);
 
 	const onCreateKeyword = useUnit(postKeywordFx);
 	const onUpdateKeyword = useUnit(updateKeywordFx);
@@ -86,6 +97,7 @@ export const KeywordCreator = ({
 	const CurrentIcon = keywordsIcons[currentKeyIcon];
 
 	const disabledColor = useThemeColor(appTokens.foreground.disabled);
+	const whiteIconColor = useThemeColor(appTokens.component.buttons.primary.fg);
 	const secondaryColor = useThemeColor(
 		appTokens.component.buttons.secondaryGray.fg
 	);
@@ -152,7 +164,16 @@ export const KeywordCreator = ({
 					placeholder='Add keyword'
 					containerStyle={styles.inputContainer}
 					value={selectedText}
-					onChangeText={text => onChangeSelectedText(text)}
+					onChangeText={text => {
+						onChangeSelectedText(text);
+
+						if (keywordsInputError) {
+							onSetInputKeywordError(null);
+						}
+					}}
+					maxLength={20}
+					errorMessage={keywordsInputError ?? undefined}
+					isError={Boolean(keywordsInputError)}
 				/>
 				{mode === KeywordsMode.EditMode && (
 					<Button
@@ -171,26 +192,42 @@ export const KeywordCreator = ({
 					}
 					size='lg'
 					onlyIcon
+					style={styles.buttonMaxWidth}
 					icon={
 						<CheckLineIcon
 							width={20}
 							height={20}
 							fill={
 								hasChangesInEditingKeyword || isNotEmptyValueInInsertMode
-									? secondaryColor
+									? whiteIconColor
 									: disabledColor
 							}
 						/>
 					}
 					onPress={() => {
-						if (!selectedText.trim()) return;
+						const trimmedWord = selectedText.trim();
+
+						if (!trimmedWord) return;
+
 						if (mode === KeywordsMode.InsertMode) {
-							if (
+							const isDuplicate = keywords.some(
+								keyword =>
+									keyword.word.trim().toLowerCase() ===
+									trimmedWord.toLowerCase()
+							);
+
+							if (isDuplicate) {
+								onSetInputKeywordError(ERROR_EXIST_WORD);
+								return;
+							}
+
+							const exceedsFreeLimit =
 								!isPremiumUser &&
 								((isSelectedVoiceoverEnabled &&
-									withVoiceOverKeywords.length >= 3) ||
-									keywords.length >= 5)
-							) {
+									withVoiceOverKeywords.length >= MAX_VOICE_OVERS_COUNT) ||
+									keywords.length >= MAX_KEYWORDS_COUNT);
+
+							if (exceedsFreeLimit) {
 								onCloseKeywords();
 								router.push(PREMIUM);
 								return;
@@ -202,7 +239,12 @@ export const KeywordCreator = ({
 								iconKey: currentKeyIcon,
 								isVoiceoverEnabled: isSelectedVoiceoverEnabled,
 							});
+							onChangeSelectedText('');
+
+							return;
 						} else if (mode === KeywordsMode.EditMode) {
+							if (!hasChangesInEditingKeyword) return;
+
 							onUpdateKeyword({
 								_id: editingKeyword?._id!,
 								word: selectedText,
@@ -210,59 +252,77 @@ export const KeywordCreator = ({
 								iconKey: selectedKeyIcon!,
 								isVoiceoverEnabled: isSelectedVoiceoverEnabled,
 							});
+
+							onChangeSelectedText('');
 						}
-						onChangeSelectedText('');
 					}}
 				/>
 			</ThemedView>
 			<ThemedView style={styles.bottomButtons}>
-				<Button
-					icon={
-						<CircleIcon
-							width={20}
-							height={20}
-							fill={keywordsColors[selectedColor].icon}
-						/>
-					}
-					title={selectedColor}
-					variant='link-gray'
-					iconPosition='left'
-					titleStyle={{ color: tertiaryGray }}
+				<Pressable
+					style={styles.controlButton}
+					hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
 					onPress={openKeywordColorPickerSheet}
-				/>
-				<Button
-					icon={
-						<CurrentIcon
-							width={20}
-							height={20}
-							fill={selectedKeyIcon ? tertiaryGray : utilityGray}
-						/>
-					}
-					title='Icon'
-					variant='link-gray'
-					iconPosition='left'
-					titleStyle={{ color: selectedKeyIcon ? tertiaryGray : utilityGray }}
+				>
+					<CircleIcon
+						width={20}
+						height={20}
+						fill={keywordsColors[selectedColor].icon}
+					/>
+					<ThemedText
+						type='textSm'
+						tokenColor={appTokens.text.tertiary}
+						style={styles.controlText}
+					>
+						{selectedColor}
+					</ThemedText>
+				</Pressable>
+
+				<Pressable
+					style={styles.controlButton}
+					hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
 					onPress={openKeywordIconPickerSheet}
-				/>
-				<Button
-					icon={
-						isSelectedVoiceoverEnabled ? (
-							<VoiceOverOn width={20} height={20} fill={tertiaryGray} />
-						) : (
-							<VoiceOverOff width={20} height={20} fill={utilityGray} />
-						)
-					}
-					title={isSelectedVoiceoverEnabled ? 'Voiceover on' : 'Voiceover off'}
-					variant='link-gray'
-					iconPosition='left'
+				>
+					<CurrentIcon
+						width={20}
+						height={20}
+						fill={selectedKeyIcon ? tertiaryGray : utilityGray}
+					/>
+					<ThemedText
+						type='textSm'
+						tokenColor={
+							selectedKeyIcon
+								? appTokens.text.tertiary
+								: appTokens.utilityGray[400]
+						}
+						style={styles.controlText}
+					>
+						Icon
+					</ThemedText>
+				</Pressable>
+
+				<Pressable
+					style={styles.controlButton}
+					hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
 					onPress={onToggleIsSelectedVoiceoverEnabled}
-					titleStyle={{
-						color: isSelectedVoiceoverEnabled ? tertiaryGray : utilityGray,
-					}}
-					titleProps={{
-						numberOfLines: 1,
-					}}
-				/>
+				>
+					{isSelectedVoiceoverEnabled ? (
+						<VoiceOverOn width={20} height={20} fill={tertiaryGray} />
+					) : (
+						<VoiceOverOff width={20} height={20} fill={utilityGray} />
+					)}
+					<ThemedText
+						type='textSm'
+						tokenColor={
+							isSelectedVoiceoverEnabled
+								? appTokens.text.tertiary
+								: appTokens.utilityGray[400]
+						}
+						style={styles.controlText}
+					>
+						{isSelectedVoiceoverEnabled ? 'Voiceover on' : 'Voiceover off'}
+					</ThemedText>
+				</Pressable>
 			</ThemedView>
 		</ThemedView>
 	);
@@ -295,5 +355,20 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		gap: 12,
+	},
+
+	controlButton: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 4,
+	},
+
+	controlText: {
+		fontWeight: 600,
+		fontFamily: 'MontserratSemiBold',
+	},
+
+	buttonMaxWidth: {
+		width: 48,
 	},
 });

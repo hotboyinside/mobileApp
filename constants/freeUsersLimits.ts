@@ -1,0 +1,3 @@
+export const MAX_MODIFICATION_IN_STAR_RATING = 5;
+export const MAX_KEYWORDS_COUNT = 5;
+export const MAX_VOICE_OVERS_COUNT = 3;

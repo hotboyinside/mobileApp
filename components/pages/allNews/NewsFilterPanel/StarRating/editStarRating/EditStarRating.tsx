@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/Badge/Badge';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Stars } from '@/components/ui/Stars';
-import { MAX_MODIFICATION_IN_STAR_RATING } from '@/constants/limits';
+import { MAX_MODIFICATION_IN_STAR_RATING } from '@/constants/freeUsersLimits';
 import { appTokens } from '@/constants/tokens';
 import { isUserPremium } from '@/helpers/userStatus/isUserPremium';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -33,7 +33,7 @@ import {
 import { StarNumber } from '@/types/starRating';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useUnit } from 'effector-react';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { HeaderBottomSheet } from '../../HeaderBottomSheet';
 
 type EditStarRatingProps = {
@@ -201,10 +201,8 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 										variant='pillColor'
 										color='gray'
 										icon={
-											<CloseIcon
-												width={16}
-												height={16}
-												fill={iconColor}
+											<Pressable
+												hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
 												onPress={() => {
 													if (!isPremiumUser) {
 														const currentWord = ratingWord.toLowerCase();
@@ -226,7 +224,9 @@ export const EditStarRating = ({ onClose }: EditStarRatingProps) => {
 														word: ratingWord,
 													});
 												}}
-											/>
+											>
+												<CloseIcon width={16} height={16} fill={iconColor} />
+											</Pressable>
 										}
 									/>
 								))}

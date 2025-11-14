@@ -1,12 +1,12 @@
-import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
 import CloseIcon from '@/assets/icons/close-icon.svg';
+import boltImage from '@/assets/images/boltImage.png';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 type PurchaseSuccessBottomSheetProps = {
 	onClose: () => void;
@@ -15,7 +15,6 @@ type PurchaseSuccessBottomSheetProps = {
 export default function PurchaseSuccessBottomSheet({
 	onClose,
 }: PurchaseSuccessBottomSheetProps) {
-	const iconBrandColor = useThemeColor(appTokens.foreground.brandPrimary);
 	const closeIconColor = useThemeColor(
 		appTokens.component.buttons.secondaryGray.fg
 	);
@@ -36,12 +35,8 @@ export default function PurchaseSuccessBottomSheet({
 					onPress={onClose}
 				/>
 			</ThemedView>
-			<BoltDuoIcon
-				width={160}
-				height={160}
-				fill={iconBrandColor}
-				style={styles.icon}
-			/>
+
+			<Image source={boltImage} style={styles.image} />
 			<ThemedText type='displayXs' style={styles.title}>
 				You’re Now Premium!
 			</ThemedText>
@@ -77,8 +72,10 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-end',
 	},
 
-	icon: {
+	image: {
 		alignSelf: 'center',
+		width: 160,
+		height: 160,
 	},
 
 	title: {

@@ -1,16 +1,23 @@
+import CloseIcon from '@/assets/icons/close-icon.svg';
 import { keywordsIcons } from '@/assets/icons/keywordsIcons';
 import { ThemedText } from '@/components/ThemedText';
-import { UserKeyword } from '@/types/keywords';
-import { Pressable, StyleSheet } from 'react-native';
-import CloseIcon from '@/assets/icons/close-icon.svg';
-import { useUnit } from 'effector-react';
-import { deleteKeywordFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
-import { startEditKeyword } from '@/stores/allNews/filtersPanel/keywords/model';
 import { useKeywordsColors } from '@/hooks/useKeywordsColors';
+import { deleteKeywordFx } from '@/stores/allNews/filtersPanel/keywords/handlers';
+import {
+	$keywordsInputError,
+	setInputKeywordError,
+	startEditKeyword,
+} from '@/stores/allNews/filtersPanel/keywords/model';
+import { UserKeyword } from '@/types/keywords';
+import { useUnit } from 'effector-react';
+import { Pressable, StyleSheet } from 'react-native';
 
 export const Keyword = ({ keyword }: { keyword: UserKeyword }) => {
 	const deleteKeyword = useUnit(deleteKeywordFx);
 	const onStartEditKeyword = useUnit(startEditKeyword);
+	const keywordsInputError = useUnit($keywordsInputError);
+
+	const onSetInputKeywordError = useUnit(setInputKeywordError);
 
 	const Icon = keywordsIcons[keyword.iconKey || ''];
 	const keywordsColors = useKeywordsColors();
@@ -22,6 +29,10 @@ export const Keyword = ({ keyword }: { keyword: UserKeyword }) => {
 		<Pressable
 			onPress={() => {
 				onStartEditKeyword(keyword);
+
+				if (keywordsInputError) {
+					onSetInputKeywordError(null);
+				}
 			}}
 			style={({ pressed }) => [
 				styles.container,
@@ -34,12 +45,12 @@ export const Keyword = ({ keyword }: { keyword: UserKeyword }) => {
 			<ThemedText type='textSm' style={{ color: textColor }}>
 				{keyword.word}
 			</ThemedText>
-			<CloseIcon
-				width={16}
-				height={16}
-				fill={iconColor}
+			<Pressable
 				onPress={() => deleteKeyword(keyword._id)}
-			/>
+				hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+			>
+				<CloseIcon width={16} height={16} fill={iconColor} />
+			</Pressable>
 		</Pressable>
 	);
 };

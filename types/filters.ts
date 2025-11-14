@@ -20,3 +20,7 @@ export type AdditionalFilterRange = { from: string; to: string };
 type AdditionalFilterValue = { enabled: boolean; range: AdditionalFilterRange };
 
 export type FiltersStore = Record<AdditionalFilterKey, AdditionalFilterValue>;
+
+export type AdditionalFiltersErrors = Partial<
+	Record<AdditionalFilterKey, string>
+>;

@@ -6,23 +6,14 @@ import { InputProps, Input as RNInput } from '@rneui/themed';
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-type InputType = 'text' | 'password' | 'number';
-
 type CustomInputProps = InputProps & {
-	type?: InputType;
+	isPassword?: boolean;
 	isError?: boolean;
 };
 
-export const Input = ({
-	type = 'text',
-	isError,
-	...props
-}: CustomInputProps) => {
+export const Input = ({ isPassword, isError, ...props }: CustomInputProps) => {
 	const [isFocused, setIsFocused] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-	const isPasswordType = type === 'password';
-	const isNumberType = type === 'number';
 
 	const labelColor = useThemeColor(appTokens.text.secondary);
 	const inputContainerBackgroundColor = useThemeColor(
@@ -38,7 +29,7 @@ export const Input = ({
 	const errorTextColor = useThemeColor(appTokens.text.errorPrimary);
 
 	const renderRightIcon = () => {
-		if (!isPasswordType) return props.rightIcon || undefined;
+		if (!isPassword) return props.rightIcon || undefined;
 
 		return (
 			<TouchableOpacity onPress={() => setIsPasswordVisible(prev => !prev)}>
@@ -65,8 +56,7 @@ export const Input = ({
 	return (
 		<RNInput
 			{...props}
-			keyboardType={isNumberType ? 'numeric' : 'default'}
-			secureTextEntry={isPasswordType && !isPasswordVisible}
+			secureTextEntry={isPassword && !isPasswordVisible}
 			rightIcon={renderRightIcon()}
 			containerStyle={[styles.containerExtra, props.containerStyle]}
 			inputContainerStyle={[

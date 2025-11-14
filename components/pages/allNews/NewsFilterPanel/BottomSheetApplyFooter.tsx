@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/Button';
+import { Status } from '@/constants/status';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { $additionalFiltersErrors } from '@/stores/allNews/filtersPanel/filters/additionalFilters';
 import { filtersApplyClick } from '@/stores/allNews/filtersPanel/filters/model';
 import { $hasChangesInFilters } from '@/stores/allNews/filtersPanel/filters/selectableFilters';
 import {
@@ -32,7 +34,10 @@ import {
 	$isStarRatingChanged,
 	$modificationCountDraft,
 } from '@/stores/starRating/model';
-import { putNotificationsSettingsFx } from '@/stores/userSettings';
+import {
+	$notificationsSettingsStatus,
+	putNotificationsSettingsFx,
+} from '@/stores/userSettings';
 import { $isKeywordsEnabled } from '@/stores/userSettings/keywordsEnabled';
 import {
 	BottomSheetFooter,
@@ -69,6 +74,7 @@ export const BottomSheetApplyFooter = ({
 	const padding = useSharedValue({ top: 8, bottom: 8 });
 
 	const applySortingClickFx = useUnit(applySortingClick);
+	const additionalFiltersErrors = useUnit($additionalFiltersErrors);
 	const hasChangesInSortingFilters = useUnit($isSortByChanged);
 
 	const applyFiltersFx = useUnit(filtersApplyClick);
@@ -93,6 +99,7 @@ export const BottomSheetApplyFooter = ({
 	const isStarRatingChanged = useUnit($isStarRatingChanged);
 
 	const isKeywordsEnabled = useUnit($isKeywordsEnabled);
+	const notificationsSettingsStatus = useUnit($notificationsSettingsStatus);
 	const onKeywordsEnabledToggle = () =>
 		putNotificationsSettingsFx({
 			isKeywordsEnabled: !isKeywordsEnabled,
@@ -107,7 +114,9 @@ export const BottomSheetApplyFooter = ({
 
 	let applyAction: () => void = () => {};
 	let hasChanges = false;
+	let hasErrors = false;
 	let isShowApplyTitle = true;
+	let isLoading = false;
 
 	switch (openedFilterTab) {
 		case FilterTabVariant.sort:
@@ -120,12 +129,16 @@ export const BottomSheetApplyFooter = ({
 			applyAction = applyFiltersFx;
 			hasChanges = hasChangesInFilters;
 			isShowApplyTitle = hasChangesInFilters;
+			hasErrors = Object.values(additionalFiltersErrors).some(error =>
+				Boolean(error)
+			);
 			break;
 
 		case FilterTabVariant.keywords:
 			applyAction = onKeywordsEnabledToggle;
 			hasChanges = true;
 			isShowApplyTitle = isKeywordsEnabled;
+			isLoading = notificationsSettingsStatus === Status.Loading;
 			break;
 
 		case FilterTabVariant.rating:
@@ -158,9 +171,9 @@ export const BottomSheetApplyFooter = ({
 			isShowApplyTitle = isStarRatingChanged;
 	}
 
+	const isSecondaryButton = closeButtonIsSecondary && isShowApplyTitle;
 	const bgColor = useThemeColor(appTokens.background.primary);
 	const borderColor = useThemeColor(appTokens.border.tertiary);
-	const isSecondaryButton = closeButtonIsSecondary && isShowApplyTitle;
 
 	useEffect(() => {
 		const showKeyboard = Keyboard.addListener('keyboardDidShow', () => {
@@ -201,11 +214,19 @@ export const BottomSheetApplyFooter = ({
 					size='lg'
 					title={isShowApplyTitle ? applyButtonTitle : closeButtonTitle}
 					onPress={() => {
-						if (hasChanges) {
+						if (!isLoading && hasChanges) {
 							applyAction();
 						}
 						onClose();
 					}}
+					disabled={hasErrors}
+					isLoading={isLoading}
+					loadingSpinnerProps={{
+						token: isShowApplyTitle
+							? appTokens.component.buttons.secondaryGray.fg
+							: appTokens.component.buttons.primary.fg,
+					}}
+					style={styles.maxBottomHeight}
 				/>
 			</Animated.View>
 		</BottomSheetFooter>
@@ -219,5 +240,9 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 16,
 		borderTopRightRadius: 16,
 		paddingHorizontal: 16,
+	},
+
+	maxBottomHeight: {
+		height: 48,
 	},
 });

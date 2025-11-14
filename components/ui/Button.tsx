@@ -8,6 +8,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { SolidSpinner } from './SolidSpinner/SolidSpinner';
 
 type ButtonColorStyles = {
 	color?: string;
@@ -33,6 +34,8 @@ type ButtonProps = RNButtonProps & {
 		| 'link-gray'
 		| 'link'
 		| 'destructive';
+	isLoading?: boolean;
+	loadingSpinnerProps?: Omit<React.ComponentProps<typeof SolidSpinner>, 'size'>;
 };
 
 const getTitlePadding = (
@@ -46,7 +49,13 @@ const getTitlePadding = (
 	return { paddingLeft: 8 };
 };
 
-export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
+export const Button = ({
+	size = 'md',
+	variant,
+	isLoading,
+	loadingSpinnerProps,
+	...props
+}: ButtonProps) => {
 	let buttonSizeStyles: ButtonSizeStyles;
 	let buttonColorStyles: ButtonColorStyles = {};
 
@@ -94,6 +103,9 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 						generalStyles.generalTextStyles,
 						{ color: textColorDisabled },
 					]}
+					title={
+						isLoading ? <SolidSpinner {...loadingSpinnerProps} /> : props.title
+					}
 				/>
 			) : (
 				<RNButton
@@ -114,6 +126,9 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 						},
 						props.titleStyle,
 					]}
+					title={
+						isLoading ? <SolidSpinner {...loadingSpinnerProps} /> : props.title
+					}
 				/>
 			);
 		case 'secondary':
@@ -165,6 +180,10 @@ export const Button = ({ size = 'md', variant, ...props }: ButtonProps) => {
 				getTitlePadding(props.icon, props.onlyIcon, props.iconPosition),
 				props.titleStyle,
 			]}
+			title={
+				isLoading ? <SolidSpinner {...loadingSpinnerProps} /> : props.title
+			}
+			disabled={props.disabled || isLoading}
 		/>
 	);
 };

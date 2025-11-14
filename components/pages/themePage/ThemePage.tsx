@@ -1,19 +1,19 @@
+import ArrowIcon from '@/assets/icons/arrow-left-soft-icon.svg';
+import MoonIcon from '@/assets/icons/moon-icon.svg';
+import SunIcon from '@/assets/icons/sun-icon.svg';
+import ThemeIcon from '@/assets/icons/theme-icon.svg';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedViewWithSafeArea } from '@/components/ThemedViewWithSafeArea';
 import { Button } from '@/components/ui/Button';
+import { AppTheme } from '@/constants/appTheme';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { $appTheme, setAppTheme } from '@/stores/userSettings/theme/model';
+import { useUnit } from 'effector-react';
 import { goBack } from 'expo-router/build/global-state/routing';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import ArrowIcon from '@/assets/icons/arrow-left-soft-icon.svg';
-import MoonIcon from '@/assets/icons/moon-icon.svg';
-import ThemeIcon from '@/assets/icons/theme-icon.svg';
-import SunIcon from '@/assets/icons/sun-icon.svg';
-import { appTokens } from '@/constants/tokens';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { useUnit } from 'effector-react';
-import { $appTheme, setAppTheme } from '@/stores/userSettings/theme/model';
-import { AppTheme } from '@/constants/appTheme';
 
 export const ThemePage = () => {
 	const appTheme = useUnit($appTheme);
