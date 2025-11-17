@@ -35,7 +35,7 @@ type ButtonProps = RNButtonProps & {
 		| 'link'
 		| 'destructive';
 	isLoading?: boolean;
-	loadingSpinnerProps?: Omit<React.ComponentProps<typeof SolidSpinner>, 'size'>;
+	loadingSpinnerProps?: React.ComponentProps<typeof SolidSpinner>;
 };
 
 const getTitlePadding = (
@@ -183,7 +183,7 @@ export const Button = ({
 			title={
 				isLoading ? <SolidSpinner {...loadingSpinnerProps} /> : props.title
 			}
-			disabled={props.disabled || isLoading}
+			disabled={props.disabled}
 		/>
 	);
 };

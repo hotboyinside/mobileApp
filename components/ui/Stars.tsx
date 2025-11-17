@@ -1,9 +1,9 @@
+import StarIconGradient from '@/assets/icons/star-icon-gradient.svg';
+import StarIcon from '@/assets/icons/star-icon.svg';
+import { appTokens } from '@/constants/tokens';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import StarIcon from '@/assets/icons/star-icon.svg';
-import StarIconGradient from '@/assets/icons/star-icon-gradient.svg';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { appTokens } from '@/constants/tokens';
 
 type StarRatingProps = {
 	rating: number;
@@ -40,6 +40,7 @@ export const Stars = ({
 
 const styles = StyleSheet.create({
 	container: {
+		alignSelf: 'flex-start',
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 2,

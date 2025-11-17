@@ -1,4 +1,3 @@
-// import '@/i18n';
 import { AppProvider } from '@/components/appProvider/AppProvider';
 import { useSession } from '@/components/appProvider/session/SessionContext';
 import { SplashScreenController } from '@/components/splash/SplashScreenController';
@@ -12,7 +11,6 @@ import {
 import { loadAppThemeFx } from '@/stores/userSettings/theme';
 import { useUnit } from 'effector-react';
 import { useFonts } from 'expo-font';
-import { useIAP } from 'expo-iap';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
@@ -22,7 +20,6 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const appStateRef = useRef(AppState.currentState);
-	const { connected } = useIAP();
 
 	const appState = useUnit($appState);
 	const onSubscribeToSseEventNews = useUnit(subscribeToSseEventNews);

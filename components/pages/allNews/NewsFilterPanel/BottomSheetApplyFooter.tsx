@@ -222,6 +222,7 @@ export const BottomSheetApplyFooter = ({
 					disabled={hasErrors}
 					isLoading={isLoading}
 					loadingSpinnerProps={{
+						size: 24,
 						token: isShowApplyTitle
 							? appTokens.component.buttons.secondaryGray.fg
 							: appTokens.component.buttons.primary.fg,
