@@ -1,7 +1,7 @@
 import {
-	sendNotificationsTokenRequest,
 	Platform,
-} from '@/config/api/notifications/sendNotificationsToken';
+	sendNotificationsTokenRequest,
+} from '@/api/notifications/sendNotificationsToken';
 import { createEffect } from 'effector';
 import { Platform as RNPlatform } from 'react-native';
 

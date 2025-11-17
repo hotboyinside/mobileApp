@@ -1,8 +1,8 @@
 import {
 	postNotificationsSettingsRequest,
 	putNotificationsSettingsRequest,
-} from '@/config/api/notifications/getNotificationsSettings';
-import { Platform } from '@/config/api/notifications/sendNotificationsToken';
+} from '@/api/notifications/getNotificationsSettings';
+import { Platform } from '@/api/notifications/sendNotificationsToken';
 import { PutNotificationsSettingsRequestData } from '@/types/notificationSettings';
 import messaging from '@react-native-firebase/messaging';
 import { createEffect } from 'effector';

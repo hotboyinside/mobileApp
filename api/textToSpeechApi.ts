@@ -1,5 +1,5 @@
+import { config } from '@/config/vars';
 import { TEXT_TO_SPEECH } from '@/constants/apiRoutes';
-import { config } from '../vars';
 
 const TEXT_TO_SPEECH_URL = `${config.apiUrl}/${TEXT_TO_SPEECH}`;
 

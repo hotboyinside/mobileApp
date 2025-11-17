@@ -5,7 +5,7 @@ import {
 	PostKeywordResponse,
 	postUserKeywordRequest,
 	putUserKeywordRequest,
-} from '@/config/api/userKeywordsApi';
+} from '@/api/userKeywordsApi';
 import {
 	KeywordForPostBackend,
 	KeywordFromClient,

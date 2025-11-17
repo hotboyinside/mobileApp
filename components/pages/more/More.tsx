@@ -1,3 +1,4 @@
+import { postInAppPurchasesRequest } from '@/api/inAppPurchases';
 import ArrowRightSoftIcon from '@/assets/icons/arrow-right-soft-icon.svg';
 import BellIcon from '@/assets/icons/bell-icon.svg';
 import BoltDuoIcon from '@/assets/icons/bolt-duo-icon.svg';
@@ -15,7 +16,6 @@ import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import { LogOutConfirmModal } from '@/components/ui/Modal/LogOutConfirmModal';
 import Social from '@/components/ui/Social';
-import { postInAppPurchasesRequest } from '@/config/api/inAppPurchases';
 import { ExternalLinks } from '@/constants/links';
 import { NOTIFICATIONS, PREMIUM, THEME } from '@/constants/routes';
 import { appTokens } from '@/constants/tokens';

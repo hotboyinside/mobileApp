@@ -1,6 +1,6 @@
+import { api } from '@/config/axios';
 import { USERS_RATING } from '@/constants/apiRoutes';
 import { StarRatingKeywords } from '@/types/starRating';
-import { api } from './axios';
 
 export interface UserRating {
 	keywordsByStar: StarRatingKeywords;

@@ -1,5 +1,5 @@
+import { api } from '@/config/axios';
 import { API_NOTIFICATIONS_MOBILE_SETTINGS } from '@/constants/apiRoutes';
-import { api } from '../axios';
 import {
 	PostNotificationsSettingsResponse,
 	PutNotificationsSettingsRequestData,

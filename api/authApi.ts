@@ -1,5 +1,5 @@
+import { api } from '@/config/axios';
 import { API_AUTH_LOGIN } from '@/constants/apiRoutes';
-import { api } from './axios';
 import { User } from '@/types/user';
 
 export interface LoginRequestData {

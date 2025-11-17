@@ -1,5 +1,6 @@
-import { api } from '@/config/api/axios';
-import { deleteNotificationsTokenRequest } from '@/config/api/notifications/sendNotificationsToken';
+import { deleteNotificationsTokenRequest } from '@/api/notifications/sendNotificationsToken';
+import { api } from '@/config/axios';
+import { registerForPushNotificationsAsync } from '@/helpers/pushNotifications/registerForPushNotificationsAsync';
 import { User } from '@/types/user';
 import {
 	createContext,
@@ -9,7 +10,6 @@ import {
 	useEffect,
 } from 'react';
 import { useStorageState } from '../authentication/useStorageState';
-import { registerForPushNotificationsAsync } from '@/helpers/pushNotifications/registerForPushNotificationsAsync';
 
 const AuthContext = createContext<{
 	signIn: (user: User) => void;

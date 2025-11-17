@@ -1,8 +1,10 @@
-import { createEffect } from 'effector';
+import { getNewsByIdRequest } from '@/api/newsApi';
 import { IFilteredNews } from '@/types/news';
-import { getNewsByIdRequest } from '@/config/api/newsApi';
+import { createEffect } from 'effector';
 
-export const fetchSelectedNewsFx = createEffect(async (newsId: string): Promise<IFilteredNews> => {
-    const res = await getNewsByIdRequest(newsId);
-    return res.data.result;
-});
+export const fetchSelectedNewsFx = createEffect(
+	async (newsId: string): Promise<IFilteredNews> => {
+		const res = await getNewsByIdRequest(newsId);
+		return res.data.result;
+	}
+);

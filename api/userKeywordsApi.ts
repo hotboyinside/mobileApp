@@ -1,5 +1,5 @@
+import { api } from '@/config/axios';
 import { USERS_KEYWORDS, USERS_KEYWORDS_ITEM } from '@/constants/apiRoutes';
-import { api } from './axios';
 import {
 	KeywordForPostBackend,
 	UserKeywordFromBackend,

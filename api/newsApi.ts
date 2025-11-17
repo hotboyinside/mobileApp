@@ -1,3 +1,4 @@
+import { api } from '@/config/axios';
 import { NEWS_BY_ID, NEWS_GET_NEWS } from '@/constants/apiRoutes';
 import { PaginationDefaults } from '@/constants/paginationDefaultLimit';
 import { WindowsNames } from '@/constants/socket/clientEvents';
@@ -12,7 +13,6 @@ import {
 } from '@/types/sortBy';
 import { StarNumberStateKey } from '@/types/starRating';
 import { StockTypesNames } from '@/types/stockTypes';
-import { api } from './axios';
 
 export enum NewsTypesOrigins {
 	News = 'news',

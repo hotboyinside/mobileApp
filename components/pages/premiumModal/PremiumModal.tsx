@@ -1,3 +1,4 @@
+import { postInAppPurchasesRequest } from '@/api/inAppPurchases';
 import FireIcon from '@/assets/icons/fire-icon.svg';
 import CallAvatar from '@/assets/images/CallAvatar.png';
 import { useSession } from '@/components/appProvider/session/SessionContext';
@@ -6,7 +7,6 @@ import PurchaseSuccessBottomSheet from '@/components/pages/premiumModal/Purchase
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
-import { postInAppPurchasesRequest } from '@/config/api/inAppPurchases';
 import { ExternalLinks } from '@/constants/links';
 import { appTokens } from '@/constants/tokens';
 import { isUserPremium } from '@/helpers/userStatus/isUserPremium';

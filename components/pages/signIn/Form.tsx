@@ -1,9 +1,9 @@
+import { LoginRequestData } from '@/api/authApi';
 import FoxrunnerIcon from '@/assets/icons/foxrunner-icon.svg';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { LoginRequestData } from '@/config/api/authApi';
 import { ExternalLinks } from '@/constants/links';
 import { appTokens } from '@/constants/tokens';
 import { useThemeColor } from '@/hooks/useThemeColor';

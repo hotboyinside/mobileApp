@@ -1,8 +1,4 @@
-import {
-	loginRequest,
-	LoginRequestData,
-	LoginResponse,
-} from '@/config/api/authApi';
+import { LoginRequestData, LoginResponse, loginRequest } from '@/api/authApi';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 

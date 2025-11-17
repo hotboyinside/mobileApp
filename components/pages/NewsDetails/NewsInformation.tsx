@@ -9,7 +9,7 @@ import { IFilteredNews } from '@/types/news';
 import { useUnit } from 'effector-react';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { ReadOnlyKeyword } from '../News/ReadOnlyKeyword';
+import { ReadOnlyKeyword } from '../allNews/News/ReadOnlyKeyword';
 import { SymbolStats } from './SymbolsStats';
 
 type NewsInformationProps = {

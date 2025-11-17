@@ -1,7 +1,7 @@
 import {
 	getUserStarRatingRequest,
 	updateUserStarRatingRequest,
-} from '@/config/api/userStarRating';
+} from '@/api/userStarRating';
 import { DefaultStarRatingSet } from '@/constants/starRatingDefaultSet';
 import { StarRatingKeywords } from '@/types/starRating';
 import { createEffect } from 'effector';

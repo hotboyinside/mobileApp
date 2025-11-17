@@ -1,4 +1,4 @@
-import { Platform } from '@/config/api/notifications/sendNotificationsToken';
+import { Platform } from '@/api/notifications/sendNotificationsToken';
 
 export interface NotificationsSettings {
 	isKeywordsPushesEnabled: boolean;
